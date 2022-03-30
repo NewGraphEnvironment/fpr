@@ -56,28 +56,6 @@ fit_to_page_landscape <- function(ft, pgwidth = 12){
 
 
 
-#' Trim up an excel worksheet - usually during import
-#'
-#' @param dat Dataframe
-#' @description Trim up a dataframe based on complete rows and col. Tidy header names
-#' @return A dataframe
-#' @import
-#' magrittr
-#' chk
-#' janitor
-#' dplyr
-#' @export
-#'
-#' @examples
-#' fpr_import_pscis()
-##function to trim up sheet and get names (was previously source from altools package)
-fpr_sheet_trim <- function(dat) {
-  dat %>%
-    dplyr::select(1:ncol(dat)) %>% ##get rid of the extra columns.
-    janitor::row_to_names(which.max(complete.cases(.))) %>%
-    janitor::clean_names() %>%
-    janitor::remove_empty(., which = "rows")
-}
 
 
 
@@ -118,14 +96,14 @@ my_kable_scroll_no_height <- function(dat, caption_text = ''){
     kableExtra::scroll_box(width = "100%")
 }
 
-my_kable <- function(dat, caption_text = '', font = font_set, ...){
-  dat %>%
-    kable(caption = caption_text, booktabs = T) %>%
-    kableExtra::kable_styling(c("condensed", "responsive"),
-                              full_width = T,
-                              font_size = font)
-    # kableExtra::scroll_box(width = "100%", height = "500px")
-}
+# my_kable <- function(dat, caption_text = '', font = font_set, ...){
+#   dat %>%
+#     kable(caption = caption_text, booktabs = T) %>%
+#     kableExtra::kable_styling(c("condensed", "responsive"),
+#                               full_width = T,
+#                               font_size = font)
+#     # kableExtra::scroll_box(width = "100%", height = "500px")
+# }
 
 my_kable <- function(dat,
                      caption_text = '',
@@ -139,6 +117,40 @@ my_kable <- function(dat,
   if(!is.null(footnote_text)){
     dat2 <- dat2 %>%
       kableExtra::footnote(symbol = footnote_text)
+  }
+  dat2
+}
+
+
+#' Custom kable settings
+#'
+#' @param dat dataframe to make a table with
+#' @param caption_text string to insert as text
+#' @param font size of font usually set in setup chunks of index.Rmd based on output type ie. gitbook vs pagedown
+#' @param footnote_text string to insert as footnote
+#' @param scroll TRUE or FALSE about whether to have scroll
+#'
+#' @return
+#' @export
+#'
+#' @examples fpr_kable(mtcars)
+fpr_kable <- function(dat,
+                     caption_text = '',
+                     font = font_set,
+                     footnote_text = NULL,
+                     scroll = TRUE){
+  dat2 <- dat %>%
+    knitr::kable(caption = caption_text, booktabs = T) %>%
+    kableExtra::kable_styling(c("condensed", "responsive"),
+                              full_width = T,
+                              font_size = font)
+  if(!is.null(footnote_text)){
+    dat2 <- dat2 %>%
+      kableExtra::footnote(symbol = footnote_text)
+  }
+  if(identical(scroll,TRUE)){
+    dat2 <- dat2 %>%
+      kableExtra::scroll_box(width = "100%", height = "500px")
   }
   dat2
 }
@@ -162,12 +174,7 @@ print_tab_cost_mult <- function(dat = tab_cost_rd_mult_report, ...){
   my_kable()
 }
 
-##here is a shot at a function to pull a photo based on a string subset
-pull_photo_by_str <- function(site_id = my_site, str_to_pull = 'barrel', ...){
-  list.files(path = paste0(getwd(), '/data/photos/', site_id), full.names = T) %>%
-    stringr::str_subset(., str_to_pull) %>%
-    basename()
-}
+
 
 fpr_appendix_title <- function(site = my_site){
   paste0('# Appendix - ', site, ' - ', my_overview_info() %>% pull(stream_name), ' {-}')
@@ -248,190 +255,6 @@ fpr_make_html_tbl <- function(df) {
 
 openHTML <- function(x) browseURL(paste0('file://', file.path(getwd(), x)))
 
-#' Import the pscis template
-#'
-#' @param workbook_name string value for name of worksheet
-#' @description Import the pscis template.  This is a helper for fpr_import_all
-#' @return A dataframe
-#' @import chk
-#' @export
-#'
-#' @examples
-#' fpr_import_pscis()
-fpr_import_pscis <- function(workbook_name = 'pscis_phase1.xlsm'){ ##new template.  could change file back to .xls
-  sig_fig0 <- c('length_or_width_meters')
-  sig_fig1 <- c('culvert_slope_percent', 'stream_width_ratio')
-  sig_fig2 <- c('outlet_drop_meters')
-  readxl::read_excel(path = paste0(getwd(),"/data/", workbook_name),
-                     sheet = 'PSCIS Assessment Worksheet') %>%
-    # purrr::set_names(janitor::make_clean_names(names(.))) %>%
-    fpr_sheet_trim() %>% ##recently added function above and pulled the altools package as it was a week link
-    dplyr::rename(date = date_of_assessment_yyyy_mm_dd) %>%
-    dplyr:: mutate(date = janitor::excel_numeric_to_date(as.numeric(date))) %>%
-    dplyr::filter(!is.na(date)) %>%
-    readr::type_convert() %>%  ##guess the type!!
-    dplyr::mutate(source = workbook_name) %>%
-    dplyr::mutate(dplyr::across(dplyr::all_of(sig_fig0), round, 0)) %>%
-    dplyr::mutate(dplyr::across(dplyr::all_of(sig_fig1), round, 1)) %>%
-    dplyr::mutate(dplyr::across(dplyr::all_of(sig_fig2), round, 2)) %>%
-    tibble::rowid_to_column() %>%
-    dplyr::mutate(rowid = rowid + 4,
-                  pscis_crossing_id = as.numeric(pscis_crossing_id),
-                  my_crossing_reference = as.numeric(my_crossing_reference)
-    ) %>%
-    dplyr::mutate(
-      aggregated_crossings_id = dplyr::case_when(!is.na(pscis_crossing_id) ~ pscis_crossing_id,
-                                                 my_crossing_reference > 200000000 ~ my_crossing_reference,  ##date based id's are greater than this number
-                                                 T ~ my_crossing_reference + 1000000000)
-    )
-}
-
-
-# import_pscis_all <- function(){
-#   dat1 <- import_pscis(workbook_name = 'pscis_phase1.xlsm')
-#   # filter(!my_crossing_reference %in% dups)
-#   dat2 <- import_pscis(workbook_name = 'pscis_phase2.xlsm')
-#   dat3 <- import_pscis(workbook_name = 'pscis_reassessments.xlsm')
-#   pscis <- bind_rows(
-#     dat1,
-#     dat2,
-#     dat3
-#   )
-#   all <- list(dat1, dat2, dat3, pscis) %>%
-#     purrr::set_names(c('pscis_phase1', 'pscis_phase2', 'pscis_reassessments', 'pscis_all'))
-#   return(all)
-# }
-
-
-
-##back photos to another place.  Going to split into two functions
-fpr_photos_backup <- function(filename = 'al'){
-  ##get teh name of the folder we are in
-  project_name <- basename(dirname(dirname(getwd())))
-  ##here we back everything up to the D drive
-  dir_backup_prj = paste0("D:/New_Graph/backups/photos/", project_name, "/")
-  dir.create(dir_backup_prj)
-
-  dir_backup_photos = paste0("D:/New_Graph/backups/photos/", project_name, "/", filename)
-  dir.create(dir_backup_photos)
-
-
-  ##path to the photos
-  path_photos <- paste0("C:/Users/allan/OneDrive/New_Graph/Current/", project_name, '/data/photos/', filename)
-
-  filestocopy <- list.files(path = path_photos,
-                            full.names = T)
-
-  #copy over the photos in the al folder -- this is done already
-  file.copy(from=filestocopy, to=dir_backup_photos,
-            overwrite = F, recursive = FALSE,
-            copy.mode = TRUE)
-}
-
-## we  want to convert our png to jpeg in case we want them for something
-fpr_img_resize_convert <- function(img){
-  image <- image_read(img)
-  image_scaled <- image_scale(image,"1440x1080!")
-  image_write(image_scaled, path = paste0(path, '/', tools::file_path_sans_ext(basename(img)), '.JPG'), format = 'jpg')
-}
-
-##function that builds the folders
-fpr_make_photo_folders <- function(xing){
-  dir.create(paste0(getwd(), '/data/photos/', xing))
-}
-
-
-fpr_time_interval_idx <- function(date_input, intervs){
-  which(date_input %within% intervs)
-}
-
-
-##get the photo sorting specific metadata from the photos in the file
-fpr_photo_sort_metadat <- function(input_file){
-  exifr::read_exif(input_file,recursive=T) %>%
-    purrr::set_names(., nm = tolower(names(.))) %>%
-    select(sourcefile, datetimeoriginal) %>%
-    mutate(datetimeoriginal = lubridate::ymd_hms(datetimeoriginal))
-}
-
-##get the names of your pscis files
-fpr_pscis_wkb_paths <- function(){
-  list.files(path = 'data', pattern = "pscis", all.files = F) %>%
-    grep(pattern = '~', invert = T, value = T)
-}
-
-fpr_import_pscis_all <- function(){
-  wkbs_paths <- fpr_pscis_wkb_paths()
-
-  pscis_list <- wkbs_paths %>%
-    map(fpr_import_pscis) %>%
-    purrr::set_names(nm = tools::file_path_sans_ext(wkbs_paths))
-}
-
-fpr_photo_qa <- function(site_id){
-  list.files(path = paste0(getwd(), '/data/photos/', site_id), full.names = T) %>%
-    stringr::str_subset(., 'barrel|outlet|upstream|downstream|road|inlet') %>%
-    as_tibble() %>%
-    mutate(x = case_when(
-      value %ilike% 'road' ~ 'road',
-      value %ilike% 'inlet' ~ 'inlet',
-      value %ilike% 'upstream' ~ 'upstream',
-      value %ilike% 'barrel' ~ 'barrel',
-      value %ilike% 'outlet' ~ 'outlet',
-      value %ilike% 'downstream' ~ 'downstream'
-    )) %>%
-    select(-value)
-}
-
-##here we stack up and down then side to side for reporting - this works!
-fpr_photo_amalg_cv <- function(site_id){
-  photos_images1 <- list.files(path = paste0(getwd(), '/data/photos/', site_id), full.names = T) %>%
-    stringr::str_subset(., 'upstream|road|inlet') %>%
-    as_tibble() %>%
-    mutate(sort = case_when(
-      value %ilike% 'road' ~ 1,
-      value %ilike% 'inlet' ~ 2,
-      value %ilike% 'upstream' ~ 3,
-      # value %ilike% 'barrel' ~ 4,
-      # value %ilike% 'outlet' ~ 5,
-      # value %ilike% 'downstream' ~ 6,
-    )) %>%
-    arrange(sort) %>%
-    pull(value) %>%
-    image_read()
-  photos_images2 <- list.files(path = paste0(getwd(), '/data/photos/', site_id), full.names = T) %>%
-    stringr::str_subset(., 'barrel|outlet|downstream') %>%
-    as_tibble() %>%
-    mutate(sort = case_when(
-      # value %ilike% 'road' ~ 1,
-      # value %ilike% 'inlet' ~ 2,
-      # value %ilike% 'upstream' ~ 3,
-      value %ilike% 'barrel' ~ 4,
-      value %ilike% 'outlet' ~ 5,
-      value %ilike% 'downstream' ~ 6,
-    )) %>%
-    arrange(sort) %>%
-    pull(value) %>%
-    image_read()
-  photos_stack1 <-image_append(image_scale(photos_images1, "x420"), stack = T) ##1/3 the width 373.33 and half the original height
-  photos_stack2 <- image_append(image_scale(photos_images2, "x420"), stack = T)
-  photos_stack <- c(photos_stack1, photos_stack2)
-  photos_stacked <- image_append(image_scale(photos_stack), stack = F)
-  image_write(photos_stacked, path = paste0(getwd(), '/data/photos/', site_id, '/crossing_all.JPG'), format = 'jpg')
-}
-
-
-fpr_import_hab_con <- function(path = "./data/habitat_confirmations.xls"){
-  readxl::excel_sheets(path = path) %>%
-    purrr::set_names() %>%
-    purrr::map(read_excel,
-               path = path,
-               .name_repair = janitor::make_clean_names) %>%
-    purrr::set_names(janitor::make_clean_names(names(.))) %>%
-    purrr::map(fpr_sheet_trim) %>% #moved to functions from https://github.com/NewGraphEnvironment/altools to reduce dependencies
-    purrr::map(plyr::colwise(type.convert))
-
-}
 
 ####---------------make the report table-----
 ##grab a df with the names of the left hand side of the table
@@ -566,19 +389,30 @@ my_pscis_info <- function(dat = pscis_phase2, site = my_site){
 }
 
 
-my_bcfishpass <- function(dat = bcfishpass_phase2, site = my_site, round_dig = 0){
+#' Filter the bcfishpass.crossings table export by PSCIS stream_crossing_id
+#'
+#' @param dat Dataframe. Defaults to bcfishpass filtered by Phase 2 sites only
+#' @param site Numeric PSCIS stream_crossing_id. Defaults to value defined by my_site
+#' @param round_dig Integer for how many numbers to round to. Defaults to 0.
+#' @param col_to_filter String value of column to filter
+#' @param col_to_pull String vlaue of column to pull
+#'
+#' @return Vector
+#' @export
+#'
+#' @examples
+fpr_my_bcfishpass <- function(dat = bcfishpass_phase2,
+                              site = my_site,
+                              col_to_filter = stream_crossing_id,
+                              col_to_pull = stream_order,
+                              round_dig = 0){
   dat %>%
-    mutate(across(where(is.numeric), round, round_dig)) %>%
-    filter(stream_crossing_id == site) %>%
-    distinct(stream_crossing_id, .keep_all = T)
+    dplyr::mutate(dplyr::across(where(is.numeric), round, round_dig)) %>%
+    dplyr::filter({{col_to_filter}} == site) %>%
+    dplyr::distinct({{col_to_filter}} , .keep_all = T) %>% #deals with duplicates
+    dplyr::pull({{col_to_pull}})
 }
 
-# my_bcfishpass <- function(dat = bcfishpass_phase2, site = my_site){
-#   dat %>%
-#     mutate(across(where(is.numeric), round, 0)) %>%
-#     filter(pscis_crossing_id == site) %>%
-#     distinct(pscis_crossing_id, .keep_all = T)
-# }
 
 my_watershed_area <- function(dat = wsheds, site = my_site){
   dat %>%
@@ -610,31 +444,52 @@ my_cost_estimate <- function(dat = tab_cost_est_phase2, site = my_site){
     distinct(pscis_crossing_id, .keep_all = T)
 }
 
-##this will pull out fish species names from our fish species codes
-# my_fish_sp <- function(sit = my_site, col_to_pull = quo(observedspp_upstr), df = bcfishpass_phase2){
-#   str_to_pull <- stringr::str_replace_all((my_bcfishpass(dat = df, site = sit) %>% pull(!!col_to_pull)), c("\\{" = "","\\}" = "")) %>%
-#     strsplit(., ",") %>% unlist()
-#   fishbc::freshwaterfish %>%
-#     filter(Code %in% str_to_pull &
-#              !Code %in% c('SST','TR')) %>%
-#     pull(CommonName) %>%
-#     stringr::str_to_lower() %>%
-#     knitr::combine_words()
-# }
+#' #' Pull out fish species long form names from our fish species codes in bcfishpass export
+#' #'
+#' #' @param ... Parameters to pass to fpr_my_bcfishpass
+#' #'
+#' #' @return Vector
+#' #' @export
+#' #'
+#' #' @examples
+#' fpr_my_fish_sp <- function(...){
+#'   # col_to_pull <-  sym(col_to_pull)
+#'   str_to_pull <- stringr::str_replace_all(
+#'     (fpr_my_bcfishpass(..., col_to_pull = observedspp_upstr)),
+#'      c("\\{" = "","\\}" = "")) %>%
+#'     strsplit(., ",") %>%
+#'     unlist()
+#'   fishbc::freshwaterfish %>%
+#'     dplyr::filter(Code %in% str_to_pull &
+#'              !Code %in% c('SST','TR')) %>%
+#'     dplyr::pull(CommonName) %>%
+#'     stringr::str_to_lower() %>%
+#'     knitr::combine_words()
+#' }
 
-
-##this will pull out fish species names from our fish species codes
-# updated with rlang
-my_fish_sp <- function(sit = my_site,
-                       col_to_pull = 'observedspp_upstr',
-                       df = bcfishpass_phase2){
-  col_to_pull <-  sym(col_to_pull)
-  str_to_pull <- stringr::str_replace_all((my_bcfishpass(dat = df, site = sit) %>% pull(!!col_to_pull)), c("\\{" = "","\\}" = "")) %>%
-    strsplit(., ",") %>% unlist()
+#' Pull out fish species long form names from our fish species codes in bcfishpass export
+#'
+#' @param ... Parameters to pass to fpr_my_bcfishpass
+#' @param col_pull Name of column to pull from bcfishpass. Defaults to observedspp_upstr. observedspp_dnstr is the other option
+#' @param sp_to_ignore Vector of strings representing species codes to ignore in output. Defaults to SST and TR as these seem a bit ambigous.
+#'
+#' @return Vector
+#' @export
+#'
+#' @examples
+fpr_my_fish_sp <- function(...,
+                           col_pull = observedspp_upstr,
+                           sp_to_ignore = c('SST','TR')){
+  # col_to_pull <-  sym(col_to_pull)
+  str_to_pull <- stringr::str_replace_all(
+    (fpr_my_bcfishpass(..., col_to_pull = {{col_pull}})),
+    c("\\{" = "","\\}" = "")) %>%
+    strsplit(., ",") %>%
+    unlist()
   fishbc::freshwaterfish %>%
-    filter(Code %in% str_to_pull &
-             !Code %in% c('SST','TR')) %>%
-    pull(CommonName) %>%
+    dplyr::filter(Code %in% str_to_pull &
+                    !Code %in% sp_to_ignore) %>%
+    dplyr::pull(CommonName) %>%
     stringr::str_to_lower() %>%
     knitr::combine_words()
 }
@@ -866,15 +721,6 @@ fpr_tab_wshd_sum <- function(site_id = NULL){
   wshds_prep
 }
 
-# flip an image
-fpr_flip_img <- function(site = my_site, rotate = 180, ...){
-  photo <- pull_photo_by_str(...)
-  image_read(paste0('data/photos/', site, '/', photo)) %>%
-    image_rotate(rotate) %>%
-    image_write(paste0('data/photos/', site, '/rotated_', photo))
-
-}
-
 # make the html tables that we link to in the interactive map.
 # we should be storing these outside of the repo.. Oh well
 fpr_print_tab_bcfp_html <- function(sites, ...){
@@ -896,5 +742,45 @@ fpr_print_tab_cv_html <- function(site){
 }
 
 
+#' Color font in html resulting from rmarkdown inline text
+#'
+#' @param x String of text to colorize.
+#' @param color String in english
+#'
+#' @return
+#' @export
+#'
+#' @examples fpr_colorize('color this red', 'red')
+fpr_colorize <- function(x, color) {
+  sprintf("<span style='color: %s;'>%s</span>", color,
+          x)
+}
 
 
+
+#' Make point geopackage layer from dataframe
+#'
+#' @param dat Dataframe with coordinates in
+#' @param gpkg_name String name of gpkg
+#' @param utm_zone Numeric value for utm zone
+#' @param easting Numeric value for
+#' @param northing Numeric value for
+#' @param directory String value for
+#'
+#' @return
+#' @export
+#'
+#' @examples
+fpr_gpkg_p <- function(dat,
+                            gpkg_name = 'mapping',
+                            utm_zone = 10,
+                            easting = "utm_easting",
+                            northing = "utm_northing",
+                            directory = "data/mapping/"){
+  dir.create(directory)
+  nm <-deparse(substitute(dat))
+  dat %>%
+    sf::st_as_sf(coords = c(easting, northing), crs = 26900 + utm_zone, remove = F) %>%
+    sf::st_transform(crs = 4326) %>%
+    sf::st_write(paste0(directory, gpkg_name, ".gpkg"), nm, delete_layer = TRUE)
+}
