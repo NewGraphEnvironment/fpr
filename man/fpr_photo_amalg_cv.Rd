@@ -6,6 +6,10 @@
 \usage{
 fpr_photo_amalg_cv(site_id)
 }
+\arguments{
+\item{site_id}{Numeric value of site corresponding to the directory name that holds the photos
+which include 'road', 'inlet', 'upstream', 'downstream', 'outlet', barrel' in the filenames.}
+}
 \value{
 
 }

@@ -26,4 +26,10 @@ Imports:
     fishbc,
     stringr,
     knitr,
-    magick
+    magick,
+    tidyselect,
+    fwapgr,
+    data.table,
+    elevatr,
+    raster,
+    rayshader

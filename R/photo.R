@@ -6,14 +6,14 @@
 #' @param site Numeric indicating site id cooresponding to name of directory containing the images
 #' @param str_to_pull String value to search for in name of photo. must be unique in the file. Defaults to barrel
 #'
-#' @return String representing name of photo that matches
+#' @return String representing the full path filename of photo that matches
 #' @export
 #'
 #' @examples
 fpr_photo_pull_by_str <- function(site = my_site, str_to_pull = 'barrel'){
   list.files(path = paste0(getwd(), '/data/photos/', site), full.names = T) %>%
-    stringr::str_subset(., str_to_pull) %>%
-    basename()
+    stringr::str_subset(., str_to_pull)
+    # basename()
 }
 
 #' Test if a dataframe has rows
@@ -272,7 +272,8 @@ fpr_photo_qa <- function(dat = pscis_all,
 #' present, only 1 of each and within the file names of those photos must be the strings
 #' containing upstream, downstream, inlet, outlet, barrel, road
 #'
-#' @inheritParams  site_id
+#' @param  site_id Numeric value of site corresponding to the directory name that holds the photos
+#' which include 'road', 'inlet', 'upstream', 'downstream', 'outlet', barrel' in the filenames.
 #'
 #' @return
 #' @export
@@ -364,7 +365,7 @@ fpr_photos_backup <- function(filename = 'al'){
 #' @export
 #'
 #' @examples
-fpr_photos_ext_to_change <- function(target){
+fpr_photo_ext_to_change <- function(target){
   list.files(path = target,
              pattern = '.*\\.(jpg|png|jpeg)$',
              recursive = TRUE,
@@ -453,3 +454,16 @@ fpr_photo_document_all <- function(path_to_photo_dir, full_names = T){
              include.dirs = T) %>%
     as_tibble()
 }
+
+#' #' Insert a photo into an rmarkdown chunk
+#' #'
+#' #' @param site Numeric indicating site id cooresponding to name of directory containing the images
+#' #' @param photo
+#' #'
+#' #' @return
+#' #' @export
+#' #'
+#' #' @examples
+#' fpr_photo_insert <- function(site = my_site, photo = my_photo){
+#'   knitr::include_graphics(paste0('data/photos/', site, '/', photo))
+#' }

@@ -12,7 +12,7 @@ fpr_photo_pull_by_str(site = my_site, str_to_pull = "barrel")
 \item{str_to_pull}{String value to search for in name of photo. must be unique in the file. Defaults to barrel}
 }
 \value{
-String representing name of photo that matches
+String representing the full path filename of photo that matches
 }
 \description{
 Pull names of a photo based on a string in the file name
