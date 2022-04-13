@@ -2,8 +2,9 @@ Package: fpr
 Type: Package
 Title: Fish Passage Reporting Functions
 Version: 0.1.0.9000
+Date: 2022-04-13
 Author: Al Irvine
-Maintainer: The package maintainer <yourself@somewhere.net>
+Maintainer: <al@newgraphenvironment.com>
 Description: Functions used in Fish Passage Reporting 
 License: MIT 
 URL: https://github.com/NewGraphEnvironment/fpr

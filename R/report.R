@@ -57,9 +57,9 @@ fpr_appendix_title <- function(site = my_site,
                                site2 = NULL,
                                site3 = NULL){
   if(is.null(site2) & is.null(site3)){
-  paste0('# Appendix - ', site, ' - ', fpr_my_pscis_info(), ' {-}')
-  }else if(is.null(site3)){ paste0('# Appendix - ', site, ' & ', site2, ' - ', fpr_my_pscis_info(), ' {-}')
-  }else paste0('# Appendix - ', site, ' & ', site2, ' & ', site3, ' - ', fpr_my_pscis_info(), ' {-}')
+  paste0('# ', fpr_my_pscis_info(), ' - ', site, ' - Appendix {-}')
+  }else if(is.null(site3)){ paste0('# ' , fpr_my_pscis_info(), ' - ', site, ' & ', site2, ' - Appendix {-}')
+  }else paste0('# ', fpr_my_pscis_info(), ' - ', site, ' & ', site2, ' & ', site3, ' - Appendix {-}')
 }
 
 #' Filter the bcfishpass.crossings table export by PSCIS stream_crossing_id
