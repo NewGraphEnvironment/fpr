@@ -15,7 +15,7 @@ fpr_my_cover_sentence(loc = "us", sit = my_site)
 String sentence with the cover types described
 }
 \description{
-No hard stop at the end of the sentence so we can reference the habitat table.
+Sentence to describe the dominant and subdominant cover types
 }
 \examples{
 fpr_my_cover_sentence()

@@ -2,7 +2,7 @@
 % Please edit documentation in R/report.R
 \name{fpr_my_cost_estimate}
 \alias{fpr_my_cost_estimate}
-\title{Sentence to explain cost to fix site}
+\title{Extact cost to fix site}
 \usage{
 fpr_my_cost_estimate(
   dat = tab_cost_est_phase2,
@@ -22,5 +22,5 @@ fpr_my_cost_estimate(
 String. Formatted number
 }
 \description{
-Sentence to explain cost to fix site
+Extact cost to fix site
 }
