@@ -295,7 +295,8 @@ fpr_table_bcfp_html <- function(sites, ...){
   fpr_table_bcfp(site = sites) %>%
     kable(caption = paste0('Summary of fish habitat modelling for PSCIS crossing ', sites, '.'), booktabs = T) %>%
     kableExtra::add_footnote(c('Model data is preliminary and subject to adjustments including incorporating area based estimates.',
-                             'Modelled rearing habitat estimates do not currently include linear lengths of centrelines within lakes and wetlands.'),
+                             'Modelled rearing habitat estimates include linear lengths of centrelines within wetlands for coho and within lakes >100ha (multiplied by 1.5) for sockeye.',
+                             'Remediation Gain is an estimate of the amount of habitat to be gained by providing access above the crossing.  This assumes that all upstream habitat is currently unavailable and that all modelled unassessed crossings located upstream would prevent further passage.'),
                              notation = 'symbol') %>%
     kableExtra::kable_styling(c("condensed"), full_width = T, font_size = 18) %>%
     readr::write_file(., file = paste0("docs/sum/bcfp/", sites, ".html"))
