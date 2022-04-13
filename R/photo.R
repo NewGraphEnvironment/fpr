@@ -12,8 +12,9 @@
 #' @examples
 fpr_photo_pull_by_str <- function(site = my_site, str_to_pull = 'barrel'){
   list.files(path = paste0(getwd(), '/data/photos/', site), full.names = T) %>%
-    stringr::str_subset(., str_to_pull)
-    # basename()
+    stringr::str_subset(., str_to_pull) %>%
+    gsub(paste0(getwd(), '/'), '', .)
+  # basename()
 }
 
 #' Test if a dataframe has rows
