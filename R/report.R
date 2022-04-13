@@ -223,18 +223,21 @@ fpr_my_survey_dist <- function(loc = 'us', sit = my_site){
     seg2 <- 'upstream '
     }else seg2 <- 'downstream '
 
-  seg3 <- 'from the culvert for '
+  seg3 <- 'from crossing '
 
-  seg4 <- fpr::fpr_my_priority_info(sit = sit, loc = loc, col_pull = 'length_surveyed')
+  seg4 <-  as.character(sit)
 
-  seg5 <- 'm '
+  seg5 <- ' for '
 
-  paste0(seg1, seg2, seg3, seg4, seg5)
+  seg6 <- fpr::fpr_my_priority_info(sit = sit, loc = loc, col_pull = 'length_surveyed')
+
+  seg7 <- 'm '
+
+  paste0(seg1, seg2, seg3, seg4, seg5, seg6, seg7)
 }
 
 #' Sentence to describe the dominant and subdominant cover types
 #'
-#' No hard stop at the end of the sentence so we can reference the habitat table.
 #'
 #' @param loc String in quotes which is either 'us' upstream or 'ds' downstream.  Defaults to 'us'
 #' @param sit Integer. Corresponds to the PSCIS site id. Defaults to my_site defined in environment
@@ -261,7 +264,7 @@ fpr_my_cover_sentence <- function(loc = 'us', sit = my_site){
   paste0(seg1, seg2, seg3, seg4, seg5, seg6, seg7)
 }
 
-#' Sentence to explain cost to fix site
+#' Extact cost to fix site
 #'
 #' @param dat Dataframe with pscis_crossing_id and cost_est_1000s columns
 #' @param col_filter String (unqouted) name of column to filter. Defaults to pscis_crossing_id
@@ -281,6 +284,82 @@ fpr_my_cost_estimate <- function(dat = tab_cost_est_phase2,
     dplyr::filter({{ col_filter }} == site) %>%
     dplyr::distinct({{ col_filter }}, .keep_all = T) %>%
     dplyr::pull({{ col_pull }})
+}
+
+#' Sentence to describe the widths and gradient
+#'
+#'
+#' @param loc String in quotes which is either 'us' upstream or 'ds' downstream.  Defaults to 'us'
+#' @param sit Integer. Corresponds to the PSCIS site id. Defaults to my_site defined in environment
+#'
+#' @return String sentence with the cover types described
+#' @export
+#'
+#' @examples fpr_my_cover_sentence()
+fpr_my_channel_sentence <- function(loc = 'us', sit = my_site){
+  seg1 <- 'The average channel width was '
+
+  seg2 <- fpr::fpr_my_habitat_info(sit = sit, loc = loc, col_pull = 'avg_channel_width_m')
+
+  seg3 <- ', the average wetted width was '
+
+  seg4 <- fpr::fpr_my_habitat_info(sit = sit, loc = loc, col_pull = 'avg_wetted_width_m')
+
+  seg5 <- ' and the average gradient was '
+
+  seg6 <- fpr::fpr_my_habitat_info(loc = 'ds', col_pull = 'average_gradient_percent')
+
+  seg7 <- '%.'
+
+  paste0(seg1, seg2, seg3, seg4, seg5, seg6, seg7)
+}
+
+#' Sentence to describe the dominant and sub-dominant substrate
+#'
+#'
+#' @param loc String in quotes which is either 'us' upstream or 'ds' downstream.  Defaults to 'us'
+#' @param sit Integer. Corresponds to the PSCIS site id. Defaults to my_site defined in environment
+#'
+#' @return String sentence with the cover types described
+#' @export
+#'
+#' @examples fpr_my_cover_sentence()
+fpr_my_substrate_sentence <- function(loc = 'us', sit = my_site){
+  seg1 <- 'The dominant substrate was '
+
+  seg2 <- fpr::fpr_my_habitat_info(sit = sit, loc = loc, col_pull = 'bed_material_dominant')
+
+  seg3 <- ' with '
+
+  seg4 <- fpr::fpr_my_habitat_info(sit = sit, loc = loc, col_pull = 'bed_material_subdominant')
+
+  seg5 <- ' sub-dominant.'
+
+  paste0(seg1, seg2, seg3, seg4, seg5)
+}
+
+#' Paragraph to describe the cover, widths, gradient and substrates.
+#'
+#' Randomly generated order from the inputs of cover, channel and substrate sentences.
+#'
+#'
+#' @param loc String in quotes which is either 'us' upstream or 'ds' downstream.  Defaults to 'us'
+#' @param sit Integer. Corresponds to the PSCIS site id. Defaults to my_site defined in environment
+#'
+#' @return String sentence with the cover types described
+#' @export
+#'
+#' @examples fpr_my_cover_sentence()
+fpr_my_habitat_paragraph <- function(loc = 'us', sit = my_site){
+  seg1 <- fpr_my_cover_sentence(loc = loc, sit = sit)
+
+  seg2 <- fpr_my_channel_sentence(loc = loc, sit = sit)
+
+  seg3 <- fpr_my_substrate_sentence(loc = loc, sit = sit)
+
+  paragraph <- c(seg1, seg2, seg3)
+
+  sample(paste0(paragraph))
 }
 
 
