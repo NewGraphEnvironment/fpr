@@ -10,7 +10,7 @@ Install with `devtools::install_github("NewGraphEnvironment/fpr", ref = "v202204
 
 <br>
 
-Reporting is generated with `bookdown` from `Rmarkdown`. Many workflows rely on provincial data input spreadsheets including:
+The reporting that this package serves to help line up is generated with `bookdown` from `Rmarkdown` so there are many dependencies such as `knitr` and `KableExtra`. Additionally, of key importance workflows rely on provincial British Columbia data input spreadsheets with version updates.  As of 2022-04-13 the provincial templates included:
 
  + Populated [Fish Data Submission Spreadsheet Template - V 2.0, January 20, 2020 ](https://www2.gov.bc.ca/gov/content/environment/plants-animals-ecosystems/fish/fish-and-fish-habitat-data-information/fish-data-submission/submit-fish-data#submitfish) 
 
@@ -19,7 +19,7 @@ Reporting is generated with `bookdown` from `Rmarkdown`. Many workflows rely on 
  <br>
  
  
-Additionally many outputs rely on a `postgresql` database built with [`bcfishpass`](https://github.com/smnorris/bcfishpass).
+Additionally many outputs manipulated by these functions rely on a tables generated from a `postgresql` database built with [`bcfishpass`](https://github.com/smnorris/bcfishpass). Some tables are unstable with column names likely to change in the future.
 
 <br>
 
