@@ -2,11 +2,17 @@ Package used for building [interactive reports]((https://newgraphenvironment.git
 
 <br>
 
-Currently under active development and likely to change significantly. Honestly likely only useful for me at this point unless you want to disect each function to understand things like the folder structure of the repo used to build the actual report. Likely to evolve into several smaller packages and definitely needs more documentation.  Just a start here.  Use at your own risk and consider keeping track of which version of the package you are using through the date formatted tags.
+Currently under active development and likely to change significantly. Honestly likely only useful for me at this point unless you want to disect each function to understand things like the folder structure of the repo used to build the actual report. Likely to evolve into several smaller packages and definitely needs more documentation.  Just a start here.  Use at your own risk and consider keeping track of which version of the package you are using through the date formatted tags. Many of these notes are for me to remember what is going on...
 
 <br>
 
-Install with `devtools::install_github("NewGraphEnvironment/fpr", ref = "v202204120902")` (check for latest tag and update accordingly)
+Install with `devtools::install_github("NewGraphEnvironment/fpr")`
+
+<br>
+
+If looking for backwards comparability because you used the package in the past and there are issues now with a newer release of the package, install with:
+
+`devtools::install_github("NewGraphEnvironment/fpr", ref = "v202204120902")` (tag coinciding with the one you used to report)
 
 <br>
 
