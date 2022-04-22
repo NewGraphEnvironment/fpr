@@ -7,7 +7,8 @@
 fpr_import_hab_con(
   path = "data/habitat_confirmations.xls",
   backup = TRUE,
-  path_backup = "data/backup/"
+  path_backup = "data/backup/",
+  ...
 )
 }
 \arguments{
@@ -17,6 +18,8 @@ https://www2.gov.bc.ca/gov/content/environment/plants-animals-ecosystems/fish/fi
 \item{backup}{Logical whether to backup all sheets as csvs or not. Defaults to true}
 
 \item{path_backup}{String indicating directory to create and backup to.  Defaults to 'data/backup/'}
+
+\item{...}{Not used.  For passing true or false to `clean_col2` from `fpr_sheet_trim`}
 }
 \value{
 

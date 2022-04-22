@@ -4,14 +4,20 @@
 \alias{fpr_sheet_trim}
 \title{Trim up an excel worksheet - usually during import}
 \usage{
-fpr_sheet_trim(dat)
+fpr_sheet_trim(dat, clean_col2 = FALSE)
 }
 \arguments{
 \item{dat}{Dataframe}
+
+\item{clean_col2}{Logical whether to remove rows if no `gazetted_name` is specified. Defaults to false.}
+
+\item{...}{Not used}
 }
 \value{
 A dataframe
 }
 \description{
-Trim up a dataframe based on complete rows. Tidy header names
+Select column names based on first row with inputs all across.
+Trim up the dataframe based on whether there are events in the first column.
+This is a `date` in the pscis inputs and `reference_number` in the fish submission template
 }

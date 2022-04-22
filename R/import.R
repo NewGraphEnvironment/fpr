@@ -3,18 +3,30 @@
 #' Trim up an excel worksheet - usually during import
 #'
 #' @param dat Dataframe
-#' @description Trim up a dataframe based on complete rows. Tidy header names
+#' @param ... Not used
+#' @param clean_col2 Logical whether to remove rows if no `gazetted_name` is specified. Defaults to false.
+#'
+#' @description Select column names based on first row with inputs all across.
+#' Trim up the dataframe based on whether there are events in the first column.
+#' This is a `date` in the pscis inputs and `reference_number` in the fish submission template
 #' @return A dataframe
 #'
 #' @examples
-fpr_sheet_trim <- function(dat) {
-  dat %>%
+fpr_sheet_trim <- function(dat,
+                           clean_col2 = FALSE) {
+  dat2 <- dat %>%
     dplyr::select(1:ncol(dat)) %>% ##get rid of the extra columns because there are remnants way down low I believe
     janitor::row_to_names(which.max(complete.cases(.))) %>%
     janitor::clean_names() %>%
     janitor::remove_empty(., which = "rows") %>%
     # remove rows that don't have a value in the first column
     dplyr::filter(!is.na(.[[1]]))
+
+  if(clean_col2){
+    dat2 <- dat2 %>%
+      dplyr::filter(!is.na(.[[2]]))
+  }
+  dat2
 }
 
 #' Import the pscis template
@@ -120,6 +132,7 @@ fpr_import_hab_prior <- function(input = 'data/habitat_confirmations_priorities.
 #' https://www2.gov.bc.ca/gov/content/environment/plants-animals-ecosystems/fish/fish-and-fish-habitat-data-information/fish-data-submission/submit-fish-data#submitfish
 #' @param backup Logical whether to backup all sheets as csvs or not. Defaults to true
 #' @param path_backup String indicating directory to create and backup to.  Defaults to 'data/backup/'
+#' @param ... Not used.  For passing true or false to `clean_col2` from `fpr_sheet_trim`
 #'
 #' @return
 #' @export
@@ -127,14 +140,16 @@ fpr_import_hab_prior <- function(input = 'data/habitat_confirmations_priorities.
 #' @examples
 fpr_import_hab_con <- function(path = "data/habitat_confirmations.xls",
                                backup = TRUE,
-                               path_backup = 'data/backup/'){
+                               path_backup = 'data/backup/',
+                               ...){
   hab_con <- readxl::excel_sheets(path = path) %>%
+    stringr::str_subset("INSTRUCTIONS", negate = T) %>%
     purrr::set_names() %>%
     purrr::map(readxl::read_excel,
                path = path,
                .name_repair = janitor::make_clean_names) %>%
     purrr::set_names(janitor::make_clean_names(names(.))) %>%
-    purrr::map(fpr_sheet_trim) %>% #moved to functions from https://github.com/NewGraphEnvironment/altools to reduce dependencies
+    purrr::map(fpr_sheet_trim, ...) %>%
     purrr::map(plyr::colwise(type.convert))
 
   if(backup){
