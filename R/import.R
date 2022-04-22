@@ -12,7 +12,9 @@ fpr_sheet_trim <- function(dat) {
     dplyr::select(1:ncol(dat)) %>% ##get rid of the extra columns because there are remnants way down low I believe
     janitor::row_to_names(which.max(complete.cases(.))) %>%
     janitor::clean_names() %>%
-    janitor::remove_empty(., which = "rows")
+    janitor::remove_empty(., which = "rows") %>%
+    # remove rows that don't have a value in the first column
+    dplyr::filter(!is.na(.[[1]]))
 }
 
 #' Import the pscis template
@@ -111,16 +113,22 @@ fpr_import_hab_prior <- function(input = 'data/habitat_confirmations_priorities.
 
 #' Import provincial fish data submission template
 #'
-#' Includes habitat data and fish sampling information
+#' Includes habitat data and fish sampling information.  Can back up all sheets to csvs. Suggest updateing git index for submission
+#' template to to assume-unchanged so that a version of the spreadsheet is stored in the repo but can be updated when it is actually necessary.
 #'
-#' @param path
+#' @param path String location of submission template file populated from
+#' https://www2.gov.bc.ca/gov/content/environment/plants-animals-ecosystems/fish/fish-and-fish-habitat-data-information/fish-data-submission/submit-fish-data#submitfish
+#' @param backup Logical whether to backup all sheets as csvs or not. Defaults to true
+#' @param path_backup String indicating directory to create and backup to.  Defaults to 'data/backup/'
 #'
 #' @return
 #' @export
 #'
 #' @examples
-fpr_import_hab_con <- function(path = "./data/habitat_confirmations.xls"){
-  readxl::excel_sheets(path = path) %>%
+fpr_import_hab_con <- function(path = "data/habitat_confirmations.xls",
+                               backup = TRUE,
+                               path_backup = 'data/backup/'){
+  hab_con <- readxl::excel_sheets(path = path) %>%
     purrr::set_names() %>%
     purrr::map(readxl::read_excel,
                path = path,
@@ -129,4 +137,10 @@ fpr_import_hab_con <- function(path = "./data/habitat_confirmations.xls"){
     purrr::map(fpr_sheet_trim) %>% #moved to functions from https://github.com/NewGraphEnvironment/altools to reduce dependencies
     purrr::map(plyr::colwise(type.convert))
 
+  if(backup){
+    dir.create(path_backup)
+    sapply(names(hab_con),
+           function (x) readr::write_csv(hab_con[[x]], file=paste0(path_backup, x, ".csv"), na = '' )   )
+  }
+  hab_con
 }

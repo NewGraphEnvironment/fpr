@@ -4,14 +4,24 @@
 \alias{fpr_import_hab_con}
 \title{Import provincial fish data submission template}
 \usage{
-fpr_import_hab_con(path = "./data/habitat_confirmations.xls")
+fpr_import_hab_con(
+  path = "data/habitat_confirmations.xls",
+  backup = TRUE,
+  path_backup = "data/backup/"
+)
 }
 \arguments{
-\item{path}{}
+\item{path}{String location of submission template file populated from
+https://www2.gov.bc.ca/gov/content/environment/plants-animals-ecosystems/fish/fish-and-fish-habitat-data-information/fish-data-submission/submit-fish-data#submitfish}
+
+\item{backup}{Logical whether to backup all sheets as csvs or not. Defaults to true}
+
+\item{path_backup}{String indicating directory to create and backup to.  Defaults to 'data/backup/'}
 }
 \value{
 
 }
 \description{
-Includes habitat data and fish sampling information
+Includes habitat data and fish sampling information.  Can back up all sheets to csvs. Suggest updateing git index for submission
+template to to assume-unchanged so that a version of the spreadsheet is stored in the repo but can be updated when it is actually necessary.
 }
