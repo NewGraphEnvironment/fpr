@@ -275,12 +275,13 @@ fpr_photo_qa <- function(dat = pscis_all,
 #'
 #' @param  site_id Numeric value of site corresponding to the directory name that holds the photos
 #' which include 'road', 'inlet', 'upstream', 'downstream', 'outlet', barrel' in the filenames.
+#' @param size String. Dimensions of individual photos. Defaults to "560x420!" to give oveall photo size of 1120 x 1260.
 #'
 #' @return
 #' @export
 #'
 #' @examples
-fpr_photo_amalg_cv <- function(site_id){
+fpr_photo_amalg_cv <- function(site_id, size = "560x420!"){
   photos_images1 <- list.files(path = paste0(getwd(), '/data/photos/', site_id), full.names = T) %>%
     stringr::str_subset(., 'upstream|road|inlet') %>%
     as_tibble() %>%
@@ -309,8 +310,8 @@ fpr_photo_amalg_cv <- function(site_id){
     arrange(sort) %>%
     pull(value) %>%
     image_read()
-  photos_stack1 <-image_append(image_scale(photos_images1, "x420"), stack = T) ##1/3 the width 373.33 and half the original height
-  photos_stack2 <- image_append(image_scale(photos_images2, "x420"), stack = T)
+  photos_stack1 <-image_append(image_scale(photos_images1, size), stack = T) ##1/3 the width 373.33 and half the original height
+  photos_stack2 <- image_append(image_scale(photos_images2, size), stack = T)
   photos_stack <- c(photos_stack1, photos_stack2)
   photos_stacked <- image_append(image_scale(photos_stack), stack = F)
   image_write(photos_stacked, path = paste0(getwd(), '/data/photos/', site_id, '/crossing_all.JPG'), format = 'jpg')
