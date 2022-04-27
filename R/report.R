@@ -114,7 +114,7 @@ fpr_my_wshd <- function(site = my_site, col = area_km){
 #' @examples
 fpr_my_fish_sp <- function(...,
                            col_pull = observedspp_upstr,
-                           sp_ignore = c('SST','TR', 'SP')){
+                           sp_ignore = c('SST','TR', 'SP', 'CRS')){
   # col_to_pull <-  sym(col_to_pull)
   str_to_pull <- stringr::str_replace_all(
     (fpr_my_bcfishpass(..., col_pull = {{col_pull}})),
@@ -301,11 +301,11 @@ fpr_my_channel_sentence <- function(loc = 'us', sit = my_site){
 
   seg2 <- fpr::fpr_my_habitat_info(sit = sit, loc = loc, col_pull = 'avg_channel_width_m')
 
-  seg3 <- ', the average wetted width was '
+  seg3 <- 'm, the average wetted width was '
 
   seg4 <- fpr::fpr_my_habitat_info(sit = sit, loc = loc, col_pull = 'avg_wetted_width_m')
 
-  seg5 <- ' and the average gradient was '
+  seg5 <- 'm, and the average gradient was '
 
   seg6 <- fpr::fpr_my_habitat_info(loc = 'ds', col_pull = 'average_gradient_percent')
 
