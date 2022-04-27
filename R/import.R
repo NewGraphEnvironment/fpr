@@ -2,18 +2,23 @@
 
 #' Trim up an excel worksheet - usually during import
 #'
+#' @param col_filter_na Logical whether to remove rows if `NA` is present in a specified column. Defaults to false.
+#' @param col_filter_na_num Integer specifying column to filter if `NA`s are present. Defaults to 2 because
+#' we use that in the fish submission form since `gazetted_name` is required and because first column
+#' of location sheet (`step_1_ref_and_loc_info') is populated to row 1500 out of box. Note that this !is.na for col 2 results in some
+#' trimming of a couple events on the admin_only_pick_lists.csv
 #' @param dat Dataframe
-#' @param ... Not used
-#' @param clean_col2 Logical whether to remove rows if no `gazetted_name` is specified. Defaults to false.
 #'
 #' @description Select column names based on first row with inputs all across.
 #' Trim up the dataframe based on whether there are events in the first column.
 #' This is a `date` in the pscis inputs and `reference_number` in the fish submission template
 #' @return A dataframe
+#' @export
 #'
 #' @examples
 fpr_sheet_trim <- function(dat,
-                           clean_col2 = FALSE) {
+                           col_filter_na = FALSE,
+                           col_filter_na_num = 2) {
   dat2 <- dat %>%
     dplyr::select(1:ncol(dat)) %>% ##get rid of the extra columns because there are remnants way down low I believe
     janitor::row_to_names(which.max(complete.cases(.))) %>%
@@ -22,9 +27,9 @@ fpr_sheet_trim <- function(dat,
     # remove rows that don't have a value in the first column
     dplyr::filter(!is.na(.[[1]]))
 
-  if(clean_col2){
+  if(col_filter_na){
     dat2 <- dat2 %>%
-      dplyr::filter(!is.na(.[[2]]))
+      dplyr::filter(!is.na(.[[col_filter_na_num]]))
   }
   dat2
 }
@@ -132,7 +137,8 @@ fpr_import_hab_prior <- function(input = 'data/habitat_confirmations_priorities.
 #' https://www2.gov.bc.ca/gov/content/environment/plants-animals-ecosystems/fish/fish-and-fish-habitat-data-information/fish-data-submission/submit-fish-data#submitfish
 #' @param backup Logical whether to backup all sheets as csvs or not. Defaults to true
 #' @param path_backup String indicating directory to create and backup to.  Defaults to 'data/backup/'
-#' @param ... Not used.  For passing true or false to `clean_col2` from `fpr_sheet_trim`
+#' @param ... Not used.  For passing true or false to col_filter_na and col_filter_na_num from \link{fpr_sheet_trim}
+#' @seealso \link{fpr_sheet_trim}
 #'
 #' @return
 #' @export
