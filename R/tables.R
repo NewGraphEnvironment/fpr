@@ -131,7 +131,8 @@ fpr_table_cv_detailed_comments <- function(dat){
 #' @param tab_sum list of dataframes formatted by fpr_table_cv_detailed.
 #' @param comments list of dataframes formatted by fpr_table_cv_detailed_comments
 #' @param photos list of dataframes with just the url of the photo for each site
-#' @param gitbook logical based on whether out put is gitbook or pagedown pdf
+#' @param gitbook logical based on whether out put is gitbook or pagedown pdf. Defaults to gitbook_on which is
+#' defined in the index file as FALSE when the pagedown output is on.  This is when we need the spaces.
 #'
 #' @return html tables with photo as footnotes
 #' @export
@@ -140,7 +141,7 @@ fpr_table_cv_detailed_comments <- function(dat){
 fpr_table_cv_detailed_print <- function(tab_sum,
                                         comments,
                                         photos,
-                                        gitbook_switch = TRUE){
+                                        gitbook_switch = gitbook_on){
   output <- kable(tab_sum, booktabs = T) %>%
     kableExtra::kable_styling(c("condensed"), full_width = T, font_size = 11) %>%
     kableExtra::add_footnote(label = paste0('Comments: ', comments[[1]]), notation = 'none') %>% #this grabs the comments out
@@ -148,8 +149,7 @@ fpr_table_cv_detailed_print <- function(tab_sum,
                                             '. From top left clockwise: Road/Site Card, Barrel, Outlet, Downstream, Upstream, Inlet.',
                                             photos[[1]]), notation = 'none')
   if(gitbook_switch){ output
-  }else output %>%
-    kableExtra::add_footnote(label = '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>', escape = F, notation = 'none')
+  }else paste0(output, '<br><br><br><br><br><br><br><br><br><br><br><br><br><br>')
 }
 
 # fpr_print_tab_summary_all_pdf <- function(tab_sum, comments, photos){
@@ -221,7 +221,7 @@ fpr_table_cv_html <- function(site){
 #' indicating order and location (left or right) for how to present the information.
 #' @param site Integer identifying which site to filter the bcfishpass dataframe
 #' @param col Column to filter bcfishpass.  Defaults to stream_crossing_id
-#' @param ... Not use. Pass param from fpr_table_bcfp_html
+#' @param ... Not use. Pass param to \link{fpr_kable}
 #'
 #' @return
 #' @export
@@ -277,7 +277,10 @@ fpr_table_bcfp <- function(dat = bcfishpass,
            Habitat = stringr::str_replace_all(Habitat, 'Lakereservoir', 'Lake and Reservoir'),
            Habitat = stringr::str_replace_all(Habitat, 'Spawningrearing ', 'Spawning and Rearing ')) %>%
     select(-remove)
-  return(tab_joined)
+  tab_joined %>%
+    fpr_kable(caption_text = paste0('Summary of fish habitat modelling for PSCIS crossing ', site, '.'),
+                   footnote_text = 'Model data is preliminary and subject to adjustments.',
+                   ...)
 }
 
 #' Write bcfishpass model summaries to html files
@@ -308,18 +311,101 @@ fpr_table_bcfp_html <- function(sites, ...){
 #' @param site Integer. Name of PSCIS site to filter pscis_phase2. Defaults to my_site
 #' @param site_photo_id Integer. Name of PSCIS site to source photo. Defaults to my_site
 #' @param font Integer. Size of font.
+#' @param col_filter String unquoted.  Name of column to filter site from. Defaults to pscis_crossing_id
 #'
 #' @return html object
 #' @export
 #'
 #' @examples print_tab_summary()
-fpr_table_cv_summary_memo <- function(dat = pscis_phase2, site = my_site, site_photo_id = my_site, font = 11){
-  fpr_table_cv_detailed(dat = dat %>% filter(pscis_crossing_id == site)) %>%
+fpr_table_cv_summary_memo <- function(dat = pscis_phase2,
+                                      site = my_site,
+                                      site_photo_id = my_site,
+                                      font = 11,
+                                      col_filter = pscis_crossing_id){
+  fpr_table_cv_detailed(dat = dat %>% filter({{ col_filter }} == site)) %>%
     kable(caption = paste0('Summary of fish passage assessment for PSCIS crossing ', site, '.'), booktabs = T) %>%    #
-    kableExtra::add_footnote(label = paste0('Comments: ', dat %>% filter(pscis_crossing_id == site) %>%
-                                              pull(assessment_comment)), notation = 'none') %>% #this grabs the comments out
+    # kableExtra::add_footnote(label = paste0('Comments: ', dat %>% filter({{ col_filter }} == site) %>%
+    #                                           pull(assessment_comment)), notation = 'none') %>% #this grabs the comments out
     kableExtra::add_footnote(label = paste0('Photos: From top left clockwise: Road/Site Card, Barrel, Outlet, Downstream, Upstream, Inlet.',
                                             paste0('![](data/photos/', site_photo_id, '/crossing_all.JPG)')), notation = 'none') %>%
     kableExtra::kable_styling(c("condensed"), full_width = T, font_size = font)
   # kableExtra::scroll_box(width = "100%", height = "500px") ##not scrolling to simplify our pagedown output
+}
+
+
+#' Summary table for fish sampling sites
+#'
+#' @param dat Dataframe.  Defaults to tab_fish_sites_sum.  Must have columns named site, passes, ef_length_m, ef_width_m, area_m2, enclosure
+#' @param sit Integer.  Site ID.  Defaults to my_site
+#' @param ... Not used. Open for passing arguments to \link{fpr_kable}
+#'
+#' @return Dataframe
+#' @seealso \link{fpr_kable}
+#' @export
+#'
+#' @examples
+fpr_table_fish_site <- function(dat = tab_fish_sites_sum, sit = my_site, ...){
+  dat %>%
+    tidyr::separate(site, into = c('site_id', 'location', 'ef'), remove = F) %>%
+    filter(site_id == sit) %>%
+    select(site, passes, ef_length_m, ef_width_m, area_m2, enclosure) %>%
+    fpr_kable(caption_text = paste0('Fish sampling site summary for ', sit, '.'), scroll = F, ...)
+}
+
+
+#' Summary table for fish densities within individual sites
+#'
+#' @param dat Dataframe.  Defaults to fish_abund. Must have columns site, local_name, species_code,
+#' life_stage, catch, density_100m2, nfc_pass
+#'
+#' @param sit Integer.  Site ID.  Defaults to my_site
+#' @param ... Not used. Open for passing arguments to \link{fpr_kable}
+#' @seealso \link{fpr_kable}
+#'
+#' @return
+#' @export
+#'
+#' @examples
+fpr_table_fish_density <- function(dat = fish_abund, sit = my_site, ...){
+  dat %>%
+    filter(site == sit) %>%
+    select(
+      local_name,
+      species_code,
+      life_stage,
+      catch,
+      density_100m2,
+      nfc_pass) %>%
+    fpr_kable(caption_text = paste0('Fish sampling density results summary for ', sit, '.'),
+              footnote_text = 'nfc_pass FALSE means fish were captured in final pass indicating more fish of this species/lifestage may have remained in site.
+              Mark-recaptured required to reduce uncertainties.',
+              scroll = F,
+              ...)
+}
+
+####--------------phase1 summary tables troubleshoot--------------------------
+#' Print out test table
+#'
+#' @param tab_sum Dataframe formatted by fpr_table_cv_detailed.
+#' @param comments Dataframe formatted by fpr_table_cv_detailed_comments
+#' @param photos test
+#' @param gitbook_switch test
+#'
+#' @return html table with photo as footnotes
+#' @export
+#'
+#' @examples
+fpr_test <- function(tab_sum,
+                     comments,
+                     photos,
+                     gitbook_switch = gitbook_on){
+  output <- kable(tab_sum, booktabs = T) %>%
+    kableExtra::kable_styling(c("condensed"), full_width = T, font_size = 11) %>%
+    kableExtra::add_footnote(label = paste0('Comments: ', comments[[1]]), notation = 'none') %>% #this grabs the comments out
+    kableExtra::add_footnote(label = paste0('Photos: PSCIS ID ', photos[[2]],
+                                            '. From top left clockwise: Road/Site Card, Barrel, Outlet, Downstream, Upstream, Inlet.',
+                                            photos[[1]]), notation = 'none')
+  if(gitbook_switch){output
+  }else output %>%
+    kableExtra::add_footnote(label = '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>', escape = F, notation = 'none')
 }
