@@ -4,11 +4,13 @@
 \alias{fpr_photo_amalg_cv}
 \title{Amalgamate 6 photos into 1}
 \usage{
-fpr_photo_amalg_cv(site_id)
+fpr_photo_amalg_cv(site_id, size = "560x420!")
 }
 \arguments{
 \item{site_id}{Numeric value of site corresponding to the directory name that holds the photos
 which include 'road', 'inlet', 'upstream', 'downstream', 'outlet', barrel' in the filenames.}
+
+\item{size}{String. Dimensions of individual photos. Defaults to "560x420!" to give oveall photo size of 1120 x 1260.}
 }
 \value{
 

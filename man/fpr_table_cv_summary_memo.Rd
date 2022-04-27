@@ -8,7 +8,8 @@ fpr_table_cv_summary_memo(
   dat = pscis_phase2,
   site = my_site,
   site_photo_id = my_site,
-  font = 11
+  font = 11,
+  col_filter = pscis_crossing_id
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ fpr_table_cv_summary_memo(
 \item{site_photo_id}{Integer. Name of PSCIS site to source photo. Defaults to my_site}
 
 \item{font}{Integer. Size of font.}
+
+\item{col_filter}{String unquoted.  Name of column to filter site from. Defaults to pscis_crossing_id}
 }
 \value{
 html object

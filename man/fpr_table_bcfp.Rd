@@ -22,7 +22,7 @@ indicating order and location (left or right) for how to present the information
 
 \item{col}{Column to filter bcfishpass.  Defaults to stream_crossing_id}
 
-\item{...}{Not use. Pass param from fpr_table_bcfp_html}
+\item{...}{Not use. Pass param to \link{fpr_kable}}
 }
 \value{
 

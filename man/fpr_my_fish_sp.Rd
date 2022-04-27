@@ -7,7 +7,7 @@
 fpr_my_fish_sp(
   ...,
   col_pull = observedspp_upstr,
-  sp_ignore = c("SST", "TR", "SP")
+  sp_ignore = c("SST", "TR", "SP", "CRS")
 )
 }
 \arguments{

@@ -4,14 +4,17 @@
 \alias{fpr_sheet_trim}
 \title{Trim up an excel worksheet - usually during import}
 \usage{
-fpr_sheet_trim(dat, clean_col2 = FALSE)
+fpr_sheet_trim(dat, col_filter_na = FALSE, col_filter_na_num = 2)
 }
 \arguments{
 \item{dat}{Dataframe}
 
-\item{clean_col2}{Logical whether to remove rows if no `gazetted_name` is specified. Defaults to false.}
+\item{col_filter_na}{Logical whether to remove rows if `NA` is present in a specified column. Defaults to false.}
 
-\item{...}{Not used}
+\item{col_filter_na_num}{Integer specifying column to filter if `NA`s are present. Defaults to 2 because
+we use that in the fish submission form since `gazetted_name` is required and because first column
+of location sheet (`step_1_ref_and_loc_info') is populated to row 1500 out of box. Note that this !is.na for col 2 results in some
+trimming of a couple events on the admin_only_pick_lists.csv}
 }
 \value{
 A dataframe
