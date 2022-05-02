@@ -1,5 +1,7 @@
 # fpr (development version)
 
+# add `fpr_make_geopackage()`
+
 # fpr 0.1.0.9002
 
 * `fpr_table_bcfp()` now includes `fpr_kable` with cookie cutter caption and footnotes.  Should move caption and footnotes to params for more flexibility.
