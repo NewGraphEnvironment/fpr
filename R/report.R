@@ -343,10 +343,11 @@ fpr_my_substrate_sentence <- function(loc = 'us', sit = my_site){
 #' Randomly generated order from the inputs of cover, channel and substrate sentences.
 #'
 #'
-#' @param loc String in quotes which is either 'us' upstream or 'ds' downstream.  Defaults to 'us'
+#' @param loc String in quotes which is usually either 'us' upstream or 'ds' downstream.  Defaults to 'us'.
+#' Corresponds to the location column of input dataframes that comes from a split of the alias_local_name
 #' @param sit Integer. Corresponds to the PSCIS site id. Defaults to my_site defined in environment
 #'
-#' @return String sentence with the cover types described
+#' @return String paragraph with the habitat characteristics for a site summarized
 #' @export
 #'
 #' @examples fpr_my_cover_sentence()
