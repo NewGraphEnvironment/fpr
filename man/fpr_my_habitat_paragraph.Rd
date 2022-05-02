@@ -7,12 +7,13 @@
 fpr_my_habitat_paragraph(loc = "us", sit = my_site)
 }
 \arguments{
-\item{loc}{String in quotes which is either 'us' upstream or 'ds' downstream.  Defaults to 'us'}
+\item{loc}{String in quotes which is usually either 'us' upstream or 'ds' downstream.  Defaults to 'us'.
+Corresponds to the location column of input dataframes that comes from a split of the alias_local_name}
 
 \item{sit}{Integer. Corresponds to the PSCIS site id. Defaults to my_site defined in environment}
 }
 \value{
-String sentence with the cover types described
+String paragraph with the habitat characteristics for a site summarized
 }
 \description{
 Randomly generated order from the inputs of cover, channel and substrate sentences.
