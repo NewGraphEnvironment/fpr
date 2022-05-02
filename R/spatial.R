@@ -106,3 +106,33 @@ fpr_sp_wshd_stats <- function(dat = wshds){
     ) %>%
     dplyr::bind_rows()
 }
+
+#' Make geopackage in directory called
+#'
+#' Names the layer the same as the name of the dataframe that is burned
+#'
+#' @param dat Dataframe with coordinates to burn to geopackage
+#' @param gpkg_name String Name of the geopackage
+#' @param utm_zone Integer UTM zone
+#' @param x String (quoted) representing column name where x coordinates are stored
+#' @param y String (quoted) representing column name where y coordinates are stored
+#' @param crs Integer destination CRS. Defaults to 4326
+#' @param dir String (quoted) representing relative path to directory where geopackage will be burned
+#'
+#' @return geopackage layer
+#' @export
+#'
+#' @examples
+fpr_make_geopackage <- function(dat,
+                                dir = "data/fishpass_mapping/",
+                                gpkg_name = 'fishpass_mapping',
+                                utm_zone = 9,
+                                x = 'utm_easting',
+                                y = 'utm_northing',
+                                crs = 4326){
+  nm <-deparse(substitute(dat))
+  dat %>%
+    sf::st_as_sf(coords = c(x, y), crs = 26900 + utm_zone, remove = F) %>%
+    sf::st_transform(crs = crs) %>%
+    sf::st_write(paste0(dir, gpkg_name, ".gpkg"), nm, delete_layer = TRUE)
+}
