@@ -4,10 +4,12 @@
 \alias{fpr_my_mapsheet}
 \title{Print link to map based on watershed name and 50k grid found in bcfishpass}
 \usage{
-fpr_my_mapsheet(wshd = "bulkley")
+fpr_my_mapsheet(wshd = "bulkley", archive_date = "2022-05-02")
 }
 \arguments{
 \item{wshd}{String identifying the watershed.  Not standardized. Must match folders at https://hillcrestgeo.ca/outgoing/fishpassage/projects/}
+
+\item{archive_date}{string quoted.  Date in format YYYY-MM-DD corresponding to the archive date of the mapdeck}
 }
 \value{
 Stirng with the url for the map where the crossing is located
