@@ -434,6 +434,36 @@ fpr_photo_paths_to_copy <- function(path_to_photo_dir){
     pull(value)
 }
 
+#' Untested!! Identify photos that should be copied over into a file to upload to the phase 2 PSCIS interface
+#' This is every photo not moved by fpr_photo_paths_to_copy
+#' adapted from https://stackoverflow.com/questions/56160445/how-to-pass-multiple-necessary-patterns-to-str-subset
+#'
+#' @param path_to_photo_dir Full path to photo directories that will be copied over
+#'
+#' @return
+#' @export
+#'
+#' @examples
+fpr_photo_paths_to_copy_phase2 <- function(path_to_photo_dir){
+  all_photos <- list.files(path = path_to_photo_dir,
+                           pattern = ".JPG$",
+                           recursive = TRUE,
+                           ignore.case = T,
+                           full.names = T,
+                           include.dirs = T)
+  negate_these <- all_photos %>%
+    stringr::str_subset(., '_k_') %>%
+    as_tibble() %>%
+    slice(1:4) ##we needed a way to grab only the first 4 photos that have a _k_ in them or else we get too many photos.
+  keep_these <- all_photos %>%
+    stringr::str_subset(., 'barrel|outlet|upstream|downstream|road|inlet', negate = T) %>%
+    purrr::map(negate_these, stringr::str_subset, string = ., negate = T) %>%
+    purrr::reduce(generics::intersect) |>
+    as_tibble() %>%
+    pull(value)
+}
+
+
 ## we have seen an issue with very long photo names getting rejected from PSCIS submisson
 ## find the long names and truncate them
 ## hold a record of the orignal and shortened named so we can repeat?
