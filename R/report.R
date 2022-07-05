@@ -134,14 +134,16 @@ fpr_my_fish_sp <- function(...,
 #'
 #' @param wshd String identifying the watershed.  Not standardized. Must match folders at https://hillcrestgeo.ca/outgoing/fishpassage/projects/
 #' @param archive_date string quoted.  Date in format YYYY-MM-DD corresponding to the archive date of the mapdeck
+#' @param ... unused.  placed to pass arguments to fpr_my_bcfishpass
 #'
 #' @return Stirng with the url for the map where the crossing is located
 #' @export
 #'
 #' @examples
 fpr_my_mapsheet <- function(wshd = 'bulkley',
-                            archive_date = '2022-05-02'){
-  paste0('https://hillcrestgeo.ca/outgoing/fishpassage/projects/', wshd, '/archive/', archive_date, '/FishPassage_', fpr_my_bcfishpass(col_pull = dbm_mof_50k_grid), '.pdf')
+                            archive_date = '2022-05-02',
+                            ...){
+  paste0('https://hillcrestgeo.ca/outgoing/fishpassage/projects/', wshd, '/archive/', archive_date, '/FishPassage_', fpr_my_bcfishpass(col_pull = dbm_mof_50k_grid, ...), '.pdf')
 }
 
 
