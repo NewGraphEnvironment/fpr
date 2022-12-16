@@ -21,7 +21,7 @@ fpr_sheet_trim <- function(dat,
                            col_filter_na_num = 2) {
   dat2 <- dat %>%
     dplyr::select(1:ncol(dat)) %>% ##get rid of the extra columns because there are remnants way down low I believe
-    janitor::row_to_names(which.max(complete.cases(.))) %>%
+    janitor::row_to_names(which.max(stats::complete.cases(.))) %>%
     janitor::clean_names() %>%
     janitor::remove_empty(., which = "rows") %>%
     # remove rows that don't have a value in the first column
@@ -42,7 +42,6 @@ fpr_sheet_trim <- function(dat,
 #' @export
 #'
 #' @examples
-#' fpr_import_pscis()
 fpr_import_pscis <- function(workbook_name = 'pscis_phase1.xlsm'){ ##new template.  could change file back to .xls
   sig_fig0 <- c('length_or_width_meters')
   sig_fig1 <- c('culvert_slope_percent', 'stream_width_ratio')
@@ -86,18 +85,30 @@ fpr_pscis_wkb_paths <- function(){
     grep(pattern = '~', invert = T, value = T)
 }
 
-#' Import All PSCIS Sheets at Once
+#' Import All PSCIS Sheets at Once and backup
 #'
-#' @return list of tibbles
+#' @param backup Logical whether to backup all sheets as a combined csvs or not. Defaults to true
+#' @param path_backup String indicating directory to create (if not exists) and backup to.  Defaults to 'data/backup/'
+#' @param ... Unused - Pass through another param
+#'
+#' @return list of tibbles and a csv that backs up a combined tibble of list components
 #' @export
 #'
 #' @examples
-fpr_import_pscis_all <- function(){
+fpr_import_pscis_all <- function(backup = TRUE,
+                                 path_backup = 'data/backup/',
+                                 ...){
   wkbs_paths <- fpr_pscis_wkb_paths()
 
   pscis_list <- wkbs_paths %>%
     map(fpr_import_pscis) %>%
     purrr::set_names(nm = tools::file_path_sans_ext(wkbs_paths))
+
+  if(backup){
+    dir.create(path_backup)
+    dplyr::bind_rows(pscis_list) %>%
+    readr::write_csv(file=paste0(path_backup, "pscis_all.csv"), na = '')
+  }
 }
 
 #' Import habitat priorities csv and assign aggregated crossing id

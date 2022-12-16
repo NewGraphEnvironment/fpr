@@ -1,11 +1,15 @@
 # fpr (development version)
 
-# add `fpr_make_geopackage()`
+# fpr v.20221215 or  0.1.0.9003
+
+* add `fpr_make_geopackage()`
+* add backup switch for `fpr_import_pscis_all`
+* add `fpr_data_tab_habvalue` data object
 
 # fpr 0.1.0.9002
 
 * `fpr_table_bcfp()` now includes `fpr_kable` with cookie cutter caption and footnotes.  Should move caption and footnotes to params for more flexibility.
-*  Tweaked individual photot in `fpr_phtot_amalg_cv()` from "x420"" to "560x420!" to deal with photos that start out as wrong size
+*  Tweaked individual photo in `fpr_phtot_amalg_cv()` from "x420"" to "560x420!" to deal with photos that start out as wrong size
 * add `fpr_plot_fish_box()` 
 * add `fpr_table_fish_density()` 
 * add `fpr_table_fish_site()` 

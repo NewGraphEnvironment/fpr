@@ -12,9 +12,6 @@ which include 'road', 'inlet', 'upstream', 'downstream', 'outlet', barrel' in th
 
 \item{size}{String. Dimensions of individual photos. Defaults to "560x420!" to give oveall photo size of 1120 x 1260.}
 }
-\value{
-
-}
 \description{
 Here we stack up and down then side to side for reporting.  There must be all 6 photos
 present, only 1 of each and within the file names of those photos must be the strings

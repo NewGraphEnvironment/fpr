@@ -9,9 +9,6 @@ fpr_photo_paths_to_copy(path_to_photo_dir)
 \arguments{
 \item{path_to_photo_dir}{Full path to photo directories that will be copied over}
 }
-\value{
-
-}
 \description{
 Identify photos that should be copied over into file to upload to PSCIS
 }

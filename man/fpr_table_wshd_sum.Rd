@@ -11,9 +11,6 @@ fpr_table_wshd_sum(dat = wshds, site_id = NULL)
 
 \item{site_id}{Numeric id corresponding to stream_crossing_id (psscis id) of site}
 }
-\value{
-
-}
 \description{
 Summary stats for each watershed
 }

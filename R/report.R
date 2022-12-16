@@ -32,7 +32,7 @@ fpr_my_pscis_info <- function(dat = pscis_phase2,
 #' @return String
 #' @export
 #'
-#' @examples fsr_my_priority_info()
+#' @examples
 fpr_my_priority_info <- function(dat = habitat_confirmations_priorities,
                                  sit = my_site,
                                  loc = 'us',
@@ -52,7 +52,7 @@ fpr_my_priority_info <- function(dat = habitat_confirmations_priorities,
 #' @return
 #' @export
 #'
-#' @examples fpr_appendix_title(site = 999)
+#' @examples
 fpr_appendix_title <- function(site = my_site,
                                site2 = NULL,
                                site3 = NULL){
@@ -80,7 +80,7 @@ fpr_my_bcfishpass <- function(dat = bcfishpass,
                               col_pull = stream_order,
                               round_dig = 0){
   dat %>%
-    dplyr::mutate(dplyr::across(tidyselect:::where(is.numeric), round, round_dig)) %>%
+    dplyr::mutate(dplyr::across(tidyselect::where(is.numeric), round, round_dig)) %>%
     dplyr::filter({{col_filter}} == site) %>%
     dplyr::distinct({{col_filter}} , .keep_all = T) %>% #deals with duplicates
     dplyr::pull({{col_pull}})
@@ -89,8 +89,8 @@ fpr_my_bcfishpass <- function(dat = bcfishpass,
 
 #' PUll out watershed characteristics
 #'
-#' @param site
-#' @param col
+#' @param site Integer - defaults to my_site
+#' @param col string unquoted representing column to pull from wshds object
 #'
 #' @return
 #' @export
@@ -98,7 +98,7 @@ fpr_my_bcfishpass <- function(dat = bcfishpass,
 #' @examples
 fpr_my_wshd <- function(site = my_site, col = area_km){
   wshds %>%
-    filter(stream_crossing_id == site) %>%
+    dplyr::filter(stream_crossing_id == site) %>%
     pull({{ col }})
 }
 
@@ -166,13 +166,13 @@ fpr_my_habitat_info <- function(dat = hab_site,
                                 loc = 'us',
                                 col_pull = 'avg_channel_width_m'){
   dat %>%
-    filter(site == sit & location == loc) %>%
+    dplyr::filter(site == sit & location == loc) %>%
     select(site, everything()) %>%
     t() %>%
     as.data.frame() %>%
     tibble::rownames_to_column() %>%
     # mutate(rowname = stringr::str_replace_all(rowname, '_', ' ')) %>%
-    filter(rowname == col_pull) %>%
+    dplyr::filter(rowname == col_pull) %>%
     pull(V1)
 }
 
@@ -180,10 +180,10 @@ fpr_my_habitat_info <- function(dat = hab_site,
 #'
 #' @param dat Dataframe. Defaults to hab_site.
 #' @param sit Integer. Corresponds to the PSCIS site id. Defaults to my_site defined in envrionment
-#' @param cover_type
+#' @param cover_type Cover type from the fish submission spreadsheet
 #' @param loc String. Either 'us' (upstream) or 'ds' (downstream). Use quotes.
 #'
-#' @return
+#' @return string value of cover as per submission template dropdown options
 #' @export
 #'
 #' @examples
@@ -218,7 +218,7 @@ fpr_my_habitat_cover <- function(dat = hab_site,
 #' @return String sentence with the direction and distance surveyed.
 #' @export
 #'
-#' @examples fpr_my_survey_dist()
+#' @examples
 fpr_my_survey_dist <- function(loc = 'us', sit = my_site){
 
   seg1 <- 'The stream was surveyed '
@@ -249,7 +249,7 @@ fpr_my_survey_dist <- function(loc = 'us', sit = my_site){
 #' @return String sentence with the cover types described
 #' @export
 #'
-#' @examples fpr_my_cover_sentence()
+#' @examples
 fpr_my_cover_sentence <- function(loc = 'us', sit = my_site){
   seg1 <- 'Total cover amount was rated as '
 
@@ -299,7 +299,7 @@ fpr_my_cost_estimate <- function(dat = tab_cost_est_phase2,
 #' @return String sentence with the cover types described
 #' @export
 #'
-#' @examples fpr_my_cover_sentence()
+#' @examples
 fpr_my_channel_sentence <- function(loc = 'us', sit = my_site){
   seg1 <- 'The average channel width was '
 
@@ -311,7 +311,7 @@ fpr_my_channel_sentence <- function(loc = 'us', sit = my_site){
 
   seg5 <- 'm, and the average gradient was '
 
-  seg6 <- fpr::fpr_my_habitat_info(loc = 'ds', col_pull = 'average_gradient_percent')
+  seg6 <- fpr::fpr_my_habitat_info(loc = loc, col_pull = 'average_gradient_percent')
 
   seg7 <- '%.'
 
@@ -327,7 +327,7 @@ fpr_my_channel_sentence <- function(loc = 'us', sit = my_site){
 #' @return String sentence with the cover types described
 #' @export
 #'
-#' @examples fpr_my_cover_sentence()
+#' @examples
 fpr_my_substrate_sentence <- function(loc = 'us', sit = my_site){
   seg1 <- 'The dominant substrate was '
 
@@ -354,7 +354,7 @@ fpr_my_substrate_sentence <- function(loc = 'us', sit = my_site){
 #' @return String paragraph with the habitat characteristics for a site summarized
 #' @export
 #'
-#' @examples fpr_my_cover_sentence()
+#' @examples
 fpr_my_habitat_paragraph <- function(loc = 'us', sit = my_site){
   seg1 <- fpr_my_cover_sentence(loc = loc, sit = sit)
 

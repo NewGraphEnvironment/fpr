@@ -13,12 +13,6 @@ fpr_appendix_title(site = my_site, site2 = NULL, site3 = NULL)
 
 \item{site3}{Numeric value of site 3. Defaults to NULL.}
 }
-\value{
-
-}
 \description{
 Build the title for the appendices
-}
-\examples{
-fpr_appendix_title(site = 999)
 }

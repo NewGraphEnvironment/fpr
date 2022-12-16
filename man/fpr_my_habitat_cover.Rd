@@ -17,9 +17,11 @@ fpr_my_habitat_cover(
 \item{sit}{Integer. Corresponds to the PSCIS site id. Defaults to my_site defined in envrionment}
 
 \item{loc}{String. Either 'us' (upstream) or 'ds' (downstream). Use quotes.}
+
+\item{cover_type}{Cover type from the fish submission spreadsheet}
 }
 \value{
-
+string value of cover as per submission template dropdown options
 }
 \description{
 Pull out dominant and subdominant cover types

@@ -11,9 +11,6 @@ fpr_table_bcfp_html(sites, ...)
 
 \item{...}{Not used. Pass param to fpr_table_bcfp}
 }
-\value{
-
-}
 \description{
 Tables will be linked to map points
 }

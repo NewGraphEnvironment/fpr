@@ -17,6 +17,3 @@ String sentence with the cover types described
 \description{
 Sentence to describe the dominant and sub-dominant substrate
 }
-\examples{
-fpr_my_cover_sentence()
-}

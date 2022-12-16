@@ -20,9 +20,6 @@ fpr_my_pscis_info(
 
 \item{col_pull}{String name of column of which to pull from filtered `dat`. Defaults to `stream_name`}
 }
-\value{
-
-}
 \description{
 Pull info about a site
 }

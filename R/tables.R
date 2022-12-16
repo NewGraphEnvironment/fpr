@@ -14,7 +14,7 @@
 #' @return
 #' @export
 #'
-#' @examples fpr_kable(mtcars)
+#' @examples
 fpr_kable <- function(dat,
                       caption_text = '',
                       font = font_set,
@@ -211,7 +211,6 @@ fpr_table_wshd_sum <- function(dat = wshds, site_id = NULL){
 #' @export
 #'
 #' @examples
-
 fpr_table_cv_html <- function(site){
   fpr_table_cv_detailed(pscis_all %>% filter(pscis_crossing_id == site)) %>%
     kable(booktabs = T) %>%
@@ -244,15 +243,15 @@ fpr_table_bcfp <- function(dat = bcfishpass,
                                   col = stream_crossing_id,
                            ...){
   df <- dat %>%
-    mutate(across(where(is.numeric), round, 1)) %>%
-    filter({{ col }} == site) %>%
+    dplyr::mutate(across(where(is.numeric), round, 1)) %>%
+    dplyr::filter({{ col }} == site) %>%
     distinct({{ col }}, .keep_all = T)
   tab_results_left <- xref_table %>%
-    filter(id_side == 1) %>%
-    arrange(id_join)
+    dplyr::filter(id_side == 1) %>%
+    dplyr::arrange(id_join)
   ##get the data
   tab_pull_left <- df %>%
-    select(pull(tab_results_left,bcfishpass)) %>%
+    select(dplyr::pull(tab_results_left,bcfishpass)) %>%
     # slice(1) %>%
     t() %>%
     as.data.frame() %>%
@@ -261,11 +260,11 @@ fpr_table_bcfp <- function(dat = bcfishpass,
   left <- left_join(tab_pull_left, xref_table, by = c('rowname' = 'bcfishpass'))
 
   tab_results_right <- xref_table %>%
-    filter(id_side == 2)
+    dplyr::filter(id_side == 2)
 
   ##get the data
   tab_pull_right<- df %>%
-    select(pull(tab_results_right,bcfishpass)) %>%
+    dplyr::select(dplyr::pull(tab_results_right,bcfishpass)) %>%
     # slice(1) %>%
     t() %>%
     as.data.frame() %>%
@@ -274,20 +273,20 @@ fpr_table_bcfp <- function(dat = bcfishpass,
   right <- left_join(tab_pull_right, xref_table, by = c('rowname' = 'bcfishpass'))
 
   tab_joined <- left_join(
-    select(left, report, V1, id_join),
-    select(right, report, V1, id_join),
+    dplyr::select(left, report, V1, id_join),
+    dplyr::select(right, report, V1, id_join),
     by = 'id_join'
   ) %>%
     select(-id_join) %>%
     purrr::set_names(c('Habitat', 'Potential', 'remove', 'Remediation Gain')) %>%
-    mutate(Potential = as.numeric(Potential),
+    dplyr::mutate(Potential = as.numeric(Potential),
            `Remediation Gain` = as.numeric(`Remediation Gain`)) %>%
-    mutate(`Remediation Gain (%)` = round(`Remediation Gain`/Potential * 100,0),
+    dplyr::mutate(`Remediation Gain (%)` = round(`Remediation Gain`/Potential * 100,0),
            Habitat = stringr::str_replace_all(Habitat, 'Ha', '(ha)'),
            Habitat = stringr::str_replace_all(Habitat, 'Km', '(km)'),
            Habitat = stringr::str_replace_all(Habitat, 'Lakereservoir', 'Lake and Reservoir'),
            Habitat = stringr::str_replace_all(Habitat, 'Spawningrearing ', 'Spawning and Rearing ')) %>%
-    select(-remove)
+    dplyr::select(-remove)
   tab_joined %>%
     fpr_kable(caption_text = paste0('Summary of fish habitat modelling for PSCIS crossing ', site, '.'),
                    footnote_text = 'Model data is preliminary and subject to adjustments.',
@@ -327,7 +326,7 @@ fpr_table_bcfp_html <- function(sites, ...){
 #' @return html object
 #' @export
 #'
-#' @examples print_tab_summary()
+#' @examples
 fpr_table_cv_summary_memo <- function(dat = pscis_phase2,
                                       site = my_site,
                                       site_photo_id = my_site,
@@ -359,8 +358,8 @@ fpr_table_cv_summary_memo <- function(dat = pscis_phase2,
 fpr_table_fish_site <- function(dat = tab_fish_sites_sum, sit = my_site, ...){
   dat %>%
     tidyr::separate(site, into = c('site_id', 'location', 'ef'), remove = F) %>%
-    filter(site_id == sit) %>%
-    select(site, passes, ef_length_m, ef_width_m, area_m2, enclosure) %>%
+    dplyr::filter(site_id == sit) %>%
+    dplyr::select(site, passes, ef_length_m, ef_width_m, area_m2, enclosure) %>%
     fpr_kable(caption_text = paste0('Fish sampling site summary for ', sit, '.'), scroll = F, ...)
 }
 
@@ -380,8 +379,8 @@ fpr_table_fish_site <- function(dat = tab_fish_sites_sum, sit = my_site, ...){
 #' @examples
 fpr_table_fish_density <- function(dat = fish_abund, sit = my_site, ...){
   dat %>%
-    filter(site == sit) %>%
-    select(
+    dplyr::filter(site == sit) %>%
+    dplyr::select(
       local_name,
       species_code,
       life_stage,

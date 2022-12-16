@@ -1,3 +1,10 @@
+#' This is a table that cross references the names PSCIS submissioni template to the bc data catalogue names to names used in reporting.  Also has columns that reference untidy table ids for join for two column table.
+#'
+#' @name xref_names_pscis
+#' @docType data
+#' @author Al Irvine \email{al@newgraphenvironment.com}
+#' @references \url{https://www2.gov.bc.ca/gov/content/environment/plants-animals-ecosystems/fish/aquatic-habitat-management/fish-passage/fish-passage-technical/assessment-projects}
+#' @keywords data
 xref_names_pscis <- tibble::tribble(
                                         ~bcdata,                               ~spdsht,                 ~report, ~id_join, ~id_side,
                                            "id",                                    NA,                      NA,       NA,       NA,

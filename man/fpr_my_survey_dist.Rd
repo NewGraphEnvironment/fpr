@@ -17,6 +17,3 @@ String sentence with the direction and distance surveyed.
 \description{
 No hard stop at the end of the sentence so we can reference the photos.
 }
-\examples{
-fpr_my_survey_dist()
-}

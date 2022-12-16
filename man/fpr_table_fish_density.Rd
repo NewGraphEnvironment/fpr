@@ -14,9 +14,6 @@ life_stage, catch, density_100m2, nfc_pass}
 
 \item{...}{Not used. Open for passing arguments to \link{fpr_kable}}
 }
-\value{
-
-}
 \description{
 Summary table for fish densities within individual sites
 }

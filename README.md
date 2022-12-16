@@ -12,7 +12,7 @@ Install with `devtools::install_github("NewGraphEnvironment/fpr")`
 
 If looking for backwards comparability because you used the package in the past and there are issues now with a newer release of the package, install with:
 
-`devtools::install_github("NewGraphEnvironment/fpr", ref = "v202204120902")` (tag coinciding with the one you used to report)
+`devtools::install_github("NewGraphEnvironment/fpr", ref = "v.20220502")` (tag coinciding with the one you used to report)
 
 <br>
 
