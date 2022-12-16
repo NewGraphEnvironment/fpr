@@ -26,9 +26,6 @@ fpr_gpkg_p(
 
 \item{directory}{String value for}
 }
-\value{
-
-}
 \description{
 Make point geopackage layer from dataframe
 }
