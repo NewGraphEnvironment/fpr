@@ -91,10 +91,10 @@ fpr_sp_wshd_stats <- function(dat = wshds){
             elev_min = min(nh_elmat_elev, na.rm = T),
             elev_max = max(nh_elmat_elev, na.rm = T),
             # elev_mean = mean(nh_elmat_elev, na.rm = T),
-            elev_median = median(nh_elmat_elev, na.rm = T),
+            elev_median = stats::median(nh_elmat_elev, na.rm = T),
             #60% of points are greater than this
-            elev_p60 = quantile(nh_elmat_elev, probs = .4, na.rm = T),
-            asp_median = median(nh_elmat_asp, na.rm = T),
+            elev_p60 = stats::quantile(nh_elmat_elev, probs = .4, na.rm = T),
+            asp_median = stats::median(nh_elmat_asp, na.rm = T),
             aspect = cut(
               asp_median,
               breaks = c(0, directions$degree_max, 360),

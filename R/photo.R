@@ -231,12 +231,14 @@ fpr_photo_qa_prep <- function(site_id){
 #'
 #'Ensure that there are 6 named photos and no duplicates named.
 #'
-#' find sites with 0 Rows.
+#'
+#'#' find sites with 0 Rows.
 #' fpr::fpr_photo_qa()[fpr::fpr_photo_qa() %>%
 #' map(fpr::fpr_dat_w_rows) %>%
 #' grep(pattern = F) ] %>%
 #' names(.) %>%
 #' unique(.)
+#'
 #'
 #' See and fix duplicates with
 #' fpr::fpr_photo_qa() %>%
@@ -252,7 +254,7 @@ fpr_photo_qa_prep <- function(site_id){
 #' @return List of tibbles for each sites.
 #' @export
 #'
-#' @examples fpr_photo_qa()
+#' @examples
 fpr_photo_qa <- function(dat = pscis_all,
                          col = site_id){
   dat %>%
@@ -262,7 +264,7 @@ fpr_photo_qa <- function(dat = pscis_all,
     purrr::set_names(
       nm = dat %>%
         dplyr::arrange({{col}}) %>%
-        pull({{col}})
+        dplyr::pull({{col}})
     )
 }
 
@@ -471,7 +473,7 @@ fpr_photo_paths_to_copy_phase2 <- function(path_to_photo_dir){
 #' Title
 #'
 #' @param path_to_photo_dir Full path to photo directories to be
-#' @param full_names
+#' @param full_names whether we should use full names when listing photos
 #'
 #' @return
 #' @export
@@ -487,15 +489,4 @@ fpr_photo_document_all <- function(path_to_photo_dir, full_names = T){
     as_tibble()
 }
 
-#' #' Insert a photo into an rmarkdown chunk
-#' #'
-#' #' @param site Numeric indicating site id cooresponding to name of directory containing the images
-#' #' @param photo
-#' #'
-#' #' @return
-#' #' @export
-#' #'
-#' #' @examples
-#' fpr_photo_insert <- function(site = my_site, photo = my_photo){
-#'   knitr::include_graphics(paste0('data/photos/', site, '/', photo))
-#' }
+

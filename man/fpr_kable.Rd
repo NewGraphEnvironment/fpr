@@ -35,6 +35,3 @@ fpr_kable(
 \description{
 Custom kable settings
 }
-\examples{
-fpr_kable(mtcars)
-}

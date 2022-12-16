@@ -7,10 +7,9 @@
 fpr_my_wshd(site = my_site, col = area_km)
 }
 \arguments{
-\item{col}{}
-}
-\value{
+\item{site}{Integer - defaults to my_site}
 
+\item{col}{string unquoted representing column to pull from wshds object}
 }
 \description{
 PUll out watershed characteristics

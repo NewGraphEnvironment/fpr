@@ -6,9 +6,6 @@
 \usage{
 fpr_photo_time_prep()
 }
-\value{
-
-}
 \description{
 Make dataframe of all the data necessary to sort photos into site folders based on time.
 }

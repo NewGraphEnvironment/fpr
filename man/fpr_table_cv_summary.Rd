@@ -9,9 +9,6 @@ fpr_table_cv_summary(dat)
 \arguments{
 \item{dat}{Dataframe built from fpr_import_pscis}
 }
-\value{
-
-}
 \description{
 Depends on tab_culvert_prep object and xref_names objects build in the tables.R file
 }

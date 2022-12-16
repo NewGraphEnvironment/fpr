@@ -13,9 +13,6 @@ fpr_photo_resize_convert(photo, size = "1440x1080!", path = NULL)
 
 \item{path}{String of path to the directory where you want to burn the converted img}
 }
-\value{
-
-}
 \description{
 Resize images and convert JPG
 }

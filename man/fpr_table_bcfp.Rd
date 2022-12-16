@@ -24,9 +24,6 @@ indicating order and location (left or right) for how to present the information
 
 \item{...}{Not use. Pass param to \link{fpr_kable}}
 }
-\value{
-
-}
 \description{
 Built from bcfishpass with the names of the left hand side of the table and 'potential' habitat calculated
 }

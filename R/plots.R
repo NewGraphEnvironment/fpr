@@ -25,3 +25,4 @@ fpr_plot_fish_box <- function(dat = fish_abund, sit = my_site){
     geom_dotplot(binaxis='y', stackdir='center', dotsize=1)+
     ylab(expression(Density ~ (fish/100 ~  m^2)))
 }
+

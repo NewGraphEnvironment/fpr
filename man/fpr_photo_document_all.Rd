@@ -9,10 +9,7 @@ fpr_photo_document_all(path_to_photo_dir, full_names = T)
 \arguments{
 \item{path_to_photo_dir}{Full path to photo directories to be}
 
-\item{full_names}{}
-}
-\value{
-
+\item{full_names}{whether we should use full names when listing photos}
 }
 \description{
 Title

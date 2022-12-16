@@ -26,6 +26,3 @@ String
 \description{
 Extract info from habitat_confirmations_priorities spreadsheet
 }
-\examples{
-fsr_my_priority_info()
-}

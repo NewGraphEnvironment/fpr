@@ -21,9 +21,6 @@ https://www2.gov.bc.ca/gov/content/environment/plants-animals-ecosystems/fish/fi
 
 \item{...}{Not used.  For passing true or false to col_filter_na and col_filter_na_num from \link{fpr_sheet_trim}}
 }
-\value{
-
-}
 \description{
 Includes habitat data and fish sampling information.  Can back up all sheets to csvs. Suggest updateing git index for submission
 template to to assume-unchanged so that a version of the spreadsheet is stored in the repo but can be updated when it is actually necessary.

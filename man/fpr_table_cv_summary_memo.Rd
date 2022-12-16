@@ -29,6 +29,3 @@ html object
 \description{
 Summary table of culvert info with photo to place in memos.
 }
-\examples{
-print_tab_summary()
-}

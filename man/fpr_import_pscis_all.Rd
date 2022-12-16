@@ -2,13 +2,20 @@
 % Please edit documentation in R/import.R
 \name{fpr_import_pscis_all}
 \alias{fpr_import_pscis_all}
-\title{Import All PSCIS Sheets at Once}
+\title{Import All PSCIS Sheets at Once and backup}
 \usage{
-fpr_import_pscis_all()
+fpr_import_pscis_all(backup = TRUE, path_backup = "data/backup/", ...)
+}
+\arguments{
+\item{backup}{Logical whether to backup all sheets as a combined csvs or not. Defaults to true}
+
+\item{path_backup}{String indicating directory to create (if not exists) and backup to.  Defaults to 'data/backup/'}
+
+\item{...}{Unused - Pass through another param}
 }
 \value{
-list of tibbles
+list of tibbles and a csv that backs up a combined tibble of list components
 }
 \description{
-Import All PSCIS Sheets at Once
+Import All PSCIS Sheets at Once and backup
 }

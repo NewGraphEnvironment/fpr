@@ -17,6 +17,3 @@ String sentence with the cover types described
 \description{
 Sentence to describe the widths and gradient
 }
-\examples{
-fpr_my_cover_sentence()
-}

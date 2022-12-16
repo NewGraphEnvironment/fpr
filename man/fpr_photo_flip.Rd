@@ -13,9 +13,6 @@ fpr_photo_flip(site_id = my_site, rotate = 180, str_to_pull = "barrel")
 
 \item{str_to_pull}{Sting value in photo name.  Must be unique in file}
 }
-\value{
-
-}
 \description{
 Flip an image
 }

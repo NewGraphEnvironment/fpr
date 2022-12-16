@@ -5,12 +5,12 @@ Version: 0.1.0.9003
 Date: 2022-04-13
 Author: Al Irvine
 Maintainer: <al@newgraphenvironment.com>
-Description: Functions used in Fish Passage Reporting 
-License: MIT 
+Description: Functions used in Fish Passage Reporting. 
+License: MIT + file LICENSE
 URL: https://github.com/NewGraphEnvironment/fpr
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Depends: 
     R (>= 4.1)
 Imports: 
@@ -20,10 +20,7 @@ Imports:
     exifr,
     purrr,
     janitor,
-    readxl,
-    chk,
     tools,
-    plyr,
     fishbc,
     stringr,
     knitr,
@@ -33,4 +30,12 @@ Imports:
     data.table,
     elevatr,
     raster,
-    rayshader
+    rayshader,
+    readr,
+    stats,
+    generics,
+    kableExtra,
+    rvest,
+    sf,
+    tibble,
+    tidyr

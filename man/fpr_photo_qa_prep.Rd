@@ -9,9 +9,6 @@ fpr_photo_qa_prep(site_id)
 \arguments{
 \item{site_id}{Numeric value of site corresponding to folder name}
 }
-\value{
-
-}
 \description{
 Ensure that there are 6 named photos and no duplicates named
 }

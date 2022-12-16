@@ -18,12 +18,13 @@ List of tibbles for each sites.
 Ensure that there are 6 named photos and no duplicates named.
 }
 \details{
-find sites with 0 Rows.
+#' find sites with 0 Rows.
 fpr::fpr_photo_qa()[fpr::fpr_photo_qa() %>%
 map(fpr::fpr_dat_w_rows) %>%
 grep(pattern = F) ] %>%
 names(.) %>%
 unique(.)
+
 
 See and fix duplicates with
 fpr::fpr_photo_qa() %>%
@@ -32,7 +33,4 @@ data.table::rbindlist(fill = T)
 After dups are fixed then Query for missing values with
 dplyr::bind_rows() %>%
 dplyr::filter(dplyr::if_any(dplr::everything(), is.na))
-}
-\examples{
-fpr_photo_qa()
 }

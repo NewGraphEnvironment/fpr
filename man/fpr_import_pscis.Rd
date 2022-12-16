@@ -15,6 +15,3 @@ A dataframe
 \description{
 Import the pscis template.  This is a helper for fpr_import_all
 }
-\examples{
-fpr_import_pscis()
-}

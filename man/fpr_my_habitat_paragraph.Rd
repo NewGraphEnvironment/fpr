@@ -18,6 +18,3 @@ String paragraph with the habitat characteristics for a site summarized
 \description{
 Randomly generated order from the inputs of cover, channel and substrate sentences.
 }
-\examples{
-fpr_my_cover_sentence()
-}
