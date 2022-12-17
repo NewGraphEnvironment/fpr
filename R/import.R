@@ -109,6 +109,7 @@ fpr_import_pscis_all <- function(backup = TRUE,
     dplyr::bind_rows(pscis_list) %>%
     readr::write_csv(file=paste0(path_backup, "pscis_all.csv"), na = '')
   }
+  pscis_list
 }
 
 #' Import habitat priorities csv and assign aggregated crossing id
