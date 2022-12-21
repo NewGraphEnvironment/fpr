@@ -1,3 +1,5 @@
+# fpr 1.0.0
+
 # fpr v.20221220 or  1.0.0.0
 
 * BREAKING CHANGE.  `fpr_import_hab_con` now requires `row_empty_remove = T` (pushes through to `fpr_sheet_trim`) in order to correctly choose the first complete row of the template speadsheets to be the column names. Reason is that `fpr_import_pscis` now explicitly drops the first 3 rows on import in order to call column types from `fpr_xref_pscis` before the call to `fpr_sheet_trim`.
