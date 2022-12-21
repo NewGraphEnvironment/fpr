@@ -19,7 +19,8 @@ https://www2.gov.bc.ca/gov/content/environment/plants-animals-ecosystems/fish/fi
 
 \item{path_backup}{String indicating directory to create and backup to.  Defaults to 'data/backup/'}
 
-\item{...}{Not used.  For passing true or false to col_filter_na and col_filter_na_num from \link{fpr_sheet_trim}}
+\item{...}{Not used.  For passing arguments from \link{fpr_sheet_trim}.  For \link{fpr_import_hab_con} we pass the switch `row_empty_remove = F` because we have not yet assigned column types. We can also pass
+`true` or `false` to col_filter_na and col_filter_na_num to change which column we use to drop off rows}
 }
 \description{
 Includes habitat data and fish sampling information.  Can back up all sheets to csvs. Suggest updateing git index for submission
