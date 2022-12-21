@@ -1,4 +1,20 @@
-# fpr (development version)
+
+
+
+# Development Version
+
+# fpr 1.0.1
+* fix [#17](https://github.com/NewGraphEnvironment/fpr/issues/17) in `my_channel_sentence` so we actually specify the site (vs defaut my_site) in the `my_habitat_info` request for the average gradient
+
+
+# fpr 1.0.0
+* v.20221221
+* BREAKING CHANGE.  `fpr_import_hab_con` now requires `row_empty_remove = T` (pushes through to `fpr_sheet_trim`) in order to correctly choose the first complete row of the template speadsheets to be the column names. Reason is that `fpr_import_pscis` now explicitly drops the first 3 rows on import in order to call column types from `fpr_xref_pscis` before the call to `fpr_sheet_trim`.
+* `fpr_xref_pscis` built from `xref_names_pscis` with column types appended.  Better way to do this may be found at https://stackoverflow.com/questions/24067782/assign-data-types-to-each-column-of-a-data-frame-in-r as it allows fpr_imp
+* `fpr_tab_habvalue`
+* Add param for directory in `fpr_import_pscis` to allow more flexibility
+* cmd badge addition
+* add switch to 
 
 # fpr v.20221215 or  0.1.0.9003
 

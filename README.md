@@ -1,3 +1,8 @@
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/NewGraphEnvironment/fpr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/NewGraphEnvironment/fpr/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
+
 Package used for building [interactive reports]((https://newgraphenvironment.github.io/fish_passage_skeena_2021_reporting/)) related to fish passage planning including fish passage assessments and habitat confirmation assessments at road-stream crossings.  
 
 <br>

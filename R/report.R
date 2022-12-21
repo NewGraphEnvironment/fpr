@@ -311,7 +311,7 @@ fpr_my_channel_sentence <- function(loc = 'us', sit = my_site){
 
   seg5 <- 'm, and the average gradient was '
 
-  seg6 <- fpr::fpr_my_habitat_info(loc = loc, col_pull = 'average_gradient_percent')
+  seg6 <- fpr::fpr_my_habitat_info(sit = sit, loc = loc, col_pull = 'average_gradient_percent')
 
   seg7 <- '%.'
 
