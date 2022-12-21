@@ -14,7 +14,15 @@
 * `fpr_tab_habvalue`
 * Add param for directory in `fpr_import_pscis` to allow more flexibility
 * cmd badge addition
-* add switch to 
+* add objects 
+  + fpr_tab_barrier_result 
+  + fpr_tab_barrier_scoring 
+  + fpr_tab_habvalue 
+  + fpr_xref_fix 
+  + fpr_xref_obstacles 
+  + fpr_xref_pscis 
+  
+  
 
 # fpr v.20221215 or  0.1.0.9003
 
