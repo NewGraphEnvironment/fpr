@@ -4,7 +4,12 @@
 \alias{fpr_sheet_trim}
 \title{Trim up an excel worksheet - usually during import}
 \usage{
-fpr_sheet_trim(dat, col_filter_na = FALSE, col_filter_na_num = 2)
+fpr_sheet_trim(
+  dat,
+  col_filter_na = FALSE,
+  col_filter_na_num = 2,
+  row_empty_remove = F
+)
 }
 \arguments{
 \item{dat}{Dataframe}
@@ -15,6 +20,9 @@ fpr_sheet_trim(dat, col_filter_na = FALSE, col_filter_na_num = 2)
 we use that in the fish submission form since `gazetted_name` is required and because first column
 of location sheet (`step_1_ref_and_loc_info') is populated to row 1500 out of box. Note that this !is.na for col 2 results in some
 trimming of a couple events on the admin_only_pick_lists.csv}
+
+\item{row_empty_remove}{Logical on whether to remove empty dataframe rows until the first complete one is found in
+order to select as rownames.  Needs to be turned on for `fpr_import_hab_con` to work.}
 }
 \value{
 A dataframe
