@@ -22,7 +22,7 @@ of location sheet (`step_1_ref_and_loc_info') is populated to row 1500 out of bo
 trimming of a couple events on the admin_only_pick_lists.csv}
 
 \item{row_empty_remove}{Logical on whether to remove empty dataframe rows until the first complete one is found in
-order to select as rownames.  Needs to be turned on for `fpr_import_hab_con` to work.}
+order to select as rownames.  Needs to be turned to TRUE for `fpr_import_hab_con` to work.}
 }
 \value{
 A dataframe
