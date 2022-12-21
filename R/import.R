@@ -47,6 +47,7 @@ fpr_sheet_trim <- function(dat,
 #'
 #' @param dir_root String indicating name of directory to look for pscis submission file
 #' @param workbook_name string value for name of worksheet
+#' @param ... Unused - Pass through another param to \link{fpr_sheet_trim}
 #'
 #' @description Import the pscis template. Assigns the column types based on the fpr_xref_pscis data object.
 #' Extracts a time_start and a date_time_start of the survey from the comments if it is sritten in 24hr format after the last period of the comments column.
@@ -57,7 +58,8 @@ fpr_sheet_trim <- function(dat,
 #'
 #' @examples
 fpr_import_pscis <- function(workbook_name = 'pscis_phase1.xlsm', ##new template.  could change file back to .xls
-                             dir_root = 'data'){
+                             dir_root = 'data',
+                             ...){
   sig_fig0 <- c('length_or_width_meters')
   sig_fig1 <- c('culvert_slope_percent', 'stream_width_ratio')
   sig_fig2 <- c('outlet_drop_meters')
@@ -65,8 +67,8 @@ fpr_import_pscis <- function(workbook_name = 'pscis_phase1.xlsm', ##new template
                      sheet = 'PSCIS Assessment Worksheet',
                      skip = 3,
                      .name_repair = janitor::make_clean_names,
-                     col_types = fpr_xref_pscis %>% filter(type_on_import == T) %>% pull(type_readxl)) %>%
-    fpr_sheet_trim() %>% ##recently added function above and pulled the altools package as it was a week link
+                     col_types = fpr_xref_pscis %>% dplyr::filter(type_on_import == T) %>% dplyr::pull(type_readxl)) %>%
+    fpr_sheet_trim(...) %>% ##recently added function above and pulled the altools package as it was a week link
     tibble::rowid_to_column() %>%
     dplyr::rename(date = date_of_assessment_yyyy_mm_dd) %>%
     dplyr::filter(!is.na(date)) %>%
@@ -103,7 +105,7 @@ fpr_pscis_wkb_paths <- function(){
 #'
 #' @param backup Logical whether to backup all sheets as a combined csvs or not. Defaults to true
 #' @param path_backup String indicating directory to create (if not exists) and backup to.  Defaults to 'data/backup/'
-#' @param ... Unused - Pass through another param
+#' @param ... Unused - Pass through another param to \link{fpr_sheet_trim}
 #'
 #' @return list of tibbles and a csv that backs up a combined tibble of list components
 #' @export

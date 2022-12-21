@@ -1,4 +1,11 @@
-# fpr (development version)
+# fpr v.20221220 or  1.0.0.0
+
+* BREAKING CHANGE.  `fpr_import_hab_con` now requires `row_empty_remove = T` (pushes through to `fpr_sheet_trim`) in order to function correctly. Reason is that `fpr_import_pscis` now explicity drops the first 3 rows on import in order to call column types from `fpr_xref_pscis`.
+* `fpr_xref_pscis` built from `xref_names_pscis` with column types appended.  Better way to do this may be found at https://stackoverflow.com/questions/24067782/assign-data-types-to-each-column-of-a-data-frame-in-r as it allows fpr_imp
+* `fpr_tab_habvalue`
+* Add param for directory in `fpr_import_pscis` to allow more flexibility
+* cmd badge addition
+* add switch to 
 
 # fpr v.20221215 or  0.1.0.9003
 
