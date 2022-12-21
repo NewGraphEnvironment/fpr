@@ -11,7 +11,7 @@ fpr_import_pscis_all(backup = TRUE, path_backup = "data/backup/", ...)
 
 \item{path_backup}{String indicating directory to create (if not exists) and backup to.  Defaults to 'data/backup/'}
 
-\item{...}{Unused - Pass through another param}
+\item{...}{Unused - Pass through another param to \link{fpr_sheet_trim}}
 }
 \value{
 list of tibbles and a csv that backs up a combined tibble of list components

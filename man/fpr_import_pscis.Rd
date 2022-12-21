@@ -4,12 +4,14 @@
 \alias{fpr_import_pscis}
 \title{Import the pscis template}
 \usage{
-fpr_import_pscis(workbook_name = "pscis_phase1.xlsm", dir_root = "data")
+fpr_import_pscis(workbook_name = "pscis_phase1.xlsm", dir_root = "data", ...)
 }
 \arguments{
 \item{workbook_name}{string value for name of worksheet}
 
 \item{dir_root}{String indicating name of directory to look for pscis submission file}
+
+\item{...}{Unused - Pass through another param to \link{fpr_sheet_trim}}
 }
 \value{
 A dataframe
