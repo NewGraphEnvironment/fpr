@@ -1,7 +1,11 @@
-# fpr 1.0.1
+
 
 
 # Development Version
+
+# fpr 1.0.1
+* fix [#17](https://github.com/NewGraphEnvironment/fpr/issues/17) in `my_channel_sentence` so we actually specify the site (vs defaut my_site) in the `my_habitat_info` request for the average gradient
+
 
 # fpr 1.0.0
 * v.20221221
