@@ -188,9 +188,6 @@ fpr_table_wshd_sum <- function(dat = wshds, site_id = NULL){
   wshds_prep <- dat %>%
     sf::st_drop_geometry() %>%
     dplyr::select(site = stream_crossing_id, area_km, contains(c('elev', 'aspect'))) %>%
-    # mutate(elev_min = case_when(site == 62181 |
-    #                               site == 62182 ~ NA_real_,
-    #                             T ~ elev_min)) %>%
     purrr::set_names(nm = names(.) %>%
                        janitor::make_clean_names(case = 'title') %>%
                        stringr::str_to_title())
