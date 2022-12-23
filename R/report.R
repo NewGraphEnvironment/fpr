@@ -362,9 +362,9 @@ fpr_my_habitat_paragraph <- function(loc = 'us', sit = my_site){
 
   seg3 <- fpr_my_substrate_sentence(loc = loc, sit = sit)
 
-  paragraph <- c(seg1, seg2, seg3)
+  paragraph <- sample(c(seg1, seg2, seg3))
 
-  sample(paste0(paragraph))
+  knitr::combine_words(paragraph, sep = '', and = '')
 }
 
 
