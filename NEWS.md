@@ -4,6 +4,9 @@
 
 
 # Development Version
+
+
+# fpr 1.0.2
 * fix bug where `fpr_my_habitat_paragraph` was putting commas between sentences
 
 # fpr 1.0.1
