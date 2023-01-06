@@ -1,8 +1,10 @@
 # fpr (development version)
 
-# fpr 1.0.2
-# Development Version
-
+# fpr 1.0.2.9
+* change names of 
+  + fpr_table_barrier_result 
+  + fpr_table_barrier_scoring 
+  + fpr_table_habvalue 
 
 # fpr 1.0.2
 * fix bug where `fpr_my_habitat_paragraph` was putting commas between sentences
