@@ -66,6 +66,8 @@ fpr_appendix_title <- function(site = my_site,
 #'
 #' @param dat Dataframe. Defaults to bcfishpass filtered by Phase 2 sites only
 #' @param site Numeric PSCIS stream_crossing_id. Defaults to value defined by my_site
+#' @param col_filter String. Tidyselect format. Column name for information you want to filter on
+#' @param col_pull String. Tidyselect format. Column name for information you want to pull.
 #' @param round_dig Integer for how many numbers to round to. Defaults to 0.
 #' @param col_to_filter String value of column to filter
 #' @param col_to_pull String vlaue of column to pull
