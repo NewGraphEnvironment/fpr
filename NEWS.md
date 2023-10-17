@@ -1,5 +1,7 @@
 # fpr (development version)
 
+* add `fpr_photo_resize_batch`
+
 # fpr 1.0.2.9
 * change names of 
   + fpr_table_barrier_result 
