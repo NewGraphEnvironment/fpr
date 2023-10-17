@@ -1,6 +1,8 @@
 # fpr (development version)
 
 * add `fpr_photo_resize_batch`
+* fix #29
+* fix #26
 
 # fpr 1.0.2.9
 * change names of 
