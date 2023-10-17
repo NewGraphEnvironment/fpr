@@ -185,7 +185,7 @@ fpr_import_hab_con <- function(path = "data/habitat_confirmations.xls",
                .name_repair = janitor::make_clean_names) %>%
     purrr::set_names(janitor::make_clean_names(names(.))) %>%
     purrr::map(fpr_sheet_trim, ...) %>%
-    purrr::map(plyr::colwise(type.convert))
+    purrr::map(plyr::colwise(type.convert, as.is = T))
 
   if(backup){
     dir.create(path_backup)
