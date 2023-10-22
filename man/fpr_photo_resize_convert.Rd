@@ -4,7 +4,7 @@
 \alias{fpr_photo_resize_convert}
 \title{Resize images and convert JPG}
 \usage{
-fpr_photo_resize_convert(photo, size = "1440x1080!", path = NULL)
+fpr_photo_resize_convert(photo, size = "1296x972!", path = NULL)
 }
 \arguments{
 \item{photo}{String of full path name of photo}
