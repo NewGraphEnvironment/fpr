@@ -17,6 +17,10 @@ fpr_my_bcfishpass(
 
 \item{site}{Numeric PSCIS stream_crossing_id. Defaults to value defined by my_site}
 
+\item{col_filter}{String. Tidyselect format. Column name for information you want to filter on}
+
+\item{col_pull}{String. Tidyselect format. Column name for information you want to pull.}
+
 \item{round_dig}{Integer for how many numbers to round to. Defaults to 0.}
 
 \item{col_to_filter}{String value of column to filter}
