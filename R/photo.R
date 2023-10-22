@@ -73,17 +73,17 @@ fpr_photo_resize_batch <- function(dir_source = NULL,
     )
 }
 
-#' Build directories where the photos will be placed based on PSCIS spreadsheets
+#' Build directories where the photos will be placed based on a list of site ids
 #'
 #' @param site String - number of site to build folder for
-#' @param path String - path stub where photos are held
+#' @param path String - path stub where photos directories are held
 #'
 #' @return Makes directories
 #' @export
 #'
 #' @examples
-fpr_photo_folders <- function(site, path = '/data/photos/'){
-  dir.create(paste0(getwd(), path, site))
+fpr_photo_folders <- function(site, path = 'data/photos/'){
+  dir.create(paste0(path, site))
 }
 
 

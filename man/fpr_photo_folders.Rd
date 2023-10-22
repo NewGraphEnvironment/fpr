@@ -4,7 +4,7 @@
 \alias{fpr_photo_folders}
 \title{Build directories where the photos will be placed based on PSCIS spreadsheets}
 \usage{
-fpr_photo_folders(site, path = "/data/photos/")
+fpr_photo_folders(site, path = "data/photos/")
 }
 \arguments{
 \item{site}{String - number of site to build folder for}
