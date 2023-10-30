@@ -1,5 +1,5 @@
 # fpr (development version)
-
+* add `fpr_photo_rename`
 * add `fpr_photo_resize_batch`
 * fix #29
 * fix #26
