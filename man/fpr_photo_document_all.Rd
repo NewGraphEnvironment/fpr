@@ -2,7 +2,7 @@
 % Please edit documentation in R/photo.R
 \name{fpr_photo_document_all}
 \alias{fpr_photo_document_all}
-\title{Title}
+\title{Document all the photos that are in the directories to csv as a bay to track changes after scripted organization}
 \usage{
 fpr_photo_document_all(path_to_photo_dir, full_names = T)
 }
@@ -12,5 +12,5 @@ fpr_photo_document_all(path_to_photo_dir, full_names = T)
 \item{full_names}{whether we should use full names when listing photos}
 }
 \description{
-Title
+Document all the photos that are in the directories to csv as a bay to track changes after scripted organization
 }
