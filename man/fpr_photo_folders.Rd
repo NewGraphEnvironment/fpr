@@ -2,18 +2,18 @@
 % Please edit documentation in R/photo.R
 \name{fpr_photo_folders}
 \alias{fpr_photo_folders}
-\title{Build directories where the photos will be placed based on PSCIS spreadsheets}
+\title{Build directories where the photos will be placed based on a list of site ids}
 \usage{
 fpr_photo_folders(site, path = "data/photos/")
 }
 \arguments{
 \item{site}{String - number of site to build folder for}
 
-\item{path}{String - path stub where photos are held}
+\item{path}{String - path stub where photos directories are held}
 }
 \value{
 Makes directories
 }
 \description{
-Build directories where the photos will be placed based on PSCIS spreadsheets
+Build directories where the photos will be placed based on a list of site ids
 }
