@@ -542,8 +542,8 @@ fpr_photo_rename <- function(dat = form_pscis,
                              ...){
   # create new photo directories
   dat %>%
-    pull({{ col_directories }}) %>%
-    map(fpr::fpr_photo_folders, path = dir_to_stub)
+    dplyr::pull({{ col_directories }}) %>%
+    purrr::map(fpr::fpr_photo_folders, path = dir_to_stub)
 
   # make a dataframe ready to rename photos with
   dat2 <- dat %>%
