@@ -57,7 +57,7 @@ fpr_photo_resize_convert <- function(photo,
 #' @param dir_target  String full path name of directory where photos are to be copied to
 #' @param ...  Not used. For passing alternative destination photo size as string to \link{fpr_photo_resize_convert}
 #'
-#' @return
+#' @return Photos resized with `.JPG` extension
 #' @export
 #'
 #' @examples
@@ -529,7 +529,7 @@ fpr_photo_document_all <- function(path_to_photo_dir, full_names = T){
 #' the name of the photo before the appended string.  Defaults to `local_name`. Used for habitat confirmation sites when there are
 #' multiple sites nested within the overall area (ex. small electrofishing sites)
 #'
-#' @return
+#' @return Duplicates of existing photos renamed with directories specified by col_directories param
 #' @export
 #'
 #' @examples
