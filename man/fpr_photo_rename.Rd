@@ -21,9 +21,9 @@ fpr_photo_rename(
 \item{col_directories}{The bare (unquoted) name of the column containing the parameter you want to use to build directories
 for storing photos. Defaults to `site_id`}
 
-\item{dir_from_stub}{String quated. Path to the place where resized photos from mergin are stored.}
+\item{dir_from_stub}{String quoted. Path to the place where resized photos from mergin are stored.}
 
-\item{dir_to_stub}{String quated. Path to the place where directories will be burned (if not already present) and
+\item{dir_to_stub}{String quoted. Path to the place where directories will be burned (if not already present) and
 renamed photos from mergin will be stored.}
 
 \item{col_string_add}{Logical. Should the contents of one of the columns in `dat` be appended to the photo name
@@ -35,6 +35,9 @@ the name of the photo before the appended string.  Defaults to `local_name`. Use
 multiple sites nested within the overall area (ex. small electrofishing sites)}
 
 \item{...}{Unused.  For passing params to [fpr_photo_folders()]}
+}
+\value{
+Duplicates of existing photos renamed with directories specified by col_directories param
 }
 \description{
 Sort in directories and rename photos loaded to Mergin as per the column they were taken for (ex. `photo_downstream`)or the "tag"

@@ -13,6 +13,9 @@ fpr_photo_resize_batch(dir_source = NULL, dir_target = NULL, ...)
 
 \item{...}{Not used. For passing alternative destination photo size as string to \link{fpr_photo_resize_convert}}
 }
+\value{
+Photos resized with `.JPG` extension
+}
 \description{
 Resize batch of images and convert JPG
 }
