@@ -43,7 +43,7 @@ fpr_dat_w_rows <- function(df){
 #'
 #' @examples
 fpr_photo_resize_convert <- function(photo,
-                                     size = "1296x972!",
+                                     size = "1036.8x777.6!",
                                      path = NULL){
   image <- magick::image_read(photo)
   image_scaled <- magick::image_scale(image, size)
