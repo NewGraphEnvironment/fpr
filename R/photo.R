@@ -538,7 +538,7 @@ fpr_photo_rename <- function(dat = form_pscis,
                              dir_from_stub =NULL,
                              dir_to_stub = NULL,
                              col_string_add = FALSE,
-                             col_string_append = local_name,
+                             col_string_append = location,
                              ...){
   # create new photo directories
   dat %>%
