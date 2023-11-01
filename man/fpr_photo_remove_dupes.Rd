@@ -5,8 +5,7 @@
 \title{Remove duplicated photos before or after photo name appended to end of photo file name by [fpr_photo_rename()]}
 \usage{
 fpr_photo_remove_dupes(
-  dir_target =
-    "/Users/airvine/Library/CloudStorage/OneDrive-Personal/Projects/repo/fish_passage_peace_2023_reporting/data/photos/test/",
+  dir_target = NULL,
   col_time = date_time_original,
   col_photo_name = source_file,
   col_model = model,
@@ -37,4 +36,7 @@ duplicate photos that have not been renamed are removed.}
 }
 \description{
 Remove duplicated photos before or after photo name appended to end of photo file name by [fpr_photo_rename()]
+}
+\examples{
+fpr::fpr_photo_remove_dupes(dir_target = '/Users/airvine/Library/CloudStorage/OneDrive-Personal/Projects/repo/fish_passage_skeena_2023_reporting/data/photos/sorted/')
 }

@@ -626,8 +626,8 @@ fpr_photo_rename <- function(dat = form_pscis,
 #' @return
 #' @export
 #'
-#' @examples
-fpr_photo_remove_dupes <- function(dir_target = '/Users/airvine/Library/CloudStorage/OneDrive-Personal/Projects/repo/fish_passage_peace_2023_reporting/data/photos/test/',
+#' @examples fpr::fpr_photo_remove_dupes(dir_target = '/Users/airvine/Library/CloudStorage/OneDrive-Personal/Projects/repo/fish_passage_skeena_2023_reporting/data/photos/sorted/')
+fpr_photo_remove_dupes <- function(dir_target = NULL,
                                    col_time = date_time_original,
                                    col_photo_name = source_file,
                                    col_model = model,
