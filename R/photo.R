@@ -518,8 +518,8 @@ fpr_photo_document_all <- function(path_to_photo_dir, full_names = T){
 #' @param dat Data frame to pull out the site names from. Defaults to a dataframe named `form_pscis`
 #' @param col_directories The bare (unquoted) name of the column containing the parameter you want to use to build directories
 #' for storing photos. Defaults to `site_id`
-#' @param dir_from_stub String quated. Path to the place where resized photos from mergin are stored.
-#' @param dir_to_stub String quated. Path to the place where directories will be burned (if not already present) and
+#' @param dir_from_stub String quoted. Path to the place where resized photos from mergin are stored.
+#' @param dir_to_stub String quoted. Path to the place where directories will be burned (if not already present) and
 #' renamed photos from mergin will be stored.
 #' @param ... Unused.  For passing params to [fpr_photo_folders()]
 #' @param col_string_add Logical. Should the contents of one of the columns in `dat` be appended to the photo name
@@ -606,6 +606,54 @@ fpr_photo_rename <- function(dat = form_pscis,
          overwrite = T,
          copy.mode = TRUE)
   # dat3 %>% select(site_id, crew_members, mergin_user, contains('photo')) %>% slice_tail(n=6)
-  }
+}
+
+#' Remove duplicated photos before or after photo name appended to end of photo file name by [fpr_photo_rename()]
+#'
+#' @param dir_target String. Full path name of directory to be scanned for duplicate photos with different names.
+#' @param col_time The bare (unquoted) name of the column containing the exif parameter stamping when photo was created.
+#' Defaults to `date_time_original`.
+#' @param col_photo_name The bare (unquoted) name of the column containing the exif parameter with full path photo name.
+#' Defaults to `source_file`.
+#' @param col_model The bare (unquoted) name of the column containing the exif parameter stamping camera type that took the photo.
+#' Defaults to `model`.
+#' @param col_iso he bare (unquoted) name of the column containing the exif parameter stamping photo iso.
+#' Defaults to `iso`.
+#' @param remove_renamed Logical. Should renamed photos be removed (based on length of photo name)? Defaults to FALSE so that
+#' duplicate photos that have not been renamed are removed.
+#' @param ... Not used.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+fpr_photo_remove_dupes <- function(dir_target = '/Users/airvine/Library/CloudStorage/OneDrive-Personal/Projects/repo/fish_passage_peace_2023_reporting/data/photos/test/',
+                                   col_time = date_time_original,
+                                   col_photo_name = source_file,
+                                   col_model = model,
+                                   col_iso = iso,
+                                   remove_renamed = FALSE,
+                                   ...){
+  dat1 <- exifr::read_exif(path = dir_target,recursive=T)  %>%
+    janitor::clean_names()  %>%
+    dplyr::group_by( {{ col_model }}, {{ col_iso }}, {{ col_time }}) %>%
+    dplyr::filter(n()>1) %>%
+    dplyr::mutate(l = stringr::str_length( {{ col_photo_name }} ))
+
+  if(remove_renamed){
+    dat2 <- dat1 %>%
+      dplyr::arrange( {{ col_time }}, {{ col_model }}, {{ col_iso }}, desc(l))
+  }else if(identical(remove_renamed, FALSE))
+    dat2 <- dat1 %>%
+      dplyr::arrange( {{ col_time }},{{ col_model }}, {{ col_iso }}, l)
+
+  dat3 <- dat2 %>%
+    dplyr::distinct( {{ col_time }}, .keep_all = T)
+
+  dat3 %>%
+    dplyr::pull( {{ col_photo_name }}) %>%
+    purrr::map(file.remove)
+
+}
 
 
