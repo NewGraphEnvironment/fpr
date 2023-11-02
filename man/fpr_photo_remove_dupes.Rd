@@ -6,6 +6,8 @@
 \usage{
 fpr_photo_remove_dupes(
   dir_target = NULL,
+  dry_run = TRUE,
+  min_replicates = 2,
   col_time = date_time_original,
   col_photo_name = source_file,
   col_model = model,
@@ -16,6 +18,13 @@ fpr_photo_remove_dupes(
 }
 \arguments{
 \item{dir_target}{String. Full path name of directory to be scanned for duplicate photos with different names.}
+
+\item{dry_run}{Logical. Should photos selected by `remove_renamed` be removed or should a dataframe be
+produced to show the identical photos? Defaults to TRUE.}
+
+\item{min_replicates}{Integer.  Minimum number of identical photos (based on identical `col_time`, `col_model` and `col_iso` values
+in photo metadata) that should be identified.  Defaults to 2.  Setting this to higher than 2 is intended for `dry_run` = TRUE
+as it is likely to remove photos used for more than one thing vs removing renamed photos.}
 
 \item{col_time}{The bare (unquoted) name of the column containing the exif parameter stamping when photo was created.
 Defaults to `date_time_original`.}
@@ -34,9 +43,12 @@ duplicate photos that have not been renamed are removed.}
 
 \item{...}{Not used.}
 }
+\value{
+A dataframe if `dry_run` is TRUE (default) or removal of photos specified through `remove_renamed` param.
+}
 \description{
 Remove duplicated photos before or after photo name appended to end of photo file name by [fpr_photo_rename()]
 }
 \examples{
-fpr::fpr_photo_remove_dupes(dir_target = '/Users/airvine/Library/CloudStorage/OneDrive-Personal/Projects/repo/fish_passage_skeena_2023_reporting/data/photos/sorted/')
+t <- fpr::fpr_photo_remove_dupes(dir_target = 'data/photos/sorted/', min_replicates = 3)
 }

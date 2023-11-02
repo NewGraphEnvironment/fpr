@@ -611,6 +611,11 @@ fpr_photo_rename <- function(dat = form_pscis,
 #' Remove duplicated photos before or after photo name appended to end of photo file name by [fpr_photo_rename()]
 #'
 #' @param dir_target String. Full path name of directory to be scanned for duplicate photos with different names.
+#' @param dry_run Logical. Should photos selected by `remove_renamed` be removed or should a dataframe be
+#' produced to show the identical photos? Defaults to TRUE.
+#' @param min_replicates Integer.  Minimum number of identical photos (based on identical `col_time`, `col_model` and `col_iso` values
+#' in photo metadata) that should be identified.  Defaults to 2.  Setting this to higher than 2 is intended for `dry_run` = TRUE
+#' as it is likely to remove photos used for more than one thing vs removing renamed photos.
 #' @param col_time The bare (unquoted) name of the column containing the exif parameter stamping when photo was created.
 #' Defaults to `date_time_original`.
 #' @param col_photo_name The bare (unquoted) name of the column containing the exif parameter with full path photo name.
@@ -623,11 +628,13 @@ fpr_photo_rename <- function(dat = form_pscis,
 #' duplicate photos that have not been renamed are removed.
 #' @param ... Not used.
 #'
-#' @return
+#' @return A dataframe if `dry_run` is TRUE (default) or removal of photos specified through `remove_renamed` param.
 #' @export
 #'
-#' @examples fpr::fpr_photo_remove_dupes(dir_target = '/Users/airvine/Library/CloudStorage/OneDrive-Personal/Projects/repo/fish_passage_skeena_2023_reporting/data/photos/sorted/')
+#' @examples t <- fpr::fpr_photo_remove_dupes(dir_target = 'data/photos/sorted/', min_replicates = 3)
 fpr_photo_remove_dupes <- function(dir_target = NULL,
+                                   dry_run = TRUE,
+                                   min_replicates  = 2,
                                    col_time = date_time_original,
                                    col_photo_name = source_file,
                                    col_model = model,
@@ -637,7 +644,7 @@ fpr_photo_remove_dupes <- function(dir_target = NULL,
   dat1 <- exifr::read_exif(path = dir_target,recursive=T)  %>%
     janitor::clean_names()  %>%
     dplyr::group_by( {{ col_model }}, {{ col_iso }}, {{ col_time }}) %>%
-    dplyr::filter(n()>1) %>%
+    dplyr::filter(dplyr::n()>min_replicates-1) %>%
     dplyr::mutate(l = stringr::str_length( {{ col_photo_name }} ))
 
   if(remove_renamed){
@@ -647,12 +654,19 @@ fpr_photo_remove_dupes <- function(dir_target = NULL,
     dat2 <- dat1 %>%
       dplyr::arrange( {{ col_time }},{{ col_model }}, {{ col_iso }}, l)
 
-  dat3 <- dat2 %>%
-    dplyr::distinct( {{ col_time }}, .keep_all = T)
-
-  dat3 %>%
-    dplyr::pull( {{ col_photo_name }}) %>%
-    purrr::map(file.remove)
+  if(dry_run){
+    dat2 %>%
+      dplyr::ungroup() %>%
+      dplyr::select({{ col_photo_name }},{{ col_time }},{{ col_model }})
+  }else if(identical(dry_run, FALSE))
+    dat3 <- dat2 %>%
+      dplyr::mutate(photo_directory = dirname( {{ col_photo_name }} )) %>%
+      dplyr::select(photo_directory,{{ col_photo_name }},{{ col_time }},{{ col_model }}, {{ col_iso }}) %>%
+      dplyr::group_split() %>%
+      purrr::map(~.x %>% dplyr::slice(1)) %>%
+      dplyr::bind_rows() %>%
+      dplyr::pull( {{ col_photo_name }}) %>%
+      purrr::map(file.remove)
 
 }
 
