@@ -2,7 +2,7 @@
 % Please edit documentation in R/photo.R
 \name{fpr_photo_remove_dupes}
 \alias{fpr_photo_remove_dupes}
-\title{Remove duplicated photos before or after photo name appended to end of photo file name by [fpr_photo_rename()]}
+\title{Remove duplicated photos before or after photo name appended to end of photo file name by \link{fpr_photo_rename}}
 \usage{
 fpr_photo_remove_dupes(
   dir_target = NULL,
@@ -47,8 +47,5 @@ duplicate photos that have not been renamed are removed.}
 A dataframe if `dry_run` is TRUE (default) or removal of photos specified through `remove_renamed` param.
 }
 \description{
-Remove duplicated photos before or after photo name appended to end of photo file name by [fpr_photo_rename()]
-}
-\examples{
-t <- fpr::fpr_photo_remove_dupes(dir_target = 'data/photos/sorted/', min_replicates = 3)
+Remove duplicated photos before or after photo name appended to end of photo file name by \link{fpr_photo_rename}
 }

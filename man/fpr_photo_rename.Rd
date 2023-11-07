@@ -34,7 +34,7 @@ for `form_fiss_site`}
 the name of the photo before the appended string.  Defaults to `local_name`. Used for habitat confirmation sites when there are
 multiple sites nested within the overall area (ex. small electrofishing sites)}
 
-\item{...}{Unused.  For passing params to [fpr_photo_folders()]}
+\item{...}{Unused.  For passing params to \link{fpr_photo_folders}}
 }
 \value{
 Duplicates of existing photos renamed with directories specified by col_directories param
