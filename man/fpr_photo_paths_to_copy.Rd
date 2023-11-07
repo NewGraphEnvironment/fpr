@@ -9,7 +9,9 @@ inlet, outlet and barrel as those are required by PSCIS (all except road anyway)
 fpr_photo_paths_to_copy(
   path_dir = "data/photos",
   slice_start = 1,
-  slice_end = 10
+  slice_end = 10,
+  tag_add = NULL,
+  tag_add_location = 6.5
 )
 }
 \arguments{
@@ -20,6 +22,14 @@ where you choose to start the selection for submission. Defaults to 1.}
 
 \item{slice_end}{Integer. Place in the list of defined photos \link{fpr_xref_photo_order}
 where you choose to end the selection for submission. Defaults to 10.}
+
+\item{tag_add}{String.  If is not NULL photos will be searched for match of this string in addition
+to the strings matched in \link{fpr_xref_photo_order}. Defaults to NULL.}
+
+\item{tag_add_location}{Integer.  If `tag_add` is not NULL this will be used to indicate
+what location in \link{fpr_xref_photo_order} the string `tag_add` will land as to control which photos names
+will be included in the slice of matchingnames.  Defaults to 6.5 as to place `tag_add` after the first 6
+mandatory PSCIS submission photos and before any other tag.}
 }
 \value{
 Vector of full path photo names.
