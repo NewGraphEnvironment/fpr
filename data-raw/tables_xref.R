@@ -144,5 +144,30 @@ fpr_xref_obstacles <- tibble::tribble(
 
 usethis::use_data(fpr_xref_obstacles, overwrite = TRUE)
 
+fpr_xref_photo_order <- tibble::tribble(
+          ~photo, ~sort,
+     "upstream",      1,
+   "downstream",      2,
+        "inlet",      3,
+       "outlet",      4,
+       "barrel",      5,
+         "road",      6,
+    "condition",      7,
+         "Fill",      8,
+     "Blockage",      9,
+  "us_typical1",     10,
+  "ds_typical1",     11,
+    "us_gravel",     12,
+    "ds_gravel",     13,
+      "us_pool",     14,
+      "ds_pool",     15,
+  "us_typical2",     16,
+  "ds_typical2",     17,
+       "us_top",     18,
+    "ds_bottom",     19,
+          "_k_",     20
+  )
 
+
+usethis::use_data(fpr_xref_photo_order, overwrite = TRUE)
 

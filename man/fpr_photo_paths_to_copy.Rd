@@ -2,13 +2,30 @@
 % Please edit documentation in R/photo.R
 \name{fpr_photo_paths_to_copy}
 \alias{fpr_photo_paths_to_copy}
-\title{Identify photos that should be copied over into file to upload to PSCIS}
+\title{Identify photos that should be copied over into file to upload to PSCIS.  See \link{fpr_xref_photo_order}
+to reference the sort order for some of the common photo tag names.  The first six photos are for upstream, downstream,
+inlet, outlet and barrel as those are required by PSCIS (all except road anyway).}
 \usage{
-fpr_photo_paths_to_copy(path_to_photo_dir)
+fpr_photo_paths_to_copy(
+  path_dir = "data/photos",
+  slice_start = 1,
+  slice_end = 10
+)
 }
 \arguments{
-\item{path_to_photo_dir}{Full path to photo directories that will be copied over}
+\item{path_dir}{String. Path to directory where photo directories are found}
+
+\item{slice_start}{Integer. Place in the list of defined photos \link{fpr_xref_photo_order}
+where you choose to start the selection for submission. Defaults to 1.}
+
+\item{slice_end}{Integer. Place in the list of defined photos \link{fpr_xref_photo_order}
+where you choose to end the selection for submission. Defaults to 10.}
+}
+\value{
+Vector of full path photo names.
 }
 \description{
-Identify photos that should be copied over into file to upload to PSCIS
+Identify photos that should be copied over into file to upload to PSCIS.  See \link{fpr_xref_photo_order}
+to reference the sort order for some of the common photo tag names.  The first six photos are for upstream, downstream,
+inlet, outlet and barrel as those are required by PSCIS (all except road anyway).
 }

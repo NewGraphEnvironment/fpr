@@ -427,36 +427,44 @@ fpr_photo_rename_ext <- function(filescopy, filespaste){
 }
 
 
-#' Identify photos that should be copied over into file to upload to PSCIS
+#' Identify photos that should be copied over into file to upload to PSCIS.  See \link{fpr_xref_photo_order}
+#' to reference the sort order for some of the common photo tag names.  The first six photos are for upstream, downstream,
+#' inlet, outlet and barrel as those are required by PSCIS (all except road anyway).
 #'
-#' @param path_to_photo_dir Full path to photo directories that will be copied over
-#'
-#' @return
+#' @param path_dir String. Path to directory where photo directories are found
+#' @param slice_start Integer. Place in the list of defined photos \link{fpr_xref_photo_order}
+#' where you choose to start the selection for submission. Defaults to 1.
+#' @param slice_end Integer. Place in the list of defined photos \link{fpr_xref_photo_order}
+#' where you choose to end the selection for submission. Defaults to 10.
+#' @return Vector of full path photo names.
 #' @export
 #'
 #' @examples
-fpr_photo_paths_to_copy <- function(path_to_photo_dir){
-  bind_rows(
-    list.files(path = path_to_photo_dir,
+fpr_photo_paths_to_copy <- function(path_dir = 'data/photos',
+                                     slice_start = 1,
+                                     slice_end = 10){
+
+  names_photos <- paste(fpr::fpr_xref_photo_order %>% dplyr::pull(photo), collapse = '|')
+
+
+  dplyr::left_join(
+    list.files(path = path_dir,
                pattern = ".JPG$",
                recursive = TRUE,
                ignore.case = T,
                full.names = T,
                include.dirs = T) %>%
-      stringr::str_subset(., 'barrel|outlet|upstream|downstream|road|inlet') %>%
-      as_tibble(),
-    ##this section will grab up to 4 more photos that have been add with the 'keep' tag (_k_) as they are in the reporting
-    list.files(path = path_to_photo_dir,
-               pattern = ".JPG$",
-               recursive = TRUE,
-               ignore.case = T,
-               full.names = T,
-               include.dirs = T) %>%
-      stringr::str_subset(., '_k_') %>%
-      as_tibble() %>%
-      slice(1:4) ##we needed a way to grab only the first 4 photos that have a _k_ in them or else we get too many photos.
+      stringr::str_subset(., names_photos) %>%
+      tibble::as_tibble() %>%
+      dplyr::mutate(tag_name = stringr::str_extract(value, names_photos)),
+
+    fpr::fpr_xref_photo_order,
+
+    by = c('tag_name' = 'photo')
   ) %>%
-    pull(value)
+    dplyr::arrange(sort) %>%
+    dplyr::slice(slice_start:slice_end)%>%
+    dplyr::pull(value)
 }
 
 #' Untested!! Identify photos that should be copied over into a file to upload to the phase 2 PSCIS interface
@@ -502,6 +510,8 @@ fpr_photo_paths_to_copy_phase2 <- function(path_to_photo_dir){
 #' @export
 #'
 #' @examples
+
+
 fpr_photo_document_all <- function(path_to_photo_dir, full_names = T){
   list.files(path = path_to_photo_dir,
              pattern =  '.*\\.(jpg|png|jpeg)$', #".JPG$"
@@ -521,7 +531,7 @@ fpr_photo_document_all <- function(path_to_photo_dir, full_names = T){
 #' @param dir_from_stub String quoted. Path to the place where resized photos from mergin are stored.
 #' @param dir_to_stub String quoted. Path to the place where directories will be burned (if not already present) and
 #' renamed photos from mergin will be stored.
-#' @param ... Unused.  For passing params to [fpr_photo_folders()]
+#' @param ... Unused.  For passing params to \link{fpr_photo_folders}
 #' @param col_string_add Logical. Should the contents of one of the columns in `dat` be appended to the photo name
 #' before the standard string additions. Defaults to `FALSE` for the `form_pscis` use case.  Likely will be `TRUE`
 #' for `form_fiss_site`
@@ -533,6 +543,8 @@ fpr_photo_document_all <- function(path_to_photo_dir, full_names = T){
 #' @export
 #'
 #' @examples
+
+
 fpr_photo_rename <- function(dat = form_pscis,
                              col_directories = site_id,
                              dir_from_stub =NULL,
@@ -608,7 +620,7 @@ fpr_photo_rename <- function(dat = form_pscis,
   # dat3 %>% select(site_id, crew_members, mergin_user, contains('photo')) %>% slice_tail(n=6)
 }
 
-#' Remove duplicated photos before or after photo name appended to end of photo file name by [fpr_photo_rename()]
+#' Remove duplicated photos before or after photo name appended to end of photo file name by \link{fpr_photo_rename}
 #'
 #' @param dir_target String. Full path name of directory to be scanned for duplicate photos with different names.
 #' @param dry_run Logical. Should photos selected by `remove_renamed` be removed or should a dataframe be
@@ -631,7 +643,7 @@ fpr_photo_rename <- function(dat = form_pscis,
 #' @return A dataframe if `dry_run` is TRUE (default) or removal of photos specified through `remove_renamed` param.
 #' @export
 #'
-#' @examples t <- fpr::fpr_photo_remove_dupes(dir_target = 'data/photos/sorted/', min_replicates = 3)
+#' @examples
 fpr_photo_remove_dupes <- function(dir_target = NULL,
                                    dry_run = TRUE,
                                    min_replicates  = 2,
