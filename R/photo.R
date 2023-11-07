@@ -436,9 +436,9 @@ fpr_photo_rename_ext <- function(filescopy, filespaste){
 #' where you choose to start the selection for submission. Defaults to 1.
 #' @param slice_end Integer. Place in the list of defined photos \link{fpr_xref_photo_order}
 #' where you choose to end the selection for submission. Defaults to 10.
-#' @param tag_add String.  If is not NULL photos will be searched for match of this string in addition
+#' @param tag_add String.  Quoted (ex. '_p2_'). If is not NULL photos will be searched for match of this string in addition
 #' to the strings matched in \link{fpr_xref_photo_order}. Defaults to NULL.
-#' @param tag_add_location Integer.  If `tag_add` is not NULL this will be used to indicate
+#' @param tag_add_location Numeric.  If `tag_add` is not NULL this will be used to indicate
 #' what location in \link{fpr_xref_photo_order} the string `tag_add` will land as to control which photos names
 #' will be included in the slice of matchingnames.  Defaults to 6.5 as to place `tag_add` after the first 6
 #' mandatory PSCIS submission photos and before any other tag.
