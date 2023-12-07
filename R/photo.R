@@ -232,6 +232,7 @@ fpr_photo_sort_plan <- function(surveyor){
 #' @param site_id Numeric value of site corresponding to folder name
 #'
 #' @return
+#' @export
 #'
 #' @examples
 fpr_photo_qa_prep <- function(site_id){
