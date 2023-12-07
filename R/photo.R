@@ -225,9 +225,11 @@ fpr_photo_sort_plan <- function(surveyor){
       photo_fullname = paste0(camera_id, '_', photo_basename))
 }
 
-#' Prep for fpr_photo_qa which will QA photos
+#' Helper function to QA Photos
 #'
-#' Ensure that there are 6 named photos and no duplicates named
+#' Prep for fpr_photo_qa which will QA photos. Ensure that there are 6 named photos and no duplicates named.
+#' Duplicates do not just contain the keyword but also a preceding underscore and proceeding period (ie. `_keyword.`).
+#' Used inside of
 #'
 #' @param site_id Numeric value of site corresponding to folder name
 #'
@@ -237,7 +239,7 @@ fpr_photo_sort_plan <- function(surveyor){
 #' @examples
 fpr_photo_qa_prep <- function(site_id){
   list.files(path = paste0(getwd(), '/data/photos/', site_id), full.names = F) %>%
-    stringr::str_subset(., 'barrel|outlet|upstream|downstream|road|inlet') %>%
+    stringr::str_subset(., '_barrel.|_outlet.|_upstream.|_downstream.|_road.|_inlet.') %>%
     as_tibble() %>%
     mutate(x = case_when(
       value %ilike% 'road' ~ 'road',
@@ -251,26 +253,11 @@ fpr_photo_qa_prep <- function(site_id){
     dplyr::mutate(site = site_id)
 }
 
-#' QA Photos
+#' Helper function to QA Photos
 #'
-#'Ensure that there are 6 named photos and no duplicates named.
+#' Ensure that there are 6 named photos and no duplicates named.  Uses \link{fpr_photo_qa_prep}.
+#' Used inside of \link{fpr_photo_qa_df}.
 #'
-#'
-#'#' find sites with 0 Rows.
-#' fpr::fpr_photo_qa()[fpr::fpr_photo_qa() %>%
-#' map(fpr::fpr_dat_w_rows) %>%
-#' grep(pattern = F) ] %>%
-#' names(.) %>%
-#' unique(.)
-#'
-#'
-#' See and fix duplicates with
-#' fpr::fpr_photo_qa() %>%
-#' data.table::rbindlist(fill = T)
-#'
-#' After dups are fixed then Query for missing values with
-#' dplyr::bind_rows() %>%
-#' dplyr::filter(dplyr::if_any(dplr::everything(), is.na))
 #'
 #' @param dat Dataframe to pull site IDs from that coincide with photo folders. Defaults to pscis_phase1
 #' @param col Column to pull to get site IDs. Defaults to my_crossing_reference
@@ -292,12 +279,61 @@ fpr_photo_qa <- function(dat = pscis_all,
     )
 }
 
+#' QA photos to see if all required PSCIS photos are named and look for duplicates of those names.
+#'
+#' Produce data frame showing missing photos and sites with duplicates. Old way of doing it documented here.
+#' Uses helper functions \link{fpr_photo_qa_prep} and \link{fpr_photo_qa}
+#'
+#'
+#'
+#'#' find sites with 0 Rows.
+#' fpr::fpr_photo_qa()[fpr::fpr_photo_qa() %>%
+#' map(fpr::fpr_dat_w_rows) %>%
+#' grep(pattern = F) ] %>%
+#' names(.) %>%
+#' unique(.)
+#'
+#'
+#' See and fix duplicates with
+#' fpr::fpr_photo_qa() %>%
+#' data.table::rbindlist(fill = T)
+#'
+#' After dups are fixed then Query for missing values with
+#' dplyr::bind_rows() %>%
+#' dplyr::filter(dplyr::if_any(dplr::everything(), is.na))
+#'
+#' @return
+#' @export
+#'
+#' @examples
+fpr_photo_qa_df <- function(){
 
-#' Amalgamate 6 photos into 1
+  dat_photo <- fpr::fpr_import_pscis_all() %>%
+    dplyr::bind_rows() %>%
+    fpr::fpr_photo_qa()
+
+  dplyr::bind_rows(
+
+    dat_photo %>%
+      purrr::map(dplyr::group_by, site) %>%
+      purrr::map(summarise_all, class) %>%
+      dplyr::bind_rows() %>%
+      dplyr::filter(if_any(everything(), is.na)),
+
+    dat_photo %>%
+      purrr::map(dplyr::group_by, site) %>%
+      purrr::map(summarise_all, class) %>%
+      dplyr::bind_rows() %>%
+      dplyr::filter(if_any(everything(), ~ . == 'list'))
+  )
+}
+
+
+#' Amalgamate 6 PSCIS photos into 1
 #'
 #' Here we stack up and down then side to side for reporting.  There must be all 6 photos
 #' present, only 1 of each and within the file names of those photos must be the strings
-#' containing upstream, downstream, inlet, outlet, barrel, road
+#' containing upstream, downstream, inlet, outlet, barrel, road.  Before running QA with
 #'
 #' @param  site_id Numeric value of site corresponding to the directory name that holds the photos
 #' which include 'road', 'inlet', 'upstream', 'downstream', 'outlet', barrel' in the filenames.
@@ -309,7 +345,7 @@ fpr_photo_qa <- function(dat = pscis_all,
 #' @examples
 fpr_photo_amalg_cv <- function(site_id, size = "560x420!"){
   photos_images1 <- list.files(path = paste0(getwd(), '/data/photos/', site_id), full.names = T) %>%
-    stringr::str_subset(., 'upstream|road|inlet') %>%
+    stringr::str_subset(., '_upstream.|_road.|_inlet.') %>%
     as_tibble() %>%
     mutate(sort = case_when(
       value %ilike% 'road' ~ 1,
@@ -323,7 +359,7 @@ fpr_photo_amalg_cv <- function(site_id, size = "560x420!"){
     pull(value) %>%
     image_read()
   photos_images2 <- list.files(path = paste0(getwd(), '/data/photos/', site_id), full.names = T) %>%
-    stringr::str_subset(., 'barrel|outlet|downstream') %>%
+    stringr::str_subset(., '_barrel.|_outlet.|_downstream.') %>%
     as_tibble() %>%
     mutate(sort = case_when(
       # value %ilike% 'road' ~ 1,
@@ -342,6 +378,7 @@ fpr_photo_amalg_cv <- function(site_id, size = "560x420!"){
   photos_stacked <- image_append(image_scale(photos_stack), stack = F)
   image_write(photos_stacked, path = paste0(getwd(), '/data/photos/', site_id, '/crossing_all.JPG'), format = 'jpg')
 }
+
 
 #' Flip an image
 #'

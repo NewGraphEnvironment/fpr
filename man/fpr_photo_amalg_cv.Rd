@@ -2,7 +2,7 @@
 % Please edit documentation in R/photo.R
 \name{fpr_photo_amalg_cv}
 \alias{fpr_photo_amalg_cv}
-\title{Amalgamate 6 photos into 1}
+\title{Amalgamate 6 PSCIS photos into 1}
 \usage{
 fpr_photo_amalg_cv(site_id, size = "560x420!")
 }
@@ -15,5 +15,5 @@ which include 'road', 'inlet', 'upstream', 'downstream', 'outlet', barrel' in th
 \description{
 Here we stack up and down then side to side for reporting.  There must be all 6 photos
 present, only 1 of each and within the file names of those photos must be the strings
-containing upstream, downstream, inlet, outlet, barrel, road
+containing upstream, downstream, inlet, outlet, barrel, road.  Before running QA with
 }

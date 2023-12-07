@@ -2,7 +2,7 @@
 % Please edit documentation in R/photo.R
 \name{fpr_photo_qa}
 \alias{fpr_photo_qa}
-\title{QA Photos}
+\title{Helper function to QA Photos}
 \usage{
 fpr_photo_qa(dat = pscis_all, col = site_id)
 }
@@ -15,22 +15,6 @@ fpr_photo_qa(dat = pscis_all, col = site_id)
 List of tibbles for each sites.
 }
 \description{
-Ensure that there are 6 named photos and no duplicates named.
-}
-\details{
-#' find sites with 0 Rows.
-fpr::fpr_photo_qa()[fpr::fpr_photo_qa() %>%
-map(fpr::fpr_dat_w_rows) %>%
-grep(pattern = F) ] %>%
-names(.) %>%
-unique(.)
-
-
-See and fix duplicates with
-fpr::fpr_photo_qa() %>%
-data.table::rbindlist(fill = T)
-
-After dups are fixed then Query for missing values with
-dplyr::bind_rows() %>%
-dplyr::filter(dplyr::if_any(dplr::everything(), is.na))
+Ensure that there are 6 named photos and no duplicates named.  Uses \link{fpr_photo_qa_prep}.
+Used inside of \link{fpr_photo_qa_df}.
 }

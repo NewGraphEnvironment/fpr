@@ -2,7 +2,7 @@
 % Please edit documentation in R/photo.R
 \name{fpr_photo_qa_prep}
 \alias{fpr_photo_qa_prep}
-\title{Prep for fpr_photo_qa which will QA photos}
+\title{Helper function to QA Photos}
 \usage{
 fpr_photo_qa_prep(site_id)
 }
@@ -10,5 +10,7 @@ fpr_photo_qa_prep(site_id)
 \item{site_id}{Numeric value of site corresponding to folder name}
 }
 \description{
-Ensure that there are 6 named photos and no duplicates named
+Prep for fpr_photo_qa which will QA photos. Ensure that there are 6 named photos and no duplicates named.
+Duplicates do not just contain the keyword but also a preceding underscore and proceeding period (ie. `_keyword.`).
+Used inside of
 }
