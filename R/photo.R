@@ -708,7 +708,8 @@ fpr_photo_remove_dupes <- function(dir_target = NULL,
                                    ...){
   dat1 <- exifr::read_exif(path = dir_target,recursive=T)  %>%
     janitor::clean_names()  %>%
-    dplyr::group_by( {{ col_model }}, {{ col_iso }}, {{ col_time }}) %>%
+    dplyr::mutate(photo_directory = dirname( {{ col_photo_name }} )) %>%
+    dplyr::group_by(photo_directory, {{ col_model }}, {{ col_iso }}, {{ col_time }}) %>%
     dplyr::filter(dplyr::n()>min_replicates-1) %>%
     dplyr::mutate(l = stringr::str_length( {{ col_photo_name }} ))
 
@@ -725,7 +726,6 @@ fpr_photo_remove_dupes <- function(dir_target = NULL,
       dplyr::select({{ col_photo_name }},{{ col_time }},{{ col_model }})
   }else if(identical(dry_run, FALSE))
     dat3 <- dat2 %>%
-      dplyr::mutate(photo_directory = dirname( {{ col_photo_name }} )) %>%
       dplyr::select(photo_directory,{{ col_photo_name }},{{ col_time }},{{ col_model }}, {{ col_iso }}) %>%
       dplyr::group_split() %>%
       purrr::map(~.x %>% dplyr::slice(1)) %>%
