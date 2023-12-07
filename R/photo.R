@@ -575,8 +575,10 @@ fpr_photo_document_all <- function(path_to_photo_dir, full_names = T){
     as_tibble()
 }
 
-#' Sort in directories and rename photos loaded to Mergin as per the column they were taken for (ex. `photo_downstream`)or the "tag"
-#' input for general "extra1" photos (ex. photo_extra1_tag). Renamed photos have strings appended after to the end of the existing file.
+#' Sort in directories and rename photos base on field form column or photo tag.
+#'
+#' Sort in directories and rename photos loaded to Mergin as per the column they were taken for (ex. `photo_downstream`) or the "tag"
+#' input for general "extra*" photos (ex. photo_extra1_tag). Renamed photos have strings appended to the end of the existing file name.
 #'
 #' @param dat Data frame to pull out the site names from. Defaults to a dataframe named `form_pscis`
 #' @param col_directories The bare (unquoted) name of the column containing the parameter you want to use to build directories

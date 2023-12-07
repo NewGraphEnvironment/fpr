@@ -2,8 +2,7 @@
 % Please edit documentation in R/photo.R
 \name{fpr_photo_rename}
 \alias{fpr_photo_rename}
-\title{Sort in directories and rename photos loaded to Mergin as per the column they were taken for (ex. `photo_downstream`)or the "tag"
-input for general "extra1" photos (ex. photo_extra1_tag). Renamed photos have strings appended after to the end of the existing file.}
+\title{Sort in directories and rename photos base on field form column or photo tag.}
 \usage{
 fpr_photo_rename(
   dat = form_pscis,
@@ -40,6 +39,6 @@ multiple sites nested within the overall area (ex. small electrofishing sites)}
 Duplicates of existing photos renamed with directories specified by col_directories param
 }
 \description{
-Sort in directories and rename photos loaded to Mergin as per the column they were taken for (ex. `photo_downstream`)or the "tag"
-input for general "extra1" photos (ex. photo_extra1_tag). Renamed photos have strings appended after to the end of the existing file.
+Sort in directories and rename photos loaded to Mergin as per the column they were taken for (ex. `photo_downstream`) or the "tag"
+input for general "extra*" photos (ex. photo_extra1_tag). Renamed photos have strings appended to the end of the existing file name.
 }
