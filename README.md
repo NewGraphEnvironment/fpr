@@ -22,9 +22,9 @@ If looking for backwards comparability because you used the package in the past 
 
 The reporting that this package serves to help line up is generated with `bookdown` from `Rmarkdown` so there are many dependencies such as `knitr` and `KableExtra`. Additionally, of key importance workflows rely on provincial British Columbia data input spreadsheets with version updates.  As of 2022-04-13 the provincial templates included:
 
- + Populated [Fish Data Submission Spreadsheet Template](https://www2.gov.bc.ca/gov/content/environment/plants-animals-ecosystems/fish/fish-and-fish-habitat-data-information/fish-data-submission/submit-fish-data#submitfish) 
+ + Populated British Columbia standardized [Fish Data Submission Spreadsheet Template](https://www2.gov.bc.ca/gov/content/environment/plants-animals-ecosystems/fish/fish-and-fish-habitat-data-information/fish-data-submission/submit-fish-data#submitfish) 
 
- + Populated [pscis_assessment_template_v24.xls](https://www2.gov.bc.ca/gov/content/environment/plants-animals-ecosystems/fish/aquatic-habitat-management/fish-passage/fish-passage-technical/assessment-projects)
+ + Populated British Columbia standardized [Provincial Stream Crossing Inventory System submission template](https://www2.gov.bc.ca/gov/content/environment/plants-animals-ecosystems/fish/aquatic-habitat-management/fish-passage/fish-passage-technical/assessment-projects)
  
  <br>
  
