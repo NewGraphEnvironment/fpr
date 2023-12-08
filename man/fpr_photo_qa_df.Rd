@@ -4,26 +4,12 @@
 \alias{fpr_photo_qa_df}
 \title{QA photos to see if all required PSCIS photos are named and look for duplicates of those names.}
 \usage{
-fpr_photo_qa_df()
+fpr_photo_qa_df(...)
+}
+\arguments{
+\item{...}{Not used. Use to pass string path defined as `dir_photos = 'quoted_filepath'` to run
+QA outside of defualt filepath of root of helper function  \link{fpr_photo_qa}.}
 }
 \description{
-Produce data frame showing missing photos and sites with duplicates. Old way of doing it documented here.
-Uses helper functions \link{fpr_photo_qa_prep} and \link{fpr_photo_qa}
-}
-\details{
-#' find sites with 0 Rows.
-fpr::fpr_photo_qa()[fpr::fpr_photo_qa() %>%
-map(fpr::fpr_dat_w_rows) %>%
-grep(pattern = F) ] %>%
-names(.) %>%
-unique(.)
-
-
-See and fix duplicates with
-fpr::fpr_photo_qa() %>%
-data.table::rbindlist(fill = T)
-
-After dups are fixed then Query for missing values with
-dplyr::bind_rows() %>%
-dplyr::filter(dplyr::if_any(dplr::everything(), is.na))
+QA photos to see if all required PSCIS photos are named and look for duplicates of those names.
 }

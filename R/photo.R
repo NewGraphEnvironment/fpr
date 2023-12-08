@@ -225,53 +225,45 @@ fpr_photo_sort_plan <- function(surveyor){
       photo_fullname = paste0(camera_id, '_', photo_basename))
 }
 
-#' Helper function to QA Photos
-#'
-#' Prep for fpr_photo_qa which will QA photos. Ensure that there are 6 named photos and no duplicates named.
-#' Duplicates do not just contain the keyword but also a preceding underscore and proceeding period (ie. `_keyword.`).
-#' Used inside of
-#'
-#' @param site_id Numeric value of site corresponding to folder name
-#'
-#' @return
-#' @export
-#'
-#' @examples
-fpr_photo_qa_prep <- function(site_id){
-  list.files(path = paste0(getwd(), '/data/photos/', site_id), full.names = F) %>%
-    stringr::str_subset(., '_barrel.|_outlet.|_upstream.|_downstream.|_road.|_inlet.') %>%
-    as_tibble() %>%
-    mutate(x = case_when(
-      value %ilike% 'road' ~ 'road',
-      value %ilike% 'inlet' ~ 'inlet',
-      value %ilike% 'upstream' ~ 'upstream',
-      value %ilike% 'barrel' ~ 'barrel',
-      value %ilike% 'outlet' ~ 'outlet',
-      value %ilike% 'downstream' ~ 'downstream'
-    )) %>%
-    tidyr::pivot_wider(names_from = x) %>%
-    dplyr::mutate(site = site_id)
-}
 
 #' Helper function to QA Photos
 #'
-#' Ensure that there are 6 named photos and no duplicates named.  Uses \link{fpr_photo_qa_prep}.
+#' Ensure that there are 6 named photos and no duplicates named.
 #' Used inside of \link{fpr_photo_qa_df}.
 #'
+#' @param dat Dataframe that contains a column with the numeric site ids. Defaults to `pscis_all`
+#' @param col Column to pull to get site IDs. Defaults to site_id
+#' @param dir_photos
 #'
-#' @param dat Dataframe to pull site IDs from that coincide with photo folders. Defaults to pscis_phase1
-#' @param col Column to pull to get site IDs. Defaults to my_crossing_reference
-#'
-#' @return List of tibbles for each sites.
+#' @return List of dataframes with photo names for 6 PSCIS photos. Will return NAs when photo not there and list of
+#' names when there is more than one that matches the pattern.
 #' @export
 #'
 #' @examples
 fpr_photo_qa <- function(dat = pscis_all,
-                         col = site_id){
+                         col = site_id,
+                         dir_photos = 'data/photos/'){
+
+  fpr_photo_qa_prep <- function(site_id, dir_photos){
+    list.files(path = paste0(dir_photos, site_id), full.names = F) %>%
+      stringr::str_subset(., '_barrel.|_outlet.|_upstream.|_downstream.|_road.|_inlet.') %>%
+      as_tibble() %>%
+      mutate(x = case_when(
+        value %ilike% 'road' ~ 'road',
+        value %ilike% 'inlet' ~ 'inlet',
+        value %ilike% 'upstream' ~ 'upstream',
+        value %ilike% 'barrel' ~ 'barrel',
+        value %ilike% 'outlet' ~ 'outlet',
+        value %ilike% 'downstream' ~ 'downstream'
+      )) %>%
+      tidyr::pivot_wider(names_from = x) %>%
+      dplyr::mutate(site = site_id)
+  }
+
   dat %>%
     dplyr::arrange({{col}}) %>%
     dplyr::pull({{col}}) %>%
-    purrr::map(fpr_photo_qa_prep) %>%
+    purrr::map(fpr_photo_qa_prep, dir_photos) %>%
     purrr::set_names(
       nm = dat %>%
         dplyr::arrange({{col}}) %>%
@@ -279,38 +271,21 @@ fpr_photo_qa <- function(dat = pscis_all,
     )
 }
 
+
 #' QA photos to see if all required PSCIS photos are named and look for duplicates of those names.
 #'
-#' Produce data frame showing missing photos and sites with duplicates. Old way of doing it documented here.
-#' Uses helper functions \link{fpr_photo_qa_prep} and \link{fpr_photo_qa}
-#'
-#'
-#'
-#'#' find sites with 0 Rows.
-#' fpr::fpr_photo_qa()[fpr::fpr_photo_qa() %>%
-#' map(fpr::fpr_dat_w_rows) %>%
-#' grep(pattern = F) ] %>%
-#' names(.) %>%
-#' unique(.)
-#'
-#'
-#' See and fix duplicates with
-#' fpr::fpr_photo_qa() %>%
-#' data.table::rbindlist(fill = T)
-#'
-#' After dups are fixed then Query for missing values with
-#' dplyr::bind_rows() %>%
-#' dplyr::filter(dplyr::if_any(dplr::everything(), is.na))
+#' @param ... Not used. Use to pass string path defined as `dir_photos = 'quoted_filepath'` to run
+#' QA outside of defualt filepath of root of helper function  \link{fpr_photo_qa}.
 #'
 #' @return
 #' @export
 #'
 #' @examples
-fpr_photo_qa_df <- function(){
+fpr_photo_qa_df <- function(...){
 
   dat_photo <- fpr::fpr_import_pscis_all() %>%
     dplyr::bind_rows() %>%
-    fpr::fpr_photo_qa()
+    fpr_photo_qa(...)
 
   dplyr::bind_rows(
 
@@ -327,7 +302,6 @@ fpr_photo_qa_df <- function(){
       dplyr::filter(if_any(everything(), ~ . == 'list'))
   )
 }
-
 
 #' Amalgamate 6 PSCIS photos into 1
 #'

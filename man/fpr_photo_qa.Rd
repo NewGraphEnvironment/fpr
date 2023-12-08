@@ -4,17 +4,20 @@
 \alias{fpr_photo_qa}
 \title{Helper function to QA Photos}
 \usage{
-fpr_photo_qa(dat = pscis_all, col = site_id)
+fpr_photo_qa(dat = pscis_all, col = site_id, dir_photos = "data/photos/")
 }
 \arguments{
-\item{dat}{Dataframe to pull site IDs from that coincide with photo folders. Defaults to pscis_phase1}
+\item{dat}{Dataframe that contains a column with the numeric site ids. Defaults to `pscis_all`}
 
-\item{col}{Column to pull to get site IDs. Defaults to my_crossing_reference}
+\item{col}{Column to pull to get site IDs. Defaults to site_id}
+
+\item{dir_photos}{}
 }
 \value{
-List of tibbles for each sites.
+List of dataframes with photo names for 6 PSCIS photos. Will return NAs when photo not there and list of
+names when there is more than one that matches the pattern.
 }
 \description{
-Ensure that there are 6 named photos and no duplicates named.  Uses \link{fpr_photo_qa_prep}.
+Ensure that there are 6 named photos and no duplicates named.
 Used inside of \link{fpr_photo_qa_df}.
 }
