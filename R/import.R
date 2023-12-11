@@ -97,7 +97,7 @@ fpr_import_pscis <- function(workbook_name = 'pscis_phase1.xlsm', ##new template
 #'
 #' @examples
 fpr_pscis_wkb_paths <- function(){
-  list.files(path = 'data', pattern = "pscis", all.files = F) %>%
+  list.files(path = 'data', pattern = glob2rx("*pscis*xlsm"), all.files = F) %>%
     grep(pattern = '~', invert = T, value = T)
 }
 
