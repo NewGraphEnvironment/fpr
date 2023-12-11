@@ -1,4 +1,6 @@
 # fpr (development version)
+* close #34
+* add `fpr_photo_qa_missing_all`
 * add `fpr_photo_qa_df`
 * add `fpr_remove_dupes` to close #42
 * add `fpr_photo_rename`
