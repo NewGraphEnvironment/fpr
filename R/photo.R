@@ -271,35 +271,85 @@ fpr_photo_qa <- function(dat = pscis_all,
     )
 }
 
+#' Find directories that exist but have none of the required 6 PSICS photos tagged within their name.
+#' Fed into \link{fpr_photo_qa_df} and relies on \link{fpr_photo_qa}.  Site directories must be named as numbers.
+#'
+#'
+#' @param ... Not used. Used to pass `dir_photos = 'filepath'` to \link{fpr_photo_qa}
+#'
+#' @return Tibble with 7 columns.
+#' @export
+#'
+#' @examples
+fpr_photo_qa_missing_all <- function(...){
+  missing_prep <- fpr_photo_qa(...)[
+    fpr_photo_qa(...) %>%
+      purrr::map(fpr::fpr_dat_w_rows) %>%
+      grep(pattern = F)
+  ] %>%
+    names(.) %>%
+    unique(.) %>%
+    tibble::as_tibble_col(column_name = 'site') %>%
+    dplyr::mutate(site = as.numeric(site))
+
+    missing <- dplyr::bind_rows(
+
+    missing_prep,
+
+
+    dplyr::bind_rows(
+      blank_t <- tibble(
+        road = character(),
+        barrel = character(),
+        upstream = character(),
+        inlet = character(),
+        outlet = character(),
+        downstream = character()
+      )
+    )
+  )
+  missing
+}
+
 
 #' QA photos to see if all required PSCIS photos are named and look for duplicates of those names.
 #'
 #' @param ... Not used. Use to pass string path defined as `dir_photos = 'quoted_filepath'` to run
-#' QA outside of defualt filepath of root of helper function  \link{fpr_photo_qa}.
+#' QA outside of defualt filepath of root of helper function  \link{fpr_photo_qa}. Incorperates outputs
+#' of \link{fpr_photo_qa_missing_all}
 #'
-#' @return
+#' @return Tibble with 7 columns.
 #' @export
 #'
 #' @examples
 fpr_photo_qa_df <- function(...){
+  dat_pcsis_all <- fpr::fpr_import_pscis_all() %>%
+    dplyr::bind_rows()
 
-  dat_photo <- fpr::fpr_import_pscis_all() %>%
-    dplyr::bind_rows() %>%
+  missing <- fpr_photo_qa_missing_all(dat = dat_pcsis_all,
+                                       ...)
+
+  dat_photo <- dat_pcsis_all %>%
     fpr_photo_qa(...)
 
   dplyr::bind_rows(
 
-    dat_photo %>%
-      purrr::map(dplyr::group_by, site) %>%
-      purrr::map(summarise_all, class) %>%
-      dplyr::bind_rows() %>%
-      dplyr::filter(if_any(everything(), is.na)),
+    missing,
 
-    dat_photo %>%
-      purrr::map(dplyr::group_by, site) %>%
-      purrr::map(summarise_all, class) %>%
-      dplyr::bind_rows() %>%
-      dplyr::filter(if_any(everything(), ~ . == 'list'))
+    dplyr::bind_rows(
+
+      dat_photo %>%
+        purrr::map(dplyr::group_by, site) %>%
+        purrr::map(summarise_all, class) %>%
+        dplyr::bind_rows() %>%
+        dplyr::filter(if_any(everything(), is.na)),
+
+      dat_photo %>%
+        purrr::map(dplyr::group_by, site) %>%
+        purrr::map(summarise_all, class) %>%
+        dplyr::bind_rows() %>%
+        dplyr::filter(if_any(everything(), ~ . == 'list'))
+    )
   )
 }
 

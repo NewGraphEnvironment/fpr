@@ -8,7 +8,11 @@ fpr_photo_qa_df(...)
 }
 \arguments{
 \item{...}{Not used. Use to pass string path defined as `dir_photos = 'quoted_filepath'` to run
-QA outside of defualt filepath of root of helper function  \link{fpr_photo_qa}.}
+QA outside of defualt filepath of root of helper function  \link{fpr_photo_qa}. Incorperates outputs
+of \link{fpr_photo_qa_missing_all}}
+}
+\value{
+Tibble with 7 columns.
 }
 \description{
 QA photos to see if all required PSCIS photos are named and look for duplicates of those names.
