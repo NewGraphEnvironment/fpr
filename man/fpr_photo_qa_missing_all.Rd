@@ -2,8 +2,8 @@
 % Please edit documentation in R/photo.R
 \name{fpr_photo_qa_missing_all}
 \alias{fpr_photo_qa_missing_all}
-\title{Find directories that exist but have none of the required 6 PSICS photos tagged within their name.
-Fed into \link{fpr_photo_qa_df} and relies on \link{fpr_photo_qa}.  Site directories must be named as numbers.}
+\title{Find sites that exist in the PSCIS input spreadsheets in the `data` directory but do not have a directory or do not have any of the
+required PSCIS tagged photo names. Fed into \link{fpr_photo_qa_df} and relies on \link{fpr_photo_qa}.  Site directories must be named as numbers.}
 \usage{
 fpr_photo_qa_missing_all(...)
 }
@@ -14,6 +14,6 @@ fpr_photo_qa_missing_all(...)
 Tibble with 7 columns.
 }
 \description{
-Find directories that exist but have none of the required 6 PSICS photos tagged within their name.
-Fed into \link{fpr_photo_qa_df} and relies on \link{fpr_photo_qa}.  Site directories must be named as numbers.
+Find sites that exist in the PSCIS input spreadsheets in the `data` directory but do not have a directory or do not have any of the
+required PSCIS tagged photo names. Fed into \link{fpr_photo_qa_df} and relies on \link{fpr_photo_qa}.  Site directories must be named as numbers.
 }
