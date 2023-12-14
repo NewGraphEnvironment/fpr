@@ -4,12 +4,19 @@
 \alias{fpr_photo_pull_by_str}
 \title{Pull names of a photo based on a string in the file name}
 \usage{
-fpr_photo_pull_by_str(site = my_site, str_to_pull = "barrel")
+fpr_photo_pull_by_str(
+  site = my_site,
+  dir_photos = "data/photos/",
+  str_to_pull = "barrel"
+)
 }
 \arguments{
 \item{site}{Numeric indicating site id cooresponding to name of directory containing the images}
 
-\item{str_to_pull}{String value to search for in name of photo. must be unique in the file. Defaults to barrel}
+\item{dir_photos}{String quoted for directory where photo directories are kept.  Trailing forward slash required.
+Defaults to 'data/photos/'.}
+
+\item{str_to_pull}{String (quoted) value to search for in name of photo. must be unique in the file. Defaults to barrel}
 }
 \value{
 String representing the full path filename of photo that matches

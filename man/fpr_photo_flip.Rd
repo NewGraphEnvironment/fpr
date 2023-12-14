@@ -4,14 +4,25 @@
 \alias{fpr_photo_flip}
 \title{Flip an image}
 \usage{
-fpr_photo_flip(site_id = my_site, rotate = 180, str_to_pull = "barrel")
+fpr_photo_flip(
+  site_id = my_site,
+  dir_photos = "data/photos/",
+  rotate = 180,
+  str_to_pull = "barrel",
+  ...
+)
 }
 \arguments{
 \item{site_id}{Numeric indicating site id cooresponding to name of directory containing the images}
 
+\item{dir_photos}{String quoted for directory where photo directories are kept.  Trailing forward slash required.
+Defaults to 'data/photos/'.}
+
 \item{rotate}{Numeric value of the amount of rotation in degrees. Defaults to 180}
 
 \item{str_to_pull}{Sting value in photo name.  Must be unique in file}
+
+\item{...}{Not used.  Used to pass `dir_photos` to \link{fpr_photo_pull_by_str}}
 }
 \description{
 Flip an image

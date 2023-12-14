@@ -4,17 +4,18 @@
 #' Pull names of a photo based on a string in the file name
 #'
 #' @param site Numeric indicating site id cooresponding to name of directory containing the images
-#' @param str_to_pull String value to search for in name of photo. must be unique in the file. Defaults to barrel
+#' @param str_to_pull String (quoted) value to search for in name of photo. must be unique in the file. Defaults to barrel
+#' @param dir_photos String quoted for directory where photo directories are kept.  Trailing forward slash required.
+#' Defaults to 'data/photos/'.
 #'
 #' @return String representing the full path filename of photo that matches
 #' @export
 #'
 #' @examples
-fpr_photo_pull_by_str <- function(site = my_site, str_to_pull = 'barrel'){
-  list.files(path = paste0(getwd(), '/data/photos/', site), full.names = T) %>%
+fpr_photo_pull_by_str <- function(site = my_site, dir_photos = 'data/photos/', str_to_pull = 'barrel'){
+  list.files(path = paste0(dir_photos, site), full.names = T) %>%
     stringr::str_subset(., str_to_pull) %>%
     gsub(paste0(getwd(), '/'), '', .)
-  # basename()
 }
 
 #' Test if a dataframe has rows
@@ -411,20 +412,25 @@ fpr_photo_amalg_cv <- function(site_id, dir_photos = 'data/photos/', size = "560
 #' @param site_id Numeric indicating site id cooresponding to name of directory containing the images
 #' @param rotate Numeric value of the amount of rotation in degrees. Defaults to 180
 #' @param str_to_pull Sting value in photo name.  Must be unique in file
+#' @param dir_photos String quoted for directory where photo directories are kept.  Trailing forward slash required.
+#' Defaults to 'data/photos/'.
+#' @param ... Not used.  Used to pass `dir_photos` to \link{fpr_photo_pull_by_str}
 #'
 #' @return
 #' @export
 #'
 #' @examples
-fpr_photo_flip <- function(site_id = my_site, rotate = 180, str_to_pull = 'barrel'){
-  photo <- fpr_photo_pull_by_str(site = site_id, str_to_pull = str_to_pull)
-  magick::image_read(paste0('data/photos/', site_id, '/', photo)) %>%
+fpr_photo_flip <- function(site_id = my_site, dir_photos = 'data/photos/', rotate = 180, str_to_pull = 'barrel', ...){
+  photo <- basename(
+    fpr_photo_pull_by_str(site = site_id, str_to_pull = str_to_pull, ...)
+  )
+  magick::image_read(paste0(dir_photos, site_id, '/', photo)) %>%
     magick::image_rotate(rotate) %>%
-    magick::image_write(paste0('data/photos/', site_id, '/rotated_', photo))
+    magick::image_write(paste0(dir_photos, site_id, '/rotated_', photo))
 
 }
 
-##back photos to another place.  Going to split into two functions
+##backup photos to another place.  Going to split into two functions
 fpr_photos_backup <- function(filename = 'al'){
   ##get teh name of the folder we are in
   project_name <- basename(dirname(dirname(getwd())))
