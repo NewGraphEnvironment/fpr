@@ -407,7 +407,7 @@ fpr_photo_amalg_cv <- function(site_id, dir_photos = 'data/photos/', size = "560
 }
 
 
-#' Flip an image
+#' Rotate an image
 #'
 #' @param site_id Numeric indicating site id cooresponding to name of directory containing the images
 #' @param rotate Numeric value of the amount of rotation in degrees. Defaults to 180
@@ -416,17 +416,22 @@ fpr_photo_amalg_cv <- function(site_id, dir_photos = 'data/photos/', size = "560
 #' Defaults to 'data/photos/'.
 #' @param ... Not used.  Used to pass `dir_photos` to \link{fpr_photo_pull_by_str}
 #'
-#' @return
+#' @return Rotated photo burned into directory of targeted original.
 #' @export
 #'
 #' @examples
-fpr_photo_flip <- function(site_id = my_site, dir_photos = 'data/photos/', rotate = 180, str_to_pull = 'barrel', ...){
+fpr_photo_rotate <- function(site_id = my_site,
+                             dir_photos = 'data/photos/',
+                             rotate = 180,
+                             str_to_pull = 'barrel',
+                             str_prepend = 'rotated_',
+                             ...){
   photo <- basename(
     fpr_photo_pull_by_str(site = site_id, str_to_pull = str_to_pull, ...)
   )
   magick::image_read(paste0(dir_photos, site_id, '/', photo)) %>%
     magick::image_rotate(rotate) %>%
-    magick::image_write(paste0(dir_photos, site_id, '/rotated_', photo))
+    magick::image_write(paste0(dir_photos, site_id, '/', str_prepend, photo))
 
 }
 
