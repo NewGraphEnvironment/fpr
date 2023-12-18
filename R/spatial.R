@@ -49,22 +49,18 @@ fpr_sp_watershed <- function(dat){
 
 #' Get elevation statistics
 #'
-#' @param dat sf object of polygons to gather elevation statistics for
+#' @param dat sf object of polygons to gather elevation statistics for.  Must contain `stream_crossing_id` column.
 #'
-#' @return sf object of polygons with elevation information added
+#' @return sf object of polygons with elevation details (ie. p60, median, min, max) and median aspect information added.
 #' @export
 #'
 #' @examples
-fpr_sp_wshd_stats <- function(dat = wshds){
-
-  url <- 'http://snowfence.umn.edu/Components/winddirectionanddegreeswithouttable3.htm'
-  page <- rvest::read_html(url)
-  directions_raw <- page %>% rvest::html_node('td table') %>% rvest::html_table(header = TRUE)
-
-  directions <- directions_raw %>%
-    purrr::set_names(~tolower(sub(' Direction', '', .x))) %>%
-    dplyr::slice(-1) %>%
-    tidyr::separate(degree, c('degree_min', 'degree_max'), sep = '\\s+-\\s+', convert = TRUE)
+fpr_sp_wshd_stats <- function(dat){
+  directions <- tibble::tibble( degree_centre = seq(0, 360 , by=22.5),
+                                cardinal = c("N","NNE","NE", "ENE", "E", "ESE", "SE", "SSE",
+                                             "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW", "N")) %>%
+    dplyr::mutate(offset = 11.25) %>%
+    dplyr::mutate(degree_max = degree_centre - offset)
 
   dat %>%
     pull(stream_crossing_id) %>%
@@ -97,14 +93,17 @@ fpr_sp_wshd_stats <- function(dat = wshds){
             asp_median = stats::median(nh_elmat_asp, na.rm = T),
             aspect = cut(
               asp_median,
-              breaks = c(0, directions$degree_max, 360),
-              labels = c(directions$cardinal, 'N')
+              breaks = c(directions$degree_max, 360),
+              labels = c(directions$cardinal)
             )
           ) %>%
           select(-asp_median)
       }
     ) %>%
-    dplyr::bind_rows()
+    dplyr::bind_rows() %>%
+    mutate(area_km = round(area_ha/100, 1)) %>%
+    mutate(across(contains('elev'), round, 0)) %>%
+    arrange(stream_crossing_id)
 }
 
 #' Make geopackage in directory called
@@ -130,9 +129,13 @@ fpr_make_geopackage <- function(dat,
                                 x = 'utm_easting',
                                 y = 'utm_northing',
                                 crs = 4326){
+
+  dir.create(dir)
   nm <-deparse(substitute(dat))
   dat %>%
     sf::st_as_sf(coords = c(x, y), crs = 26900 + utm_zone, remove = F) %>%
     sf::st_transform(crs = crs) %>%
     sf::st_write(paste0(dir, gpkg_name, ".gpkg"), nm, delete_layer = TRUE)
 }
+
+

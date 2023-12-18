@@ -4,13 +4,13 @@
 \alias{fpr_sp_wshd_stats}
 \title{Get elevation statistics}
 \usage{
-fpr_sp_wshd_stats(dat = wshds)
+fpr_sp_wshd_stats(dat)
 }
 \arguments{
-\item{dat}{sf object of polygons to gather elevation statistics for}
+\item{dat}{sf object of polygons to gather elevation statistics for.  Must contain `stream_crossing_id` column.}
 }
 \value{
-sf object of polygons with elevation information added
+sf object of polygons with elevation details (ie. p60, median, min, max) and median aspect information added.
 }
 \description{
 Get elevation statistics
