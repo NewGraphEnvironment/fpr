@@ -1,4 +1,5 @@
 # fpr (development version)
+* use `testthat3`
 * close #34
 * add `fpr_photo_qa_missing_all`
 * add `fpr_photo_qa_df`
