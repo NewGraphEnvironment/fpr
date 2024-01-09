@@ -1,5 +1,7 @@
 # fpr (development version)
-* use `testthat3`
+* add `fpr_db_q_crossings_utm`
+* add `fpr_db_conn`
+* add `fpr_sp_utm_assign`
 * close #34
 * add `fpr_photo_qa_missing_all`
 * add `fpr_photo_qa_df`
