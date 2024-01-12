@@ -41,5 +41,4 @@ Imports:
     readxl,
     plyr,
     chk,
-    DBI,
-    RPostgres
+    DBI
