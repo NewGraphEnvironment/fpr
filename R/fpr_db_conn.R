@@ -2,30 +2,30 @@
 #'
 #' Connect to pg database using environmental variables
 #'
-#' @param db_var Quoted string value of environmental variable with database name
-#' @param host_var Quoted string value of environmental variable with host name
-#' @param port_var Quoted string value of environmental variable with port name
-#' @param user_var Quoted string value of environmental variable with user name
-#' @param password_var Quoted string value of environmental variable with password
+#' @param db_var Quoted string value of database name.  Defaults to `Sys.getenv('PG_DB_SHARE')`
+#' @param host_var Quoted string value of host name.  Defaults to `Sys.getenv('PG_HOST_SHARE')`
+#' @param port_var Quoted string value of port name.  Defaults to `Sys.getenv('PG_PORT_SHARE')`
+#' @param user_var Quoted string value of user name.  Defaults to `Sys.getenv('PG_USER_SHARE')`
+#' @param password_var QQuoted string value of password.  Defaults to `Sys.getenv('PG_PASS_SHARE')`
 #'
 #' @return
 #' @export
 #'
 #' @examples \dontrun{fpr_db_conn()}
 fpr_db_conn <- function(
-    db_var = 'PG_DB_SHARE',
-    host_var = 'PG_HOST_SHARE',
-    port_var = 'PG_PORT_SHARE',
-    user_var = 'PG_USER_SHARE',
-    password_var = 'PG_PASS_SHARE'
+    db_var = Sys.getenv('PG_DB_SHARE'),
+    host_var = Sys.getenv('PG_HOST_SHARE'),
+    port_var = Sys.getenv('PG_PORT_SHARE'),
+    user_var = Sys.getenv('PG_USER_SHARE'),
+    password_var = Sys.getenv('PG_PASS_SHARE')
 ) {
 
   DBI::dbConnect(
     RPostgres::Postgres(),
-    dbname = Sys.getenv(db_var),
-    host = Sys.getenv(host_var),
-    port = Sys.getenv(port_var),
-    user = Sys.getenv(user_var),
-    password = Sys.getenv(password_var)
+    dbname = db_var,
+    host = host_var,
+    port = port_var,
+    user = user_var,
+    password = password_var
   )
 }
