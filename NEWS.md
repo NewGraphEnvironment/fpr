@@ -1,5 +1,7 @@
 # fpr (development version)
-* add `fpr_db_q_crossings_utm`
+* add `fpr_dbq_lstable`
+* add `fpr_dbq_subset`
+* add `fpr_db_query`
 * add `fpr_db_conn`
 * add `fpr_sp_utm_assign`
 * close #34
