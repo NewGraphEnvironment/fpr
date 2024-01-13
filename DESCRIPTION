@@ -41,4 +41,8 @@ Imports:
     readxl,
     plyr,
     chk,
-    DBI
+    DBI,
+    glue
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
