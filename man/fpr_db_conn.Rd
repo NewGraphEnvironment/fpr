@@ -5,27 +5,34 @@
 \title{Connect to postgres database}
 \usage{
 fpr_db_conn(
-  db_var = "PG_DB_SHARE",
-  host_var = "PG_HOST_SHARE",
-  port_var = "PG_PORT_SHARE",
-  user_var = "PG_USER_SHARE",
-  password_var = "PG_PASS_SHARE"
+  db_var = Sys.getenv("PG_DB_SHARE"),
+  host_var = Sys.getenv("PG_HOST_SHARE"),
+  port_var = Sys.getenv("PG_PORT_SHARE"),
+  user_var = Sys.getenv("PG_USER_SHARE"),
+  password_var = Sys.getenv("PG_PASS_SHARE")
 )
 }
 \arguments{
-\item{db_var}{Quoted string value of environmental variable with database name}
+\item{db_var}{Quoted string value of database name.  Defaults to `Sys.getenv('PG_DB_SHARE')`}
 
-\item{host_var}{Quoted string value of environmental variable with host name}
+\item{host_var}{Quoted string value of host name.  Defaults to `Sys.getenv('PG_HOST_SHARE')`}
 
-\item{port_var}{Quoted string value of environmental variable with port name}
+\item{port_var}{Quoted string value of port name.  Defaults to `Sys.getenv('PG_PORT_SHARE')`}
 
-\item{user_var}{Quoted string value of environmental variable with user name}
+\item{user_var}{Quoted string value of user name.  Defaults to `Sys.getenv('PG_USER_SHARE')`}
 
-\item{password_var}{Quoted string value of environmental variable with password}
+\item{password_var}{QQuoted string value of password.  Defaults to `Sys.getenv('PG_PASS_SHARE')`}
 }
 \description{
-Connect to pg database using environmental variables
+Connect to pg database using environmental variables.  Ass
 }
 \examples{
-\dontrun{fpr_db_conn()}
+\dontrun{conn <- fpr_db_conn()}
 }
+\seealso{
+Other database postgres: 
+\code{\link{fpr_db_query}()},
+\code{\link{fpr_dbq_lstable}()},
+\code{\link{fpr_dbq_subset}()}
+}
+\concept{database postgres}
