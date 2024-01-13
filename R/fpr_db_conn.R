@@ -1,7 +1,5 @@
 #' Connect to postgres database
 #'
-#' Connect to pg database using environmental variables.  Ass
-#'
 #' @param db_var Quoted string value of database name.  Defaults to `Sys.getenv('PG_DB_SHARE')`
 #' @param host_var Quoted string value of host name.  Defaults to `Sys.getenv('PG_HOST_SHARE')`
 #' @param port_var Quoted string value of port name.  Defaults to `Sys.getenv('PG_PORT_SHARE')`
