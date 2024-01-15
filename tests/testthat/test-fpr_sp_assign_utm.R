@@ -1,7 +1,10 @@
 testthat::test_that("derives UTMs equivalent", {
   testthat::expect_equal(nrow({
 
-    d <- fpr_db_query(query = fpr::fpr_dbq_subset(num_rows = 1000))
+    d <- fpr_db_query(
+      query = fpr::fpr_dbq_subset(
+        num_rows = 500,
+        randomize = TRUE))
 
     d2 <- fpr::fpr_sp_assign_utm(dat = d,
                                  col_zone = 'utm_zone2',
