@@ -9,7 +9,10 @@
 library(testthat)
 library(fpr)
 
+
+# CMD check will
 test_check("fpr")
+# test_package("fpr")
 
 # Note: Exclude manual tests
 # test_dir("tests_manual")
