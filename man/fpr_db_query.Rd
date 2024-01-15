@@ -4,7 +4,7 @@
 \alias{fpr_db_query}
 \title{Query a postgres database}
 \usage{
-fpr_db_query(query = "SELECT * FROM bcfishpass.crossings limit 100000;", ...)
+fpr_db_query(query = "SELECT * FROM bcfishpass.crossings limit 100;", ...)
 }
 \arguments{
 \item{query}{Quoted string query written in `sql`.  Defaults to  "SELECT * FROM bcfishpass.crossings limit 100000;"}
@@ -21,7 +21,8 @@ Provides connection from \link{fpr_db_conn} as well as a subsequent disconnectio
 \seealso{
 Other database postgres: 
 \code{\link{fpr_db_conn}()},
-\code{\link{fpr_dbq_lstable}()},
+\code{\link{fpr_dbq_lscols}()},
+\code{\link{fpr_dbq_lstables}()},
 \code{\link{fpr_dbq_subset}()}
 }
 \concept{database postgres}

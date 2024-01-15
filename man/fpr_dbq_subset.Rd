@@ -10,20 +10,21 @@ fpr_dbq_subset(
   col_select = "*",
   schema = "bcfishpass",
   table = "crossings_vw",
-  num_rows = 100
+  num_rows = 100,
+  ...
 )
 }
 \arguments{
-\item{col_partition}{String (quoted) name of column to partition table on. See column names of any table with \link{}}
+\item{col_partition}{String (quoted) name of column to partition table on. See column names of any table with \link{fpr_dbq_lscols}}
 
 \item{col_order}{String (quoted) name of column to order partitioned table subsets before sliced.
-See column names of any table with fpr_db_query('SELECT * FROM <schema>.<table> LIMIT 0;')}
+See column names of any table with \link{fpr_dbq_lscols}}
 
 \item{col_select}{String (quoted) name of columns to select from the table.  Must include the `col_order` and `col_partition`.}
 
-\item{schema}{String (quoted) name of target postgres db schema.  See names of schemas with \link{}}
+\item{schema}{Character string (quoted) name of target postgres db schema.  See names of schemas with \link{fpr_dbq_lstables}}
 
-\item{table}{String (quoted) name of target postgres db table. See names of tables with \link{}}
+\item{table}{Character string (quoted) name of target postgres db table  See names of schemas with \link{fpr_dbq_lstables}}
 
 \item{num_rows}{Number of rows to slice (if available) from each partitioned section of table.}
 }
@@ -34,12 +35,13 @@ Text string to insert into \link{fpr_db_conn} call
 Build query to read in subset table from postgres database.
 }
 \examples{
-\dontrun{fpr_db_query(query = fpr_db_q_crossings_utm())}
+\dontrun{fpr_db_query(query = fpr_dbq_subset())}
 }
 \seealso{
 Other database postgres: 
 \code{\link{fpr_db_conn}()},
 \code{\link{fpr_db_query}()},
-\code{\link{fpr_dbq_lstable}()}
+\code{\link{fpr_dbq_lscols}()},
+\code{\link{fpr_dbq_lstables}()}
 }
 \concept{database postgres}

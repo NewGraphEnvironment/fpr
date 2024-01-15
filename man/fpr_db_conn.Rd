@@ -24,7 +24,7 @@ fpr_db_conn(
 \item{password_var}{QQuoted string value of password.  Defaults to `Sys.getenv('PG_PASS_SHARE')`}
 }
 \description{
-Connect to pg database using environmental variables.  Ass
+Connect to postgres database
 }
 \examples{
 \dontrun{conn <- fpr_db_conn()}
@@ -32,7 +32,8 @@ Connect to pg database using environmental variables.  Ass
 \seealso{
 Other database postgres: 
 \code{\link{fpr_db_query}()},
-\code{\link{fpr_dbq_lstable}()},
+\code{\link{fpr_dbq_lscols}()},
+\code{\link{fpr_dbq_lstables}()},
 \code{\link{fpr_dbq_subset}()}
 }
 \concept{database postgres}
