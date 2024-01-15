@@ -12,7 +12,7 @@
 #'
 #' @examples \dontrun{fpr_db_query(query = fpr_dbq_subset())}
 fpr_db_query <- function(
-    query = "SELECT * FROM bcfishpass.crossings limit 100000;",
+    query = "SELECT * FROM bcfishpass.crossings limit 100;",
     ...){
 
   start_time <- Sys.time()
