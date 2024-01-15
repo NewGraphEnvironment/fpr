@@ -1,10 +1,10 @@
 #' Connect to postgres database
 #'
-#' @param db_var Quoted string value of database name.  Defaults to `Sys.getenv('PG_DB_SHARE')`
-#' @param host_var Quoted string value of host name.  Defaults to `Sys.getenv('PG_HOST_SHARE')`
-#' @param port_var Quoted string value of port name.  Defaults to `Sys.getenv('PG_PORT_SHARE')`
-#' @param user_var Quoted string value of user name.  Defaults to `Sys.getenv('PG_USER_SHARE')`
-#' @param password_var QQuoted string value of password.  Defaults to `Sys.getenv('PG_PASS_SHARE')`
+#' @param db_var Quoted character string value of database name.
+#' @param host_var Quoted character string value of host name.
+#' @param port_var Quoted character string value of port name.
+#' @param user_var Quoted character string value of user name.
+#' @param password_var Quoted character string value of password.
 #'
 #' @family database postgres
 #'
