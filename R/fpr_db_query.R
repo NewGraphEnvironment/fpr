@@ -2,8 +2,9 @@
 #'
 #' Provides connection from \link{fpr_db_conn} as well as a subsequent disconnection
 #'
-#' @param query Quoted string query written in `sql`.  Defaults to  "SELECT * FROM bcfishpass.crossings limit 100000;"
-#' @param ... Not used.  Facilitates pass through of quoted strings to set postgres database params to link\{fpr_db_conn}
+#' @param query Quoted string query written in `sql`.
+#' @param ... Not used.  Facilitates pass through of quoted strings to set postgres database
+#' params to link\{fpr_db_conn}
 #'
 #' @family database postgres
 #'

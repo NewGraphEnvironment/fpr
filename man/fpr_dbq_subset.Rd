@@ -6,19 +6,17 @@
 \usage{
 fpr_dbq_subset(
   col_partition = "utm_zone",
-  col_order = "aggregated_crossings_id",
   col_select = "*",
   schema = "bcfishpass",
-  table = "crossings_vw",
+  table = "crossings",
   num_rows = 100,
+  randomize = TRUE,
+  col_order = "aggregated_crossings_id",
   ...
 )
 }
 \arguments{
 \item{col_partition}{String (quoted) name of column to partition table on. See column names of any table with \link{fpr_dbq_lscols}}
-
-\item{col_order}{String (quoted) name of column to order partitioned table subsets before sliced.
-See column names of any table with \link{fpr_dbq_lscols}}
 
 \item{col_select}{String (quoted) name of columns to select from the table.  Must include the `col_order` and `col_partition`.}
 
@@ -27,6 +25,12 @@ See column names of any table with \link{fpr_dbq_lscols}}
 \item{table}{Character string (quoted) name of target postgres db table  See names of schemas with \link{fpr_dbq_lstables}}
 
 \item{num_rows}{Number of rows to slice (if available) from each partitioned section of table.}
+
+\item{randomize}{Logical (TRUE or FALSE) of whether to choose rows within partitioned subsets optionally.
+If FALSE `col_order` needs to be specified}
+
+\item{col_order}{String (quoted) name of column to order partitioned table subsets before sliced.
+See column names of any table with \link{fpr_dbq_lscols}}
 }
 \value{
 Text string to insert into \link{fpr_db_conn} call

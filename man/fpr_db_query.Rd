@@ -7,7 +7,7 @@
 fpr_db_query(query = "SELECT * FROM bcfishpass.crossings limit 100;", ...)
 }
 \arguments{
-\item{query}{Quoted string query written in `sql`.  Defaults to  "SELECT * FROM bcfishpass.crossings limit 100000;"}
+\item{query}{Quoted string query written in `sql`.}
 }
 \value{
 Object pulled from database and message of how long the query took to complete.
