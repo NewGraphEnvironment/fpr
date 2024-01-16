@@ -21,4 +21,5 @@ fpr_xref_template_pscis <- function(){
     dplyr::slice(0) %>%
     # https://stackoverflow.com/questions/65921972/convert-a-vector-of-character-strings-as-symbols
     dplyr::mutate(dplyr::across(c(!!! rlang::syms(d_num)), ~ as.numeric(.x)))
+    # fpr_import_pscis is dealing with the date from excel so we will j
 }
