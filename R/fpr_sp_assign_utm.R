@@ -6,14 +6,16 @@
 #' @param col_easting Quoted string defining the name of the column where the utm easting will be stored.
 #' @param col_northing Quoted string defining the name of the column where the utm northing will be stored.
 #'
+#' @family spatial operations
+#'
 #' @return
 #' @export
 #'
 #' @examples
 fpr_sp_assign_utm <- function(dat = NULL,
                                col_zone = 'utm_zone',
-                               col_easting = 'utm_easting',
-                               col_northing = 'utm_northing'){
+                               col_easting = 'easting',
+                               col_northing = 'northing'){
 
   if (is.null(dat))
     poisutils::ps_error('please provide "dat" (sf point dataframe) object')

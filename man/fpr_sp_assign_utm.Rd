@@ -7,8 +7,8 @@
 fpr_sp_assign_utm(
   dat = NULL,
   col_zone = "utm_zone",
-  col_easting = "utm_easting",
-  col_northing = "utm_northing"
+  col_easting = "easting",
+  col_northing = "northing"
 )
 }
 \arguments{
@@ -23,3 +23,8 @@ fpr_sp_assign_utm(
 \description{
 Import sf object (point) and assign utm zone, easting and northing
 }
+\seealso{
+Other spatial operations: 
+\code{\link{fpr_sp_assign_latlong}()}
+}
+\concept{spatial operations}
