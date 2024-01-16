@@ -5,7 +5,7 @@
 #' @param table Character string (quoted) name of target postgres db table  See names of schemas with \link{fpr_dbq_lstables}
 #'
 #' @family database postgres
-#' @return
+#' @return tibble of columns names and associated type for specified table.
 #' @export
 #'
 #' @examples \dontrun{fpr_db_query(query = fpr_dbq_lscols())}

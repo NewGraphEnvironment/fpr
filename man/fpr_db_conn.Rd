@@ -23,6 +23,9 @@ fpr_db_conn(
 
 \item{password_var}{Quoted character string value of password.}
 }
+\value{
+DBI connection
+}
 \description{
 Connect to postgres database
 }

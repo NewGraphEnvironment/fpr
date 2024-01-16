@@ -1,4 +1,4 @@
-#' This is a table that cross references the names PSCIS submission template to the bc data catalog names to names used in reporting.  Also has columns that reference untidy table ids for join for two column table.
+#' Cross references the names from PSCIS submission template to the bc data catalog names to names used in reporting.
 #'
 #' @name fpr_xref_pscis
 #' @docType data
@@ -6,8 +6,6 @@
 #' @description This is a table that cross references the names PSCIS submission template to the bc data catalog names to names used in reporting.  Also has columns that reference untidy table ids for join for two column table.
 #' @details
 #' Latest version created with script in https://github.com/NewGraphEnvironment/fpr/issues/6
-#' Needed to bring in date as numeric then convert later
-#' @eval  rdScript("inst/createCrimeData.R")
 #' @author Al Irvine \email{al@newgraphenvironment.com}
 #' @references \url{https://www2.gov.bc.ca/gov/content/environment/plants-animals-ecosystems/fish/aquatic-habitat-management/fish-passage/fish-passage-technical/assessment-projects}
 #' @keywords data

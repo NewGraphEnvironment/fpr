@@ -1,11 +1,10 @@
 #' List all tables and their sizes
 #'
-#' @inheritParams fpr_dbq_lscols
 #' @param col_order Single quoted string with columns to order results on. To order by size descending
 #' use 'size desc'.
 #'
 #' @family database postgres
-#' @return
+#' @return tibble with schema name, table name and sizes of all tables in database.
 #' @export
 #'
 #' @examples \dontrun{fpr_dbq_lstables(col_order = 'size desc')}

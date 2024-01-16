@@ -6,6 +6,9 @@
 \usage{
 fpr_xref_template_pscis()
 }
+\value{
+empty tibble with columns and types equivalent to PSCIS submission template.
+}
 \description{
 For use in prepping digital field data for submission.
 }

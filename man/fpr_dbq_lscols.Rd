@@ -11,6 +11,9 @@ fpr_dbq_lscols(schema = "bcfishpass", table = "crossings_vw", ...)
 
 \item{table}{Character string (quoted) name of target postgres db table  See names of schemas with \link{fpr_dbq_lstables}}
 }
+\value{
+tibble of columns names and associated type for specified table.
+}
 \description{
 List names of all columns in a postgres table
 }

@@ -10,6 +10,9 @@ fpr_dbq_lstables(col_order = "table_schema, table_name")
 \item{col_order}{Single quoted string with columns to order results on. To order by size descending
 use 'size desc'.}
 }
+\value{
+tibble with schema name, table name and sizes of all tables in database.
+}
 \description{
 List all tables and their sizes
 }

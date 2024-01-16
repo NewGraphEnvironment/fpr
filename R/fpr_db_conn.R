@@ -8,7 +8,7 @@
 #'
 #' @family database postgres
 #'
-#' @return
+#' @return DBI connection
 #' @export
 #'
 #' @examples \dontrun{conn <- fpr_db_conn()}
