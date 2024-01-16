@@ -72,20 +72,21 @@ fpr_import_pscis <- function(workbook_name = 'pscis_phase1.xlsm', ##new template
     tibble::rowid_to_column() %>%
     dplyr::rename(date = date_of_assessment_yyyy_mm_dd) %>%
     dplyr::filter(!is.na(date)) %>%
-    dplyr:: mutate(date = janitor::excel_numeric_to_date(as.numeric(date)),
-                   source = workbook_name,
-                   dplyr::across(dplyr::all_of(sig_fig0), round, 0),
-                   dplyr::across(dplyr::all_of(sig_fig1), round, 1),
-                   dplyr::across(dplyr::all_of(sig_fig2), round, 2),
-                   rowid = rowid + 4,
-                   aggregated_crossings_id = dplyr::case_when(!is.na(pscis_crossing_id) ~ pscis_crossing_id,
-                                                              my_crossing_reference > 200000000 ~ my_crossing_reference,  ##date based id's are greater than this number
-                                                              T ~ my_crossing_reference + 1000000000),
-                   time_start = stringr::str_squish(stringr::str_extract(assessment_comment, "[^.|^?]*$")), #assumes the time is positioned after last "."
-                   date_time_start = lubridate::ymd_hm(paste0(date, ' ', time_start)),
-                   camera_id = stringr::word(crew_members, 1), ##identify who had the camera as this is the first initials in the crew_members
-                   site_id = dplyr::case_when(!is.na(pscis_crossing_id) ~ pscis_crossing_id,
-                                       T ~ my_crossing_reference)
+    dplyr:: mutate(
+      # date = janitor::excel_numeric_to_date(as.numeric(date)),
+      source = workbook_name,
+      dplyr::across(dplyr::all_of(sig_fig0), round, 0),
+      dplyr::across(dplyr::all_of(sig_fig1), round, 1),
+      dplyr::across(dplyr::all_of(sig_fig2), round, 2),
+      rowid = rowid + 4,
+      aggregated_crossings_id = dplyr::case_when(!is.na(pscis_crossing_id) ~ pscis_crossing_id,
+                                                 my_crossing_reference > 200000000 ~ my_crossing_reference,  ##date based id's are greater than this number
+                                                 T ~ my_crossing_reference + 1000000000),
+      time_start = stringr::str_squish(stringr::str_extract(assessment_comment, "[^.|^?]*$")), #assumes the time is positioned after last "."
+      date_time_start = lubridate::ymd_hms(paste0(date, ' ', time_start)),
+      camera_id = stringr::word(crew_members, 1), ##identify who had the camera as this is the first initials in the crew_members
+      site_id = dplyr::case_when(!is.na(pscis_crossing_id) ~ pscis_crossing_id,
+                                 T ~ my_crossing_reference)
     )
 }
 

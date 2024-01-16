@@ -20,7 +20,7 @@ fpr_xref_pscis <- tibble::tribble(
                  "funding_source",                                    NA,                      NA,       NA,       NA,       "text",            FALSE,
          "responsible_party_name",                                    NA,                      NA,       NA,       NA,       "text",            FALSE,
                 "consultant_name",                                    NA,                      NA,       NA,       NA,       "text",            FALSE,
-                "assessment_date",                                "date",                  "Date",       1L,       1L,    "numeric",            TRUE,
+                "assessment_date",                                "date",                  "Date",       1L,       1L,       "date",            TRUE,
              "stream_crossing_id",                   "pscis_crossing_id",              "PSCIS ID",       2L,       1L,    "numeric",            TRUE,
                   "assessment_id",                                    NA,                      NA,       NA,       NA,           NA,           FALSE,
     "external_crossing_reference",               "my_crossing_reference",           "External ID",       3L,       1L,    "numeric",            TRUE,
