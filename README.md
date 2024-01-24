@@ -1,7 +1,4 @@
-
 # Fish Passage Reporting
-
-
 And much more... Package used to clean data, QA, and for building [interactive reports](https://github.com/NewGraphEnvironment/dff-2022/blob/master/docs/Aquatic_restoration_and_fish_passage_resources.pdf) usually related to fish passage planning, implementation and monitoring.  
 
 <br>
