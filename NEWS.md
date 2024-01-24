@@ -1,4 +1,6 @@
-# fpr (development version)
+# fpr (v.20240124)
+* add `fpr_sp_assign_sf_from_utm`
+* add `fpr_make_xref_pscis_modelled`
 * add `fpr_dbq_lstable`
 * add `fpr_dbq_subset`
 * add `fpr_db_query`
