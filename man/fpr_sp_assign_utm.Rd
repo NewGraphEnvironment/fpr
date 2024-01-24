@@ -8,7 +8,8 @@ fpr_sp_assign_utm(
   dat = NULL,
   col_zone = "utm_zone",
   col_easting = "easting",
-  col_northing = "northing"
+  col_northing = "northing",
+  sig_dit = 0
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ fpr_sp_assign_utm(
 \item{col_easting}{Quoted string defining the name of the column where the utm easting will be stored.}
 
 \item{col_northing}{Quoted string defining the name of the column where the utm northing will be stored.}
+
+\item{sig_dit}{Number of significant digits to round the easting and northing to.}
 }
 \description{
 Import sf object (point) and assign utm zone, easting and northing

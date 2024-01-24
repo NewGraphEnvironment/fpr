@@ -5,6 +5,7 @@
 #' @param col_zone Quoted string defining the name of the column where the utm zone will be stored.
 #' @param col_easting Quoted string defining the name of the column where the utm easting will be stored.
 #' @param col_northing Quoted string defining the name of the column where the utm northing will be stored.
+#' @param sig_dit Number of significant digits to round the easting and northing to.
 #'
 #' @family spatial operations
 #'
@@ -15,7 +16,8 @@
 fpr_sp_assign_utm <- function(dat = NULL,
                                col_zone = 'utm_zone',
                                col_easting = 'easting',
-                               col_northing = 'northing'){
+                               col_northing = 'northing',
+                              sig_dit = 0){
 
   if (is.null(dat))
     poisutils::ps_error('please provide "dat" (sf point dataframe) object')
@@ -65,8 +67,9 @@ fpr_sp_assign_utm <- function(dat = NULL,
     #   purrr::map2(.x = form_l, .y = crs_l, .f = ~ sf::st_transform(x = .x,
     #                                                                      crs = .y))
     purrr::map(~dplyr::mutate(.,
-                              {{ col_easting }} := sf::st_coordinates(.)[,1],
-                              {{ col_northing }} := sf::st_coordinates(.)[,2])) %>%
+                              {{ col_easting }} := round(sf::st_coordinates(.)[,1], sig_dit),
+                              {{ col_northing }} := round(sf::st_coordinates(.)[,2], sig_dit))
+               ) %>%
     # transform back to geodecic crs of choice and recombine
     purrr::map(sf::st_transform, crs = crs_og) %>%
     dplyr::bind_rows() %>%
