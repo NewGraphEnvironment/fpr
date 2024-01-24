@@ -10,13 +10,13 @@ Currently under active development. You will want to disect each function to und
 
 <br>
 
-Install with `devtools::install_github("NewGraphEnvironment/fpr")`
+Install with `pak::pkg_install("NewGraphEnvironment/fpr")`
 
 <br>
 
 If looking for backwards comparability because you used the package in the past and there are issues now with a newer release of the package, install with:
 
-`devtools::install_github("NewGraphEnvironment/fpr", ref = "v1.0.0")` (tag coinciding with the one you used to report)
+`pak::pkg_install("NewGraphEnvironment/fpr@v.20240124")` (tag coinciding with the one you used to report)
 
 <br>
 
