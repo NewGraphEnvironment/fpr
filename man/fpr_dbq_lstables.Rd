@@ -7,8 +7,8 @@
 fpr_dbq_lstables(col_order = "table_schema, table_name")
 }
 \arguments{
-\item{col_order}{Single quoted string with columns to order results on. To order by size descending
-use 'size desc'.}
+\item{col_order}{A single quoted character string with columns to order results on. Default is 'table_schema,
+table_name'. To order by size descending use 'size desc'.}
 }
 \value{
 tibble with schema name, table name and sizes of all tables in database.
@@ -17,7 +17,9 @@ tibble with schema name, table name and sizes of all tables in database.
 List all tables and their sizes
 }
 \examples{
-\dontrun{fpr_dbq_lstables(col_order = 'size desc')}
+\dontrun{
+fpr_db_query(fpr_dbq_lstables(col_order = 'size desc'))
+}
 }
 \seealso{
 Other database postgres: 

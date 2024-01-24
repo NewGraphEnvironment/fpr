@@ -1,13 +1,16 @@
 #' List all tables and their sizes
 #'
-#' @param col_order Single quoted string with columns to order results on. To order by size descending
-#' use 'size desc'.
+#' @param col_order A single quoted character string with columns to order results on. Default is 'table_schema,
+#' table_name'. To order by size descending use 'size desc'.
 #'
+#' @importFrom glue glue
 #' @family database postgres
 #' @return tibble with schema name, table name and sizes of all tables in database.
 #' @export
 #'
-#' @examples \dontrun{fpr_dbq_lstables(col_order = 'size desc')}
+#' @examples \dontrun{
+#' fpr_db_query(fpr_dbq_lstables(col_order = 'size desc'))
+#' }
 fpr_dbq_lstables <-  function(
     col_order = 'table_schema, table_name'){
   glue::glue(
