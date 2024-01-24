@@ -16,7 +16,9 @@ Object pulled from database and message of how long the query took to complete.
 Provides connection from \link{fpr_db_conn} as well as a subsequent disconnection
 }
 \examples{
-\dontrun{fpr_db_query(query = fpr_dbq_subset())}
+\dontrun{
+fpr_db_query(query = fpr_dbq_subset())
+}
 }
 \seealso{
 Other database postgres: 

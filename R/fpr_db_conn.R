@@ -11,7 +11,9 @@
 #' @return DBI connection
 #' @export
 #'
-#' @examples \dontrun{conn <- fpr_db_conn()}
+#' @examples \dontrun{
+#' conn <- fpr_db_conn()
+#' }
 fpr_db_conn <- function(
     db_var = Sys.getenv('PG_DB_SHARE'),
     host_var = Sys.getenv('PG_HOST_SHARE'),

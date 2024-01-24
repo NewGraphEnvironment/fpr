@@ -11,7 +11,9 @@
 #' @return Object pulled from database and message of how long the query took to complete.
 #' @export
 #'
-#' @examples \dontrun{fpr_db_query(query = fpr_dbq_subset())}
+#' @examples \dontrun{
+#' fpr_db_query(query = fpr_dbq_subset())
+#' }
 fpr_db_query <- function(
     query = "SELECT * FROM bcfishpass.crossings limit 100;",
     ...){

@@ -30,7 +30,9 @@ DBI connection
 Connect to postgres database
 }
 \examples{
-\dontrun{conn <- fpr_db_conn()}
+\dontrun{
+conn <- fpr_db_conn()
+}
 }
 \seealso{
 Other database postgres: 
