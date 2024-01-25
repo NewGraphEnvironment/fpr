@@ -5,23 +5,23 @@
 \title{Assign a spatial data frame from UTM coordinates}
 \usage{
 fpr_sp_assign_sf_from_utm(
-  dat,
-  utm_zone = "utm_zone",
-  easting = "easting",
-  northing = "northing",
+  dat = NULL,
+  col_utm_zone = "utm_zone",
+  col_easting = "easting",
+  col_northing = "northing",
   crs_return = 3005
 )
 }
 \arguments{
 \item{dat}{A data frame.}
 
-\item{utm_zone}{The name of the column to group by. Default is "utm_zone".}
+\item{col_utm_zone}{The name of the column to group by. Default is "utm_zone".}
 
-\item{easting}{The name of the easting coordinate column. Default is "easting".}
+\item{col_easting}{The name of the easting coordinate column. Default is "easting".}
 
-\item{northing}{The name of the northing coordinate column. Default is "northing".}
+\item{col_northing}{The name of the northing coordinate column. Default is "northing".}
 
-\item{crs_return}{The EPSG code to transform the coordinate reference system to. Must be Geographic (ex. Albers or WSG84). Default is BC Albers - 3005.}
+\item{crs_return}{Numeric. The EPSG code to transform the coordinate reference system to. Must be Geographic (ex. Albers or WSG84). Default is BC Albers - 3005.}
 }
 \value{
 A spatial data frame.
@@ -38,3 +38,10 @@ must be in a Geographic Coordinate System (BC Albers or vs a Spatial coordinate 
 fpr_sp_assign_sf_from_utm(pscis_all)
 }
 }
+\seealso{
+Other spatial operations: 
+\code{\link{fpr_sp_assign_latlong}()},
+\code{\link{fpr_sp_assign_utm}()},
+\code{\link{fpr_sp_gpkg_backup}()}
+}
+\concept{spatial operations}
