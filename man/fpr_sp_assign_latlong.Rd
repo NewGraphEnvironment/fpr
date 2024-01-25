@@ -7,7 +7,7 @@
 fpr_sp_assign_latlong(dat = NULL, col_lat = "lat", col_lon = "lon")
 }
 \arguments{
-\item{dat}{sf dataframe of type `Geometry type: POINT`}
+\item{dat}{sf dataframe of type `Geometry type: POINT`. Default is `NULL`.}
 
 \item{col_lat}{Quoted character string defining the name of the column where the northing will be stored.}
 
@@ -21,6 +21,8 @@ Extract latitude and longitude (WSG84 CRS 4326 from sf object and add as columns
 }
 \seealso{
 Other spatial operations: 
-\code{\link{fpr_sp_assign_utm}()}
+\code{\link{fpr_sp_assign_sf_from_utm}()},
+\code{\link{fpr_sp_assign_utm}()},
+\code{\link{fpr_sp_gpkg_backup}()}
 }
 \concept{spatial operations}

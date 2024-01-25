@@ -9,25 +9,42 @@ fpr_sp_assign_utm(
   col_zone = "utm_zone",
   col_easting = "easting",
   col_northing = "northing",
-  sig_dit = 0
+  sig_dig = 0
 )
 }
 \arguments{
-\item{dat}{sf dataframe of type `Geometry type: POINT`}
+\item{dat}{sf dataframe of type `Geometry type: POINT`. Default is `NULL`.}
 
-\item{col_zone}{Quoted string defining the name of the column where the utm zone will be stored.}
+\item{col_zone}{Quoted string defining the name of the column where the utm zone will be stored. Default is `'utm_zone'`.}
 
-\item{col_easting}{Quoted string defining the name of the column where the utm easting will be stored.}
+\item{col_easting}{Quoted string defining the name of the column where the utm easting will be stored. Default is `'easting'`.}
 
-\item{col_northing}{Quoted string defining the name of the column where the utm northing will be stored.}
+\item{col_northing}{Quoted string defining the name of the column where the utm northing will be stored. Default is `'northing'`.}
 
-\item{sig_dit}{Number of significant digits to round the easting and northing to.}
+\item{sig_dig}{Number of significant digits to round the easting and northing to. Default is `0`.}
+}
+\value{
+An sf dataframe with assigned utm zone, easting and northing.
 }
 \description{
 Import sf object (point) and assign utm zone, easting and northing
 }
+\examples{
+\dontrun{
+sf_df <- data.frame(
+  lon = c(-128.5, -123.5, -118.5),  # Longitudes for UTM zones 9, 10, and 11
+  lat = c(45.5, 45.5, 45.5)  # Same latitude for simplicity
+) \%>\%
+  sf::st_as_sf(coords = c("lon", "lat"), crs = 4326)
+
+# Use the function
+result <- fpr_sp_assign_utm(dat = sf_df)
+}
+}
 \seealso{
 Other spatial operations: 
-\code{\link{fpr_sp_assign_latlong}()}
+\code{\link{fpr_sp_assign_latlong}()},
+\code{\link{fpr_sp_assign_sf_from_utm}()},
+\code{\link{fpr_sp_gpkg_backup}()}
 }
 \concept{spatial operations}
