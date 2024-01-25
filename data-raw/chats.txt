@@ -1,0 +1,182 @@
+from now on can you put identifiers in our chat that make it clear for you to tell in a chat log what is you and what is me? start now please
+
+ 
+Yes, you're correct. The eastings should not be equivalent across different UTM zones. The issue might be due to the latitudes and longitudes being too close to each other.
+
+In UTM, the easting is the distance from the central meridian of the UTM zone, and the northing is the distance from the equator. Therefore, if the points are too close to each other, they might end up having similar eastings and northings even in different UTM zones.
+
+To avoid this, you can use more precise coordinates with decimals. Here's an example:
+
+# Create an example sf object with coordinates in UTM zones 9, 10, and 11
+sf_df <- data.frame(
+  lon = c(-128.5, -123.5, -118.5),  # Longitudes for UTM zones 9, 10, and 11
+  lat = c(45.5, 45.5, 45.5)  # Same latitude for simplicity
+) %>%
+  sf::st_as_sf(coords = c("lon", "lat"), crs = 4326)
+
+# Use the function
+result <- fpr_sp_assign_utm(dat = sf_df)
+
+This code will create points in UTM zones 9, 10, and 11 with more precise coordinates.
+
+hmm. somehow we are getting equivalent eastings for all three zones. that should not be possible. shouldn't we have decimals for the lons and lats? is that the issue?
+
+I apologize for the confusion. You're correct. The formula to calculate the UTM zone from longitude is indeed floor((long + 180) / 6) + 1.
+
+Here's the corrected code:
+
+# Create an example sf object with coordinates in UTM zones 9, 10, and 11
+sf_df <- data.frame(
+  lon = c(-129, -123, -117),  # Longitudes for UTM zones 9, 10, and 11
+  lat = c(45, 45, 45)  # Same latitude for simplicity
+) %>%
+  sf::st_as_sf(coords = c("lon", "lat"), crs = 4326)
+
+# Use the function
+result <- fpr_sp_assign_utm(dat = sf_df)
+
+This code will create points in UTM zones 9, 10, and 11. The longitudes are chosen such that they fall into the middle of each UTM zone to avoid edge cases.
+
+function returns utm zones 8 11 and 13. can you confirm those coordinates are correct? shouldn't the calculation for finding zone be floor((long + 180) / 6) + 1 ?
+
+I apologize for the confusion. The longitude of -125 does indeed fall into UTM zone 10, not 9. UTM zones are 6 degrees wide, and zone 1 starts at -180 degrees longitude. So, a longitude of -125 would fall into zone ((180+125)/6) = 9.17, which rounds down to zone 9.
+
+To ensure that one of the points falls into UTM zone 9 (which corresponds to EPSG code 32609 for the northern hemisphere), you could use a longitude of -135 instead. Here's the corrected code:
+
+# Create an example sf object with coordinates in UTM zones 9, 10, and 11
+sf_df <- data.frame(
+  lon = c(-135, -120, -105),  # Longitudes for UTM zones 9, 10, and 11
+  lat = c(45, 45, 45)  # Same latitude for simplicity
+) %>%
+  sf::st_as_sf(coords = c("lon", "lat"), crs = 4326)
+
+# Use the function
+result <- fpr_sp_assign_utm(dat = sf_df)
+
+This code will create points in UTM zones 9, 10, and 11.
+
+are you sure one of the points is in utm zone 9 crs 26909?
+
+Sure, here's the example code without the roxygen notation:
+
+# Create an example sf object with coordinates in UTM zones 9, 10, and 11
+sf_df <- data.frame(
+  lon = c(-125, -120, -115),  # Longitudes for UTM zones 9, 10, and 11
+  lat = c(45, 45, 45)  # Same latitude for simplicity
+) %>%
+  sf::st_as_sf(coords = c("lon", "lat"), crs = 4326)
+
+# Use the function
+result <- fpr_sp_assign_utm(dat = sf_df)
+
+You can run this code in your R environment to test the function.
+
+great. please generate without #' notation so i can test
+
+Sure, here's how you might create an example sf object with coordinates that fall into UTM zones 9, 10, and 11, and then use it in the example section of your roxygen documentation:
+
+#' @examples
+#' \dontrun{
+#' # Create an example sf object with coordinates in UTM zones 9, 10, and 11
+#' sf_df <- data.frame(
+#'   lon = c(-125, -120, -115),  # Longitudes for UTM zones 9, 10, and 11
+#'   lat = c(45, 45, 45)  # Same latitude for simplicity
+#' ) %>%
+#'   sf::st_as_sf(coords = c("lon", "lat"), crs = 4326)
+#'
+#' # Use the function
+#' result <- fpr_sp_assign_utm(dat = sf_df)
+#' }
+
+This example creates a simple sf object with three points, each in a different UTM zone. The fpr_sp_assign_utm function is then called with this sf object as the dat argument.
+
+awesome. please redo the only the example part but build an example sf object in one step with pipeline and make the example sf_df have lat and lon columns with coordinates that when converted to utm land in different utm zones 9, 10 and 11
+
+Sure, here's how you might update your roxygen documentation:
+
+#' Import sf object (point) and assign utm zone, easting and northing
+#'
+#' @param dat sf dataframe of type `Geometry type: POINT`. Default is `NULL`.
+#' @param col_zone Quoted string defining the name of the column where the utm zone will be stored. Default is `'utm_zone'`.
+#' @param col_easting Quoted string defining the name of the column where the utm easting will be stored. Default is `'easting'`.
+#' @param col_northing Quoted string defining the name of the column where the utm northing will be stored. Default is `'northing'`.
+#' @param sig_dig Number of significant digits to round the easting and northing to. Default is `0`.
+#'
+#' @return An sf dataframe with assigned utm zone, easting and northing.
+#'
+#' @importFrom sf st_crs st_transform st_coordinates
+#' @importFrom dplyr mutate arrange select distinct group_by bind_rows
+#' @importFrom purrr map2 map
+#' @importFrom chk chk_string
+#' @importFrom poisutils ps_error
+#'
+#' @family spatial operations
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' sf_df <- sf::st_as_sf(data.frame(x = runif(10), y = runif(10)), coords = c("x", "y"))
+#' sf_df <- sf::st_set_crs(sf_df, 4326)
+#' result <- fpr_sp_assign_utm(dat = sf_df)
+#' }
+fpr_sp_assign_utm <- function(dat = NULL,
+                               col_zone = 'utm_zone',
+                               col_easting = 'easting',
+                               col_northing = 'northing',
+                               sig_dig = 0){
+  # Your function code here
+}
+
+Please replace the function code with your actual function code. The @examples section should contain a minimal example of how to use your function.
+
+sorry - forgot to add the code. please try again
+
+#' Import sf object (point) and assign utm zone, easting and northing #' #' #' @param dat sf dataframe of type Geometry type: POINT #' @param col_zone Quoted string defining the name of the column where the utm zone will be stored. #' @param col_easting Quoted string defining the name of the column where the utm easting will be stored. #' @param col_northing Quoted string defining the name of the column where the utm northing will be stored. #' @param sig_dig Number of significant digits to round the easting and northing to. #' #' @family spatial operations #' #' @return #' @export #' #' @examples fpr_sp_assign_utm <- function(dat = NULL, col_zone = 'utm_zone', col_easting = 'easting', col_northing = 'northing', sig_dig = 0){
+
+if (is.null(dat)) poisutils::ps_error('please provide "dat" (sf point dataframe) object') if (!is.data.frame(dat)) poisutils::ps_error('"dat" must inherit from a data.frame') if (class(dat)[1]!="sf") poisutils::ps_error('"dat" must be a sf object') if (!attributes(sf::st_geometry(dat))$class[1] != "sfc_point") poisutils::ps_error('"dat" must be a point simple feature object') chk::chk_string(col_zone) chk::chk_string(col_easting) chk::chk_string(col_northing)
+
+capture the original crs
+crs_og <- sf::st_crs(dat, parameters = T)$epsg
+
+find the utm zone
+dat2 <- dat %>% sf::st_transform(crs = 4326) %>% dplyr::mutate( long = sf::st_coordinates(.)[,1]) %>% # lat = sf::st_coordinates(.)[,2]) %>% # add in utm zone of study area dplyr::mutate({{ col_zone }} := floor((long + 180) / 6) + 1) %>% dplyr::mutate(epsg = 26900 + !! rlang::sym(col_zone)) %>% dplyr::arrange(epsg) %>% dplyr::select(-long)
+
+grab the crs list to pass to get the utm coords later with map2
+crs_l <- dat2 %>% dplyr::distinct(epsg) %>% dplyr::pull(epsg)
+
+split the sf object row wise after sorting by utm_zone
+form_l <- dat2 %>% # important to group by something that will sort the df equivalent to the crs df dplyr::group_by(epsg) %>% dplyr::group_split()
+
+form_l <- split(form_prep1, seq(1:nrow(form_prep1)))
+# transform to utm crs and extract coords
+dat <- form_l %>% purrr::map2(crs_l, sf::st_transform) %>% # the above is the same as longer format below # form <- form_l %>% # purrr::map2(.x = form_l, .y = crs_l, .f = ~ sf::st_transform(x = .x, # crs = .y)) purrr::map(~dplyr::mutate(., {{ col_easting }} := round(sf::st_coordinates(.)[,1], sig_dig), {{ col_northing }} := round(sf::st_coordinates(.)[,2], sig_dig)) ) %>% # transform back to geodecic crs of choice and recombine purrr::map(sf::st_transform, crs = crs_og) %>% dplyr::bind_rows() %>% dplyr::select(-epsg)
+
+}
+
+Sure, here's an example of how you might update your roxygen documentation:
+
+#' @title Your Function Title
+#'
+#' @description A brief description of what your function does.
+#'
+#' @param param1 Description of the first parameter. Default is `default_value1`.
+#' @param param2 Description of the second parameter. Default is `default_value2`.
+#'
+#' @return What the function returns.
+#'
+#' @examples
+#' \dontrun{
+#' example_call <- your_function(param1 = value1, param2 = value2)
+#' }
+#'
+#' @importFrom package function
+#'
+#' @export
+#'
+your_function <- function(param1 = default_value1, param2 = default_value2) {
+  # Your function code here
+}
+
+Please replace your_function, param1, param2, default_value1, default_value2, package, function, and the function code with your actual function name, parameters, default values, the package and function you're importing from, and your actual function code. The @examples section should contain a minimal example of how to use your function.
+
+update the roxygen documentation to include the default values and @importsfrom and minimal example. do not print out rest of function though please
