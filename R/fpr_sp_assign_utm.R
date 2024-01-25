@@ -1,23 +1,39 @@
 #' Import sf object (point) and assign utm zone, easting and northing
 #'
+#' @param dat sf dataframe of type `Geometry type: POINT`. Default is `NULL`.
+#' @param col_zone Quoted string defining the name of the column where the utm zone will be stored. Default is `'utm_zone'`.
+#' @param col_easting Quoted string defining the name of the column where the utm easting will be stored. Default is `'easting'`.
+#' @param col_northing Quoted string defining the name of the column where the utm northing will be stored. Default is `'northing'`.
+#' @param sig_dig Number of significant digits to round the easting and northing to. Default is `0`.
 #'
-#' @param dat sf dataframe of type `Geometry type: POINT`
-#' @param col_zone Quoted string defining the name of the column where the utm zone will be stored.
-#' @param col_easting Quoted string defining the name of the column where the utm easting will be stored.
-#' @param col_northing Quoted string defining the name of the column where the utm northing will be stored.
-#' @param sig_dit Number of significant digits to round the easting and northing to.
+#' @return An sf dataframe with assigned utm zone, easting and northing.
+#'
+#' @importFrom sf st_crs st_transform st_coordinates
+#' @importFrom dplyr mutate arrange select distinct group_by bind_rows
+#' @importFrom purrr map2 map
+#' @importFrom chk chk_string
+#' @importFrom poisutils ps_error
+#' @importFrom rlang sym
 #'
 #' @family spatial operations
-#'
-#' @return
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' sf_df <- data.frame(
+#'   lon = c(-128.5, -123.5, -118.5),  # Longitudes for UTM zones 9, 10, and 11
+#'   lat = c(45.5, 45.5, 45.5)  # Same latitude for simplicity
+#' ) %>%
+#'   sf::st_as_sf(coords = c("lon", "lat"), crs = 4326)
+#'
+#' # Use the function
+#' result <- fpr_sp_assign_utm(dat = sf_df)
+#' }
 fpr_sp_assign_utm <- function(dat = NULL,
-                               col_zone = 'utm_zone',
-                               col_easting = 'easting',
-                               col_northing = 'northing',
-                              sig_dit = 0){
+                              col_zone = 'utm_zone',
+                              col_easting = 'easting',
+                              col_northing = 'northing',
+                              sig_dig = 0){
 
   if (is.null(dat))
     poisutils::ps_error('please provide "dat" (sf point dataframe) object')
@@ -38,8 +54,7 @@ fpr_sp_assign_utm <- function(dat = NULL,
   dat2 <- dat %>%
     sf::st_transform(crs = 4326) %>%
     dplyr::mutate(
-      long = sf::st_coordinates(.)[,1]) %>%
-    #   lat = sf::st_coordinates(.)[,2]) %>%
+      long = sf::st_coordinates(.)[, 1]) %>%
     # add in utm zone of study area
     dplyr::mutate({{ col_zone }} := floor((long + 180) / 6) + 1) %>%
     dplyr::mutate(epsg = 26900 + !! rlang::sym(col_zone)) %>%
@@ -67,9 +82,9 @@ fpr_sp_assign_utm <- function(dat = NULL,
     #   purrr::map2(.x = form_l, .y = crs_l, .f = ~ sf::st_transform(x = .x,
     #                                                                      crs = .y))
     purrr::map(~dplyr::mutate(.,
-                              {{ col_easting }} := round(sf::st_coordinates(.)[,1], sig_dit),
-                              {{ col_northing }} := round(sf::st_coordinates(.)[,2], sig_dit))
-               ) %>%
+                              {{ col_easting }} := round(sf::st_coordinates(.)[, 1], sig_dig),
+                              {{ col_northing }} := round(sf::st_coordinates(.)[ ,2], sig_dig))
+    ) %>%
     # transform back to geodecic crs of choice and recombine
     purrr::map(sf::st_transform, crs = crs_og) %>%
     dplyr::bind_rows() %>%
