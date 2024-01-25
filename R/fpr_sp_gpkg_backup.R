@@ -25,6 +25,8 @@
 #' @importFrom tools file_path_sans_ext
 #' @importFrom fpr fpr_sp_assign_utm
 #'
+#' @family spatial operations
+#'
 #' @export
 #'
 #' @examples
@@ -60,6 +62,7 @@ fpr_sp_gpkg_backup <- function(
   chk::chk_dir(dir_backup)
   chk::chk_logical(write_back_to_path)
   chk::chk_logical(write_backup)
+  chk::chk_logical(return_object)
 
   # Read geopackage
   dat <- sf::st_read(dsn = path_gpkg, quiet = TRUE)
@@ -90,9 +93,20 @@ fpr_sp_gpkg_backup <- function(
       readr::write_csv(paste0(
         dir_backup, tools::file_path_sans_ext(basename(path_gpkg)), ".csv"), na = "")
     # we rename the object just to get an informative name for the object saved in the .RData file
-    gpkg <- dat2
-    save(gpkg,
-         file = paste0(dir_backup, tools::file_path_sans_ext(basename(path_gpkg)),".RData"))
+    # apparently not good practice to use assign() within a function because it make code difficult to debug
+
+    # Create a dynamic object name
+    obj_name <- tools::file_path_sans_ext(basename(path_gpkg))
+
+    # Assign the value of dat2 to the new object in the function environment
+    assign(obj_name, dat2, envir = environment())
+
+    # Save the new object
+    save(list = obj_name,
+         file = paste0(dir_backup, obj_name, ".RData"))
+
+    # Remove the temporary object from the function environment
+    rm(list = obj_name, envir = environment())
   }
   if(return_object){
     dat2

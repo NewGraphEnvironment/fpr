@@ -60,3 +60,10 @@ gpkg_utms_updated <- fpr_sp_gpkg_backup(
 waldo::compare(gpkg_raw, gpkg_utms_updated)
 }
 }
+\seealso{
+Other spatial operations: 
+\code{\link{fpr_sp_assign_latlong}()},
+\code{\link{fpr_sp_assign_sf_from_utm}()},
+\code{\link{fpr_sp_assign_utm}()}
+}
+\concept{spatial operations}
