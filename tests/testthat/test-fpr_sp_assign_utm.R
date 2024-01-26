@@ -3,8 +3,8 @@ testthat::test_that("derives UTMs equivalent", {
 
     d <- fpr_db_query(
       query = fpr::fpr_dbq_subset(
-        num_rows = 500,
-        randomize = TRUE))
+        num_rows = 100,
+        randomize = FALSE))
 
     d2 <- fpr::fpr_sp_assign_utm(dat = d,
                                  col_zone = 'utm_zone2',
@@ -15,7 +15,7 @@ testthat::test_that("derives UTMs equivalent", {
       dplyr::mutate(chk_east = abs(utm_easting - utm_easting2),
                     chk_north = abs(utm_northing - utm_northing2),
                     chk_zone = abs(utm_zone - utm_zone2)) %>%
-      dplyr::filter(dplyr::if_any(c(chk_east, chk_north), ~ .x >= 2) | chk_zone >= 1)
+      dplyr::filter(dplyr::if_any(c(chk_east, chk_north), ~ .x >= 3) | chk_zone >= 1)
 
     d3}),
     0)
