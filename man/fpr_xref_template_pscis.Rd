@@ -13,5 +13,5 @@ empty tibble with columns and types equivalent to PSCIS submission template.
 For use in prepping digital field data for submission.
 }
 \examples{
-example <- fpr_xref_template_pscis()
+xref_template_pscis <- fpr_xref_template_pscis()
 }
