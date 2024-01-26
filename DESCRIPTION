@@ -1,6 +1,6 @@
 Package: fpr
 Type: Package
-Title: Fish Passage Reporting Functions
+Title: Fish Passage Data Wrangling and Reporting Functions
 Version: 1.0.2.9000
 Author: Allan Irvine
 Maintainer: <al@newgraphenvironment.com>
@@ -9,6 +9,7 @@ License: MIT + file LICENSE
 URL: https://github.com/NewGraphEnvironment/fpr
 Encoding: UTF-8
 RoxygenNote: 7.3.0
+BugReports: https://github.com/NewGraphEnvironment/fpr/issues
 LazyData: true
 Depends: 
     R (>= 4.1)
