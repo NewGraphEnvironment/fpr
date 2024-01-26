@@ -1,4 +1,7 @@
-# Development version
+
+* change name of `fpr_t_site_id` to `fpr_tidy_assign_site_id` to clarify use and avoid future conflicts if/when 
+fpr_test_* functions are introduced
+* in `fpr_sp_gpkg_backup` split out write_backup params into write_csv and write_rdata to provide more flexibility. change to new name for fpr_tidy_assign_site_id
 
 
 # fpr 1.1.0

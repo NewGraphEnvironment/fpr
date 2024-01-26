@@ -7,8 +7,11 @@
 fpr_sp_gpkg_backup(
   path_gpkg = NULL,
   dir_backup = "data/backup/",
+  update_utm = TRUE,
+  update_site_id = FALSE,
   write_back_to_path = FALSE,
-  write_backup = TRUE,
+  write_to_csv = TRUE,
+  write_to_rdata = TRUE,
   return_object = FALSE,
   ...
 )
@@ -18,47 +21,37 @@ fpr_sp_gpkg_backup(
 
 \item{dir_backup}{A character string specifying the directory for backup. Default is "data/backup/".}
 
+\item{update_utm}{A logical value indicating whether to update the UTM coordinate columns with \link{fpr_sp_assign_utm}.
+Default is TRUE.}
+
+\item{update_site_id}{A logical value indicating whether to update the site_id column with \link{fpr_tidy_assign_site_id}.
+Default is TRUE.}
+
 \item{write_back_to_path}{A logical value indicating whether to write the updated geopackage back to the original
 path. Will overwrite existing gpkg if it is present and the layer is the same as the basename of the geopackage
 (ex. a layer named form_pscis_2023 will be written back to form_pscis_2023.gpkg).  Default is FALSE.}
 
-\item{write_backup}{A logical value indicating whether to write a backup of the geopackage. Default is TRUE.}
+\item{write_to_csv}{A logical value indicating whether to write csv version of gpkg to file for versioning. Default is TRUE}
+
+\item{write_to_rdata}{A logical value indicating whether to write .RData object representation gpkg to file. Reason
+for storing the geopackage in this format is that is preserves the object exactly where as recreating the gpkg
+from csv will introduce small changes which appear to be only the removal of spaces. Default is TRUE}
 
 \item{return_object}{A logical value indicating whether to return the updated sf object. Default is FALSE.}
 
 \item{...}{Not used.  Can be used to pass additional arguments to \link{fpr::fpr_sp_assign_utm}.}
 }
 \value{
-Depending on write switches write a backup of the geopackage to the specified directory as a .RData
-file containing an object named gpkg and a .csv file containing the data frame with the geometry column removed.
-Switch can be used to overwrite the existing geopackage it is reading from because UTM coordinate columns will be
-updated based on the geometry column.
+Depending on write and return switches write a backup of the geopackage to the specified directory as a .RData
+file containing an object named as the basename (without extension) of the input gpkg.  Also a .csv file containing
+the gpkg represented as a data frame with the geometry column removed.  The updated sf object can be returned to the
+global environment. Switch can be used to overwrite the existing geopackage it is reading if UTM coordinate columns
+and or site_id is updated updated.
 }
 \description{
-This function reads a geopackage file, checks and updates its UTM coordinates, and writes it back to the original path
-and/or a backup directory as a .csv and .RData file. This function wraps \link{fpr_sp_assign_utm} facilitating
+This function reads a geopackage file, updates its UTM coordinate column values, and optionally writes it back to the
+original path, a backup directory as a .csv and .RData file. This function wraps \link{fpr_sp_assign_utm} facilitating
 updating utm zone, easting and northing columns once geometries have been altered in QGIS.
-}
-\examples{
-\dontrun{
-# Don't write any files or update the geopackage file in QGIS - just update the coordinates columns and import
-# the updated sf object to the global environment and compare to a raw version of the file.
-gpkg_raw <- sf::st_read(
-  dsn = "~/Projects/gis/sern_peace_fwcp_2023/data_field/2023/form_fiss_site_2023.gpkg",
-  quiet = TRUE
-) \%>\% slice(1:5)
-
-gpkg_utms_updated <- fpr_sp_gpkg_backup(
-  path_gpkg = "~/Projects/gis/sern_peace_fwcp_2023/data_field/2023/form_fiss_site_2023.gpkg",
-  write_backup = FALSE,
-  col_easting = "utm_easting",
-  col_northing = "utm_northing",
-  sig_dit = 3,
-  return_object = TRUE
-) \%>\% slice(1:5)
-
-waldo::compare(gpkg_raw, gpkg_utms_updated)
-}
 }
 \seealso{
 Other spatial operations: 
