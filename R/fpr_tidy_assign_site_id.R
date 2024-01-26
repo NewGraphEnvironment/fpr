@@ -22,7 +22,7 @@
 #'
 #' fpr_t_site_id(dat_pass)
 #' }
-fpr_t_site_id <- function(dat = NULL) {
+fpr_tidy_assign_site_id <- function(dat = NULL) {
 
   # Sanity checks
   if (is.null(dat))
