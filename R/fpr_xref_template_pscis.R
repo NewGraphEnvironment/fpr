@@ -6,7 +6,7 @@
 #' @return empty tibble with columns and types equivalent to PSCIS submission template.
 #' @export
 #'
-#' @examples example <- fpr_xref_template_pscis()
+#' @examples xref_template_pscis <- fpr_xref_template_pscis()
 fpr_xref_template_pscis <- function(){
   template_prep<- fpr::fpr_xref_pscis %>%
     dplyr::filter(!is.na(spdsht))
