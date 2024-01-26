@@ -13,7 +13,7 @@ Install with `pak::pkg_install("NewGraphEnvironment/fpr")`
 
 If looking for backwards comparability because you used the package in the past and there are issues now with a newer release of the package, install with:
 
-`pak::pkg_install("NewGraphEnvironment/fpr@v.20240124")` (tag coinciding with the one you used to report)
+`pak::pkg_install("NewGraphEnvironment/fpr@v1.1.0")` (tag coinciding with the one you used to report)
 
 <br>
 
