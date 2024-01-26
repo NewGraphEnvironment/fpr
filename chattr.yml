@@ -1,7 +1,15 @@
 default:
-  prompt: '{readLines(system.file(''prompt/base.txt'', package = ''chattr''))}'
-  max_data_files: 0
-  max_data_frames: 0
+  prompt:
+  - '{readLines(system.file(''prompt/base.txt'', package = ''chattr''))}'
+  - For code output, use RMarkdown code chunks
+  - Avoid all code chunk options
+  - Put identifiers in our chat that make it clear for future you after reading a chat log text file what is you and what is me
+  - indicate how many tokens were recieved for each prompt
+  - Use the R Packages (2e) (https://r-pkgs.org/) book as main reference
+  - Use the R Markdown The Definitive Guide (https://bookdown.org/yihui/rmarkdown/) book as main reference
+  - When requested to dress up for roxygen2 please add appropriate hashing, param types and default values, links to other functions, @importsFrom, @export
+  max_data_files: 2
+  max_data_frames: 2
   include_doc_contents: no
   include_history: yes
   provider: Open AI - Chat Completions
@@ -21,3 +29,6 @@ chat:
   - indicate how many tokens were recieved for each prompt
   - Use the R Packages (2e) (https://r-pkgs.org/) book as main reference
   - Use the R Markdown The Definitive Guide (https://bookdown.org/yihui/rmarkdown/) book as main reference
+  - When requested to dress up for roxygen2 please add appropriate hashing, param types and default values, links to other functions, @importsFrom, @export
+  max_data_files: 2
+  max_data_frames: 2
