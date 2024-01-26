@@ -47,7 +47,8 @@ fpr_t_site_id <- function(dat = NULL) {
       sf::st_drop_geometry() %>%
       dplyr::filter(has_both_values | has_no_values) %>%
       dplyr::select(date_time_start, pscis_crossing_id, my_crossing_reference)
-    stop("Error: Some rows violate the rules:\n", toString(dat))
+    stop("Error: Some rows have either values in both pscis_crossing_id and my_crossing_reference or are missing
+                   values in both fields:\n", paste(capture.output(print(dat)), collapse = "\n"))
   } else {
     dat <- dat %>%
       dplyr::select(-has_both_values, -has_no_values)
