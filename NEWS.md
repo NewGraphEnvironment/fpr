@@ -1,3 +1,5 @@
+# fpr 1.1.0
+
 # Development version
 * add `fpr_sp_gpkg_backup`
 * add `fpr_t_site_id`

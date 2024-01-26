@@ -1,7 +1,7 @@
 Package: fpr
 Type: Package
 Title: Fish Passage Data Wrangling and Reporting Functions
-Version: 1.0.2.9000
+Version: 1.1.0
 Author: Allan Irvine
 Maintainer: <al@newgraphenvironment.com>
 Description: Functions used in Fish Passage Reporting. 
