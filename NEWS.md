@@ -11,14 +11,14 @@
 * add `fpr_db_query`
 * add `fpr_db_conn`
 * add `fpr_sp_utm_assign`
-* close #34
+* close [#34](https://github.com/NewGraphEnvironment/fpr/issues/34)
 * add `fpr_photo_qa_missing_all`
 * add `fpr_photo_qa_df`
-* add `fpr_remove_dupes` to close #42
+* add `fpr_remove_dupes` to close [#42](https://github.com/NewGraphEnvironment/fpr/issues/42)
 * add `fpr_photo_rename`
 * add `fpr_photo_resize_batch`
-* fix #29
-* fix #26
+* fix [#29](https://github.com/NewGraphEnvironment/fpr/issues/29)
+* fix [#26](https://github.com/NewGraphEnvironment/fpr/issues/26)
 
 # fpr 1.0.2.9
 * change names of 
