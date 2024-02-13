@@ -17,3 +17,4 @@ Makes directories
 \description{
 Build directories where the photos will be placed based on a list of site ids
 }
+\concept{photo}

@@ -80,11 +80,12 @@ fpr_photo_resize_batch <- function(dir_source = NULL,
 #' @param path String - path stub where photos directories are held
 #'
 #' @return Makes directories
+#' @family photo
 #' @export
 #'
 #' @examples
 fpr_photo_folders <- function(site, path = 'data/photos/'){
-  dir.create(paste0(path, site))
+  dir.create(paste0(path, site), recursive = TRUE)
 }
 
 
@@ -234,7 +235,13 @@ fpr_photo_sort_plan <- function(surveyor){
 #'
 #' @param dat Dataframe that contains a column with the numeric site ids. Defaults to `pscis_all`
 #' @param col Column to pull to get site IDs. Defaults to site_id
-#' @param dir_photos
+#' @param dir_photos The directory where the photos are stored. Defaults to 'data/photos/'
+#'
+#' @importFrom stringr str_subset str_detect
+#' @importFrom tibble as_tibble
+#' @importFrom dplyr mutate arrange pull
+#' @importFrom tidyr pivot_wider
+#' @importFrom purrr map set_names
 #'
 #' @return List of dataframes with photo names for 6 PSCIS photos. Will return NAs when photo not there and list of
 #' names when there is more than one that matches the pattern.
@@ -248,14 +255,14 @@ fpr_photo_qa <- function(dat = pscis_all,
   fpr_photo_qa_prep <- function(site_id, dir_photos){
     list.files(path = paste0(dir_photos, site_id), full.names = F) %>%
       stringr::str_subset(., '_barrel.|_outlet.|_upstream.|_downstream.|_road.|_inlet.') %>%
-      as_tibble() %>%
-      mutate(x = case_when(
-        value %ilike% 'road' ~ 'road',
-        value %ilike% 'inlet' ~ 'inlet',
-        value %ilike% 'upstream' ~ 'upstream',
-        value %ilike% 'barrel' ~ 'barrel',
-        value %ilike% 'outlet' ~ 'outlet',
-        value %ilike% 'downstream' ~ 'downstream'
+      tibble::as_tibble() %>%
+      dplyr::mutate(x = dplyr::case_when(
+        stringr::str_detect(value, 'road') ~ 'road',
+        stringr::str_detect(value, 'inlet') ~ 'inlet',
+        stringr::str_detect(value, 'upstream') ~ 'upstream',
+        stringr::str_detect(value, 'barrel') ~ 'barrel',
+        stringr::str_detect(value, 'outlet') ~ 'outlet',
+        stringr::str_detect(value, 'downstream') ~ 'downstream'
       )) %>%
       tidyr::pivot_wider(names_from = x) %>%
       dplyr::mutate(site = site_id)
