@@ -2,8 +2,7 @@ default:
   prompt:
   - '{readLines(system.file(''prompt/base.txt'', package = ''chattr''))}'
   - Use the R Packages (2e) (https://r-pkgs.org/) book as main reference
-  - When requested to "dress up" please add appropriate hashing, param types and default values, links to other
-  functions, family, importsFrom, export as per roxygen2 syntax
+  - When requested to dress up please add appropriate hashing, param types and default values, links to other functions, family, importsFrom, export as per roxygen2 syntax
   max_data_files: 0
   max_data_frames: 0
   include_doc_contents: no
