@@ -10,7 +10,8 @@
 #' @return Sf of clipped point layer
 #' @export
 #'
-#' @examples \dontrun{fpr_dbq_clip(c("FRAN", "NECR"))}
+#' @examples \dontrun{fpr_db_query(query = fpr_dbq_clip('whse_environmental_monitoring.envcan_hydrometric_stn_sp',
+#''whse_basemapping.fwa_watershed_groups_poly', 'watershed_group_code', c("FRAN", "NECR")))}
 
 
 fpr_dbq_clip <- function(
@@ -21,19 +22,11 @@ fpr_dbq_clip <- function(
 
   join_on_string <- paste0("'", join_on, "'", collapse = ", ")
 
-  fpr_db_query(query = glue::glue("SELECT point.*, poly.{join_column}
+  glue::glue("SELECT point.*, poly.{join_column}
    FROM {schema_table_point} point
    INNER JOIN {schema_table_polygon} poly
    ON ST_Intersects(poly.geom, point.geom)
-   WHERE poly.{join_column} IN ({join_on_string});"))
+   WHERE poly.{join_column} IN ({join_on_string});")
 
 }
-
-fpr_dbq_clip('whse_environmental_monitoring.envcan_hydrometric_stn_sp',
-                        'whse_basemapping.fwa_watershed_groups_poly', 'watershed_group_code',
-                        c("FRAN", "NECR"))
-
-fpr_dbq_clip('bcfishpass.barriers_bt',
-             'whse_basemapping.fwa_watershed_groups_poly', 'watershed_group_code',
-             c("FRAN", "NECR"))
 

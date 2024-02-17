@@ -234,7 +234,7 @@ fpr_photo_sort_plan <- function(surveyor){
 #'
 #' @param dat Dataframe that contains a column with the numeric site ids. Defaults to `pscis_all`
 #' @param col Column to pull to get site IDs. Defaults to site_id
-#' @param dir_photos
+#' @param dir_photos Directory that contains the photos. Defaults to data/photos/
 #'
 #' @return List of dataframes with photo names for 6 PSCIS photos. Will return NAs when photo not there and list of
 #' names when there is more than one that matches the pattern.

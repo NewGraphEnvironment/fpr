@@ -37,6 +37,7 @@ conn <- fpr_db_conn()
 \seealso{
 Other database postgres: 
 \code{\link{fpr_db_query}()},
+\code{\link{fpr_dbq_clip}()},
 \code{\link{fpr_dbq_lscols}()},
 \code{\link{fpr_dbq_lstables}()},
 \code{\link{fpr_dbq_subset}()}

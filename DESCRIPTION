@@ -46,7 +46,11 @@ Imports:
     RPostgres,
     poisutils,
     bcdata,
-    rlang
+    rlang,
+    fasstr,
+    ggdark, 
+    ggplot2, 
+    tidyhydat
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

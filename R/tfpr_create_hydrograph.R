@@ -3,11 +3,15 @@
 #' @param station String (quoted) number of station
 #' @param pane_hydat Boolean TRUE if you want a pane layout of all hydrographs
 #' @param single_hydat Boolean TRUE if you want a single hydrograph with mean flows
-#' @param
 #'
-#' @importFrom tidyhydat
-#' @importFrom lubridate
-#' @family
+#' @importFrom lubridate year
+#' @importFrom tidyhydat hy_daily_flows search_stn_number
+#' @importFrom stringr str_to_title
+#' @importFrom fasstr plot_data_screening
+#' @importFrom ggdark dark_theme_bw
+#' @importFrom dplyr mutate group_by summarise
+#' @importFrom ggplot2 ggsave ggplot geom_ribbon scale_x_date labs geom_line scale_colour_manual
+#'
 #' @return Hydrographs of station
 #' @export
 #'
@@ -44,8 +48,8 @@ fpr_create_hydrograph <- function(
     hydrograph_stats_print
 
     #Save hydrograph pane
-    ggsave(plot = hydrograph_stats_print, file=paste0("fig/hydrology_stats_", station, ".png"),
-           h=3.4, w=5.11, units="in", dpi=300)
+    ggsave(plot = hydrograph_stats_print, filename=paste0("fig/hydrology_stats_", station, ".png"),
+           height=3.4, width=5.11, units="in", dpi=300)
   }
 
 
@@ -85,9 +89,8 @@ fpr_create_hydrograph <- function(
     # coord_cartesian(ylim = c(0, 600))
     plot
 
-    ggsave(plot = plot, file=paste0("./fig/hydrograph_", station, ".png"),
-           h=3.4, w=5.11, units="in", dpi=300)
+    ggsave(plot = plot, filename=paste0("./fig/hydrograph_", station, ".png"),
+           height=3.4, width=5.11, units="in", dpi=300)
   }
 
 }
-
