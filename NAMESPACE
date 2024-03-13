@@ -2,7 +2,7 @@
 
 export("%>%")
 export(fpr_appendix_title)
-export(fpr_create_hydrograph_local)
+export(fpr_create_hydrograph)
 export(fpr_dat_w_rows)
 export(fpr_db_conn)
 export(fpr_db_query)

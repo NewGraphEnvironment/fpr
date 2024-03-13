@@ -1,4 +1,4 @@
-#' Creates hydrographs
+#' Creates hydrograph and hydrology stats figures for a given station.
 #'
 #' @param station String (quoted) number of station
 #' @param pane_hydat Boolean TRUE if you want a pane layout of all hydrographs
@@ -106,7 +106,7 @@ fpr_create_hydrograph <- function(
                 daily_sd = sd(Value, na.rm = TRUE),
                 max = max(Value, na.rm = TRUE),
                 min = min(Value, na.rm = TRUE)) %>%
-      dplyr::mutate(Date = as.Date(day_of_year, origin = "2015-12-31"))
+      dplyr::mutate(Date = as.Date(day_of_year))
 
     plot <- ggplot2::ggplot()+
       ggplot2::geom_ribbon(data = flow, aes(x = Date, ymax = max,
