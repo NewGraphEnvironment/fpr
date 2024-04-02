@@ -80,11 +80,12 @@ fpr_photo_resize_batch <- function(dir_source = NULL,
 #' @param path String - path stub where photos directories are held
 #'
 #' @return Makes directories
+#' @family photo
 #' @export
 #'
 #' @examples
 fpr_photo_folders <- function(site, path = 'data/photos/'){
-  dir.create(paste0(path, site))
+  dir.create(paste0(path, site), recursive = TRUE)
 }
 
 
@@ -236,6 +237,12 @@ fpr_photo_sort_plan <- function(surveyor){
 #' @param col Column to pull to get site IDs. Defaults to site_id
 #' @param dir_photos Directory that contains the photos. Defaults to data/photos/
 #'
+#' @importFrom stringr str_subset str_detect
+#' @importFrom tibble as_tibble
+#' @importFrom dplyr mutate arrange pull
+#' @importFrom tidyr pivot_wider
+#' @importFrom purrr map set_names
+#'
 #' @return List of dataframes with photo names for 6 PSCIS photos. Will return NAs when photo not there and list of
 #' names when there is more than one that matches the pattern.
 #' @export
@@ -246,16 +253,16 @@ fpr_photo_qa <- function(dat = pscis_all,
                          dir_photos = 'data/photos/'){
 
   fpr_photo_qa_prep <- function(site_id, dir_photos){
-    list.files(path = paste0(dir_photos, site_id), full.names = F) %>%
-      stringr::str_subset(., '_barrel.|_outlet.|_upstream.|_downstream.|_road.|_inlet.') %>%
-      as_tibble() %>%
-      mutate(x = case_when(
-        value %ilike% 'road' ~ 'road',
-        value %ilike% 'inlet' ~ 'inlet',
-        value %ilike% 'upstream' ~ 'upstream',
-        value %ilike% 'barrel' ~ 'barrel',
-        value %ilike% 'outlet' ~ 'outlet',
-        value %ilike% 'downstream' ~ 'downstream'
+    list.files(path = paste0(dir_photos, site_id), full.names = FALSE) %>%
+      stringr::str_subset(., '_barrel\\.|_outlet\\.|_upstream\\.|_downstream\\.|_road\\.|_inlet\\.') %>%
+      tibble::as_tibble() %>%
+      dplyr::mutate(x = dplyr::case_when(
+        stringr::str_detect(value, 'road') ~ 'road',
+        stringr::str_detect(value, 'inlet') ~ 'inlet',
+        stringr::str_detect(value, 'upstream') ~ 'upstream',
+        stringr::str_detect(value, 'barrel') ~ 'barrel',
+        stringr::str_detect(value, 'outlet') ~ 'outlet',
+        stringr::str_detect(value, 'downstream') ~ 'downstream'
       )) %>%
       tidyr::pivot_wider(names_from = x) %>%
       dplyr::mutate(site = site_id)
@@ -272,11 +279,16 @@ fpr_photo_qa <- function(dat = pscis_all,
     )
 }
 
-#' Find sites that exist in the PSCIS input spreadsheets in the `data` directory but do not have a directory or do not have any of the
-#' required PSCIS tagged photo names. Fed into \link{fpr_photo_qa_df} and relies on \link{fpr_photo_qa}.  Site directories must be named as numbers.
+#' Find sites missing all photos
+#'
+#' Find sites that exist in the PSCIS input spreadsheets in the `data` directory but do not have a directory or do not
+#' have any of the required PSCIS tagged photo names. Fed into \link{fpr_photo_qa_df} and relies on \link{fpr_photo_qa}.
+#' Site directories must be named as numbers.
 #'
 #'
 #' @param ... Not used. Used to pass `dir_photos = 'filepath'` to \link{fpr_photo_qa}
+#'
+#' @family photo
 #'
 #' @return Tibble with 7 columns.
 #' @export
@@ -313,24 +325,32 @@ fpr_photo_qa_missing_all <- function(...){
 }
 
 
-#' QA photos to see if all required PSCIS photos are named and look for duplicates of those names.
+#' QA photos
+#'
+#' See if all required PSCIS photos are named and look for duplicates of those names.
 #'
 #' @param ... Not used. Use to pass string path defined as `dir_photos = 'quoted_filepath'` to run
 #' QA outside of defualt filepath of root of helper function  \link{fpr_photo_qa}. Incorperates outputs
 #' of \link{fpr_photo_qa_missing_all}
+#' @param dat Dataframe that contains a column with the numeric site ids. Defaults to `pscis_all` created using
+#'  \link{fpr_import_pscis_all}
+#'  @family photo
 #'
-#' @return Tibble with 7 columns.
+#' @return Tibble with 7 columns showing missing phots.
 #' @export
 #'
 #' @examples
-fpr_photo_qa_df <- function(...){
-  dat_pcsis_all <- fpr::fpr_import_pscis_all() %>%
-    dplyr::bind_rows()
+fpr_photo_qa_df <- function(dat = NULL, ...){
 
-  missing <- fpr_photo_qa_missing_all(dat = dat_pcsis_all,
-                                       ...)
+  if(is.null(dat)){
+    dat2 <- fpr::fpr_import_pscis_all() %>%
+      dplyr::bind_rows()
+  } else dat2 <- dat
 
-  dat_photo <- dat_pcsis_all %>%
+  missing <- fpr_photo_qa_missing_all(dat = dat2,
+                                      ...)
+
+  dat_photo <- dat2 %>%
     fpr_photo_qa(...)
 
   dplyr::bind_rows(

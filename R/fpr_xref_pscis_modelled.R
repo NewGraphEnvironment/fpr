@@ -14,10 +14,10 @@
 #' @importFrom sf st_drop_geometry
 #' @examples
 #' \dontrun{
-#' fpr_make_xref_pscis_modelled(project_id = 'peace_2023_Phase1')
+#' fpr_xref_pscis_modelled(project_id = 'peace_2023_Phase1')
 #' }
 #' @export
-fpr_make_xref_pscis_modelled <- function(
+fpr_xref_pscis_modelled <- function(
     project_id = NULL){
   bcdata::bcdc_query_geodata("7ecfafa6-5e18-48cd-8d9b-eae5b5ea2881") %>%
     dplyr::filter(FUNDING_PROJECT_NUMBER %in% c(project_id)) %>%
