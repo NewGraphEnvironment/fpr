@@ -11,7 +11,7 @@ fpr_photo_qa(dat = pscis_all, col = site_id, dir_photos = "data/photos/")
 
 \item{col}{Column to pull to get site IDs. Defaults to site_id}
 
-\item{dir_photos}{The directory where the photos are stored. Defaults to 'data/photos/'}
+\item{dir_photos}{Directory that contains the photos. Defaults to data/photos/}
 }
 \value{
 List of dataframes with photo names for 6 PSCIS photos. Will return NAs when photo not there and list of

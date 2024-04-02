@@ -235,7 +235,7 @@ fpr_photo_sort_plan <- function(surveyor){
 #'
 #' @param dat Dataframe that contains a column with the numeric site ids. Defaults to `pscis_all`
 #' @param col Column to pull to get site IDs. Defaults to site_id
-#' @param dir_photos The directory where the photos are stored. Defaults to 'data/photos/'
+#' @param dir_photos Directory that contains the photos. Defaults to data/photos/
 #'
 #' @importFrom stringr str_subset str_detect
 #' @importFrom tibble as_tibble
