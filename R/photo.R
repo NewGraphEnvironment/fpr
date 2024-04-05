@@ -374,59 +374,6 @@ fpr_photo_qa_df <- function(dat = NULL, ...){
   )
 }
 
-#' Amalgamate 6 PSCIS photos into 1
-#'
-#' Here we stack up and down then side to side for reporting.  There must be all 6 photos
-#' present, only 1 of each and within the file names of those photos must be the strings
-#' containing upstream, downstream, inlet, outlet, barrel, road.  Before running QA with
-#'
-#' @param  site_id Numeric value of site corresponding to the directory name that holds the photos
-#' which include 'road', 'inlet', 'upstream', 'downstream', 'outlet', barrel' in the filenames.
-#' @param size String. Dimensions of individual photos. Defaults to "560x420!" to give oveall photo size of 1120 x 1260.
-#' @param dir_photos String quoted for directory where photo directories are kept.  Trailing forward slash required.
-#' Defaults to 'data/photos/'.
-#'
-#' @return Burned amalgamated crossing_all.JPG which includes 6 PSCIS photos together as one.
-#' @export
-#'
-#' @examples
-fpr_photo_amalg_cv <- function(site_id, dir_photos = 'data/photos/', size = "560x420!"){
-  photos_images1 <- list.files(path = paste0(dir_photos, site_id), full.names = T) %>%
-    stringr::str_subset(., '_upstream.|_road.|_inlet.') %>%
-    as_tibble() %>%
-    mutate(sort = case_when(
-      value %ilike% 'road' ~ 1,
-      value %ilike% 'inlet' ~ 2,
-      value %ilike% 'upstream' ~ 3,
-      # value %ilike% 'barrel' ~ 4,
-      # value %ilike% 'outlet' ~ 5,
-      # value %ilike% 'downstream' ~ 6,
-    )) %>%
-    arrange(sort) %>%
-    pull(value) %>%
-    image_read()
-  photos_images2 <- list.files(path = paste0(dir_photos, site_id), full.names = T) %>%
-    stringr::str_subset(., '_barrel.|_outlet.|_downstream.') %>%
-    as_tibble() %>%
-    mutate(sort = case_when(
-      # value %ilike% 'road' ~ 1,
-      # value %ilike% 'inlet' ~ 2,
-      # value %ilike% 'upstream' ~ 3,
-      value %ilike% 'barrel' ~ 4,
-      value %ilike% 'outlet' ~ 5,
-      value %ilike% 'downstream' ~ 6,
-    )) %>%
-    arrange(sort) %>%
-    pull(value) %>%
-    image_read()
-  photos_stack1 <-image_append(image_scale(photos_images1, size), stack = T) ##1/3 the width 373.33 and half the original height
-  photos_stack2 <- image_append(image_scale(photos_images2, size), stack = T)
-  photos_stack <- c(photos_stack1, photos_stack2)
-  photos_stacked <- image_append(image_scale(photos_stack), stack = F)
-  image_write(photos_stacked, path = paste0(dir_photos, site_id, '/crossing_all.JPG'), format = 'jpg')
-}
-
-
 #' Rotate an image
 #'
 #' @param site_id Numeric indicating site id cooresponding to name of directory containing the images

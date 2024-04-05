@@ -19,6 +19,7 @@ Build directories where the photos will be placed based on a list of site ids
 }
 \seealso{
 Other photo: 
+\code{\link{fpr_photo_amalg_cv}()},
 \code{\link{fpr_photo_qa_missing_all}()}
 }
 \concept{photo}

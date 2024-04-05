@@ -19,6 +19,7 @@ Site directories must be named as numbers.
 }
 \seealso{
 Other photo: 
+\code{\link{fpr_photo_amalg_cv}()},
 \code{\link{fpr_photo_folders}()}
 }
 \concept{photo}
