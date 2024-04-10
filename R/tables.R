@@ -24,7 +24,7 @@ fpr_kable <- function(dat,
                       col_width_min = NULL,
                       width_min = '1.0in'){
   dat2 <- dat %>%
-    knitr::kable(caption = caption_text, booktabs = T) %>%
+    knitr::kable(caption = caption_text, booktabs = T, label = NA) %>%
     kableExtra::kable_styling(c("condensed", "responsive"),
                               full_width = T,
                               font_size = font)

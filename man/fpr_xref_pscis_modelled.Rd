@@ -7,7 +7,8 @@
 fpr_xref_pscis_modelled(project_id = NULL)
 }
 \arguments{
-\item{project_id}{A character string (quoted) specifying the project ID (or list of project IDS separated by commas)
+\item{project_id}{A character string (quoted) specifying the project ID (or list of project IDS separated by commas).
+The project_id is detailed as the `FUNDING_PROJECT_NUMBER` in the BC Data Catalougue
 to filter the data on. Default is NULL.}
 }
 \value{

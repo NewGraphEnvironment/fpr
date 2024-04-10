@@ -2,7 +2,7 @@
 % Please edit documentation in R/fpr_dbq_clip.R
 \name{fpr_dbq_clip}
 \alias{fpr_dbq_clip}
-\title{Clips a point layer by a polygon layer, and returns the clipped point layer containing user specified columns.}
+\title{Clips a point layer by a filtered polygon layer}
 \usage{
 fpr_dbq_clip(
   schtab_pnt = NULL,
@@ -27,7 +27,8 @@ fpr_dbq_clip(
 Sf of clipped point layer
 }
 \description{
-Clips a point layer by a polygon layer, and returns the clipped point layer containing user specified columns.
+Returns the clipped point layer containing user specified columns from point layer as well as column indicating
+associated value used to filter plygon layer.
 }
 \examples{
 \dontrun{fpr_db_query(query = fpr_dbq_clip('whse_environmental_monitoring.envcan_hydrometric_stn_sp',
