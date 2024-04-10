@@ -1,4 +1,7 @@
-#' Clips a point layer by a polygon layer, and returns the clipped point layer containing user specified columns.
+#' Clips a point layer by a filtered polygon layer
+#'
+#' Returns the clipped point layer containing user specified columns from point layer as well as column indicating
+#' associated value used to filter plygon layer.
 #'
 #' @param schtab_pnt String (quoted) name of point layer schema.table.
 #' @param schtab_pol String (quoted) name of polygon layer schema.table.
