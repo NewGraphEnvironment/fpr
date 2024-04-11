@@ -6,7 +6,7 @@ Author: Allan Irvine
 Maintainer: <al@newgraphenvironment.com>
 Description: Functions used in Fish Passage Reporting. 
 License: MIT + file LICENSE
-URL: https://github.com/NewGraphEnvironment/fpr
+URL: https://github.com/NewGraphEnvironment/fpr, http://www.newgraphenvironment.com/fpr/
 Encoding: UTF-8
 RoxygenNote: 7.3.1
 BugReports: https://github.com/NewGraphEnvironment/fpr/issues
