@@ -10,6 +10,7 @@
 #' @param scroll_box_height string. pixel height of scroll box.  Defaults to "500px"
 #' @param col_width_min Number or vector of numbers. Defaults to NULL
 #' @param width_min string with units of inches (in). Defaults to 1.0in
+#' @param ... Not used. Open for passing arguments to `knitr::kable`
 #'
 #' @return
 #' @export
@@ -22,9 +23,10 @@ fpr_kable <- function(dat,
                       scroll = TRUE,
                       scroll_box_height = "500px",
                       col_width_min = NULL,
-                      width_min = '1.0in'){
+                      width_min = '1.0in',
+                      ...){
   dat2 <- dat %>%
-    knitr::kable(caption = caption_text, booktabs = T, label = NA) %>%
+    knitr::kable(caption = caption_text, booktabs = T, label = NA, ...) %>%
     kableExtra::kable_styling(c("condensed", "responsive"),
                               full_width = T,
                               font_size = font)

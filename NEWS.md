@@ -1,4 +1,5 @@
 # Development version
+* add pass through `...` to `fpr_kable` to allow for more flexibility
 * Update `fpr_kable` to deal with duplicated Table captions as per #68
 * Update fpr_photo_amalg_cv to include full calls to functions, importFrom and move to stand alone script. replace calls to %like% with str_detect. add to photo family
 * Added fpr_dbq_clip which clips a point layer by a polygon layer.

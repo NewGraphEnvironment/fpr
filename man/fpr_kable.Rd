@@ -12,7 +12,8 @@ fpr_kable(
   scroll = TRUE,
   scroll_box_height = "500px",
   col_width_min = NULL,
-  width_min = "1.0in"
+  width_min = "1.0in",
+  ...
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ fpr_kable(
 \item{col_width_min}{Number or vector of numbers. Defaults to NULL}
 
 \item{width_min}{string with units of inches (in). Defaults to 1.0in}
+
+\item{...}{Not used. Open for passing arguments to `knitr::kable`}
 }
 \description{
 Custom kable settings
