@@ -45,7 +45,6 @@ Imports:
     glue,
     RPostgres,
     poisutils,
-    bcdata,
     rlang,
     fasstr,
     ggdark, 
