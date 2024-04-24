@@ -1,7 +1,8 @@
 # Development version
+* close [#75](https://github.com/NewGraphEnvironment/fpr/issues/75) and [#76](https://github.com/NewGraphEnvironment/fpr/issues/76) by using `fpr_kable` in `fpr_table_cv_summary_memo`
 * add fpr_xref_crossings as per https://github.com/NewGraphEnvironment/fish_passage_template_reporting/issues/1
 * add pass through `...` to `fpr_kable` to allow for more flexibility
-* Update `fpr_kable` to deal with duplicated Table captions as per #68
+* Update `fpr_kable` to deal with duplicated Table captions as per [#68](https://github.com/NewGraphEnvironment/fpr/issues/68)
 * Update fpr_photo_amalg_cv to include full calls to functions, importFrom and move to stand alone script. replace calls to %like% with str_detect. add to photo family
 * Added fpr_dbq_clip which clips a point layer by a polygon layer.
 * Added fpr_create_hydrograph which creates hydrographs of flow data for a given station
