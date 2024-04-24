@@ -8,11 +8,9 @@
     "\n 'This is not a time to despair, but to act.' - David Byrne",
     "\n 'The people that have the best life are the ones that are OK with not being sure.' - Mac Miller",
     "\n 'Just because you make a good plan, doesn't mean that's what's gonna happen.' - Taylor Swift",
-    "\n 'Sometimes it's hard to find, find my way up into the clouds. Tune it out, they can be so loud.' - ASAP Rocky",
     "\n 'The only way to do great work is to love what you do.' - Steve Jobs",
     "\n 'Genius is the ability to put into effect what is on your mind.' - Ab-Soul",
     "\n 'I'm always looking for something different. I'm inspired by the unknown.' - ASAP Rocky",
-    "\n 'Life's a puzzle, all the pieces don't fit. But I'll make them fit, even if I gotta trim a bit.' - ASAP Rocky",
     "\n 'I don't want you to protest because I'm asking you to. Do it because you see a need to. Do it because you believe that the structural problems in our society need change.' - Killer Mike",
     "\n 'You have to be comfortable with being uncomfortable if you're going to grow.' - Killer Mike",
     "\n 'It's cool to be a part of the system and use your voice within it to try to make things better.' - Killer Mike",
@@ -29,14 +27,12 @@
     # John Lennon Quotes
     "\n 'A dream you dream alone is only a dream. A dream you dream together is reality.' - John Lennon",
     "\n 'Time you enjoy wasting, was not wasted.' - John Lennon",
-    "\n 'Happiness is a warm gun.' - John Lennon",
     "\n 'Everything will be okay in the end. If it's not okay, it's not the end.' - John Lennon",
     "\n 'Reality leaves a lot to the imagination.' - John Lennon",
 
     # Kobe Bryant Quotes
     "\n 'The most important thing is to try and inspire people so that they can be great in whatever they want to do.' - Kobe Bryant",
     "\n 'If you're afraid to fail, then you're probably going to fail.' - Kobe Bryant",
-    "\n 'My parents are my backbone. Still are. They're the only group that will support you if you score zero or you score 40.' - Kobe Bryant",
     "\n 'I can't relate to lazy people. We don't speak the same language. I don't understand you. I don't want to understand you.' - Kobe Bryant",
     "\n 'The moment you give up, is the moment you let someone else win.' - Kobe Bryant",
 
@@ -68,7 +64,6 @@
     "\n 'Innovation distinguishes between a leader and a follower.' - Steve Jobs",
     "\n 'The people who are crazy enough to think they can change the world are the ones who do.' - Steve Jobs",
     "\n 'Have the courage to follow your heart and intuition. They somehow already know what you truly want to become.' - Steve Jobs",
-    "\n 'Stay hungry, stay foolish.' - Steve Jobs",
 
     "\n 'Life is all about the evolution.' - Ab-Soul",
     "\n 'I just try to speak on things that affect me and things that I see around me.' - Ab-Soul",
