@@ -53,6 +53,9 @@ fpr_sheet_trim <- function(dat,
 #' Extracts a time_start and a date_time_start of the survey from the comments if it is sritten in 24hr format after the last period of the comments column.
 #' Assigns the camera tot hte first person listed in the crew memebers column. Creates a site_id as either the PSCIS id or the my crossing reference
 #'  This is a helper for fpr_import_pscis_all.
+#'
+#' @family import
+#' @importFrom chk chk_file
 #' @return A dataframe
 #' @export
 #'
@@ -60,6 +63,9 @@ fpr_sheet_trim <- function(dat,
 fpr_import_pscis <- function(workbook_name = 'pscis_phase1.xlsm', ##new template.  could change file back to .xls
                              dir_root = 'data',
                              ...){
+
+  chk::chk_file(paste0(dir_root, "/", workbook_name))
+
   sig_fig0 <- c('length_or_width_meters')
   sig_fig1 <- c('culvert_slope_percent', 'stream_width_ratio')
   sig_fig2 <- c('outlet_drop_meters')
@@ -92,13 +98,16 @@ fpr_import_pscis <- function(workbook_name = 'pscis_phase1.xlsm', ##new template
 
 #' Get Names of PSCIS Files
 #'
+#' @param path_ls_files String indicating directory to look for pscis submission files.  Defaults to 'data'.
+#'
 #' @description Reads filenames in your data file for files with the 'pscis' string in their name. Ignores temp files that are there when
 #' @return String of pull path name of file by that pattern
+#' @family import
 #' @export
 #'
 #' @examples
-fpr_pscis_wkb_paths <- function(){
-  list.files(path = 'data', pattern = glob2rx("*pscis*xlsm"), all.files = F) %>%
+fpr_pscis_wkb_paths <- function(path_ls_files = 'data'){
+  list.files(path = path_ls_files, pattern = glob2rx("*pscis*xlsm"), all.files = F) %>%
     grep(pattern = '~', invert = T, value = T)
 }
 
@@ -106,7 +115,7 @@ fpr_pscis_wkb_paths <- function(){
 #'
 #' @param backup Logical whether to backup all sheets as a combined csvs or not. Defaults to true
 #' @param path_backup String indicating directory to create (if not exists) and backup to.  Defaults to 'data/backup/'
-#' @param ... Unused - Pass through another param to \link{fpr_sheet_trim}
+#' @param ... Unused - Pass through another param to \link{fpr_pscis_wkb_paths}
 #'
 #' @return list of tibbles and a csv that backs up a combined tibble of list components
 #' @export
@@ -115,7 +124,7 @@ fpr_pscis_wkb_paths <- function(){
 fpr_import_pscis_all <- function(backup = TRUE,
                                  path_backup = 'data/backup/',
                                  ...){
-  wkbs_paths <- fpr_pscis_wkb_paths()
+  wkbs_paths <- fpr_pscis_wkb_paths(...)
 
   pscis_list <- wkbs_paths %>%
     purrr::map(fpr_import_pscis) %>%

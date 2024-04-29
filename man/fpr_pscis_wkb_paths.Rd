@@ -4,7 +4,10 @@
 \alias{fpr_pscis_wkb_paths}
 \title{Get Names of PSCIS Files}
 \usage{
-fpr_pscis_wkb_paths()
+fpr_pscis_wkb_paths(path_ls_files = "data")
+}
+\arguments{
+\item{path_ls_files}{String indicating directory to look for pscis submission files.  Defaults to 'data'.}
 }
 \value{
 String of pull path name of file by that pattern
@@ -12,3 +15,8 @@ String of pull path name of file by that pattern
 \description{
 Reads filenames in your data file for files with the 'pscis' string in their name. Ignores temp files that are there when
 }
+\seealso{
+Other import: 
+\code{\link{fpr_import_pscis}()}
+}
+\concept{import}

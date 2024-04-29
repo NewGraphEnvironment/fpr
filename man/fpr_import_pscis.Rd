@@ -22,3 +22,8 @@ Extracts a time_start and a date_time_start of the survey from the comments if i
 Assigns the camera tot hte first person listed in the crew memebers column. Creates a site_id as either the PSCIS id or the my crossing reference
  This is a helper for fpr_import_pscis_all.
 }
+\seealso{
+Other import: 
+\code{\link{fpr_pscis_wkb_paths}()}
+}
+\concept{import}
