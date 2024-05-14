@@ -148,15 +148,18 @@ fpr_table_cv_detailed_comments <- function(dat){
 #' defined in the index file as FALSE when the pagedown output is on.  This is when we need the spaces.
 #'
 #' @return html tables with photo as footnotes
+#' @importFrom kableExtra kable_styling add_footnote
+#' @importFrom knitr kable
 #' @export
+#' @family tables
 #'
 #' @examples
 fpr_table_cv_detailed_print <- function(tab_sum,
                                         comments,
                                         photos,
                                         gitbook_switch = gitbook_on){
-  output <- kable(tab_sum, booktabs = T) %>%
-    kableExtra::kable_styling(c("condensed"), full_width = T, font_size = 11) %>%
+  output <- knitr::kable(tab_sum, booktabs = T) |>
+    kableExtra::kable_styling(c("condensed"), full_width = T, font_size = 11) |>
     kableExtra::add_footnote(label = paste0('Comments: ', comments[[1]]), notation = 'none') %>% #this grabs the comments out
     kableExtra::add_footnote(label = paste0('Photos: PSCIS ID ', photos[[2]],
                                             '. From top left clockwise: Road/Site Card, Barrel, Outlet, Downstream, Upstream, Inlet.',

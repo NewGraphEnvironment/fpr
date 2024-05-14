@@ -27,3 +27,4 @@ html tables with photo as footnotes
 \description{
 Print out a list of fpr_table_cv_detailed tables showing PSCIS data in untidy table in either gitbook or pdf versions.
 }
+\concept{tables}
