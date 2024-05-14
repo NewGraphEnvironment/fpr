@@ -52,7 +52,7 @@ Imports:
     tidyhydat,
     cli
 Remotes:  
-    poissonconsulting/fwapgr
+    poissonconsulting/fwapgr,
     poissonconsulting/poisutils
 Suggests: 
     testthat (>= 3.0.0)
