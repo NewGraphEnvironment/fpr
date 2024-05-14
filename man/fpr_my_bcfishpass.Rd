@@ -2,7 +2,7 @@
 % Please edit documentation in R/report.R
 \name{fpr_my_bcfishpass}
 \alias{fpr_my_bcfishpass}
-\title{Filter the bcfishpass.crossings table export by PSCIS stream_crossing_id}
+\title{Filter table by a value.  Commopnly used to filter bcfishpass.crossings table export by PSCIS stream_crossing_id}
 \usage{
 fpr_my_bcfishpass(
   dat = bcfishpass,
@@ -15,7 +15,7 @@ fpr_my_bcfishpass(
 \arguments{
 \item{dat}{Dataframe. Defaults to bcfishpass filtered by Phase 2 sites only}
 
-\item{site}{Numeric PSCIS stream_crossing_id. Defaults to value defined by my_site}
+\item{site}{Numeric Value to filter `col_filter` on.  Usually the PSCIS stream_crossing_id. Defaults to value defined by my_site}
 
 \item{col_filter}{String. Tidyselect format. Column name for information you want to filter on}
 
@@ -31,5 +31,5 @@ fpr_my_bcfishpass(
 Vector
 }
 \description{
-Filter the bcfishpass.crossings table export by PSCIS stream_crossing_id
+Filter table by a value.  Commopnly used to filter bcfishpass.crossings table export by PSCIS stream_crossing_id
 }

@@ -62,10 +62,10 @@ fpr_appendix_title <- function(site = my_site,
   }else paste0('# ', fpr_my_pscis_info(), ' - ', site, ' & ', site2, ' & ', site3, ' - Appendix {-}')
 }
 
-#' Filter the bcfishpass.crossings table export by PSCIS stream_crossing_id
+#' Filter table by a value.  Commopnly used to filter bcfishpass.crossings table export by PSCIS stream_crossing_id
 #'
 #' @param dat Dataframe. Defaults to bcfishpass filtered by Phase 2 sites only
-#' @param site Numeric PSCIS stream_crossing_id. Defaults to value defined by my_site
+#' @param site Numeric Value to filter `col_filter` on.  Usually the PSCIS stream_crossing_id. Defaults to value defined by my_site
 #' @param col_filter String. Tidyselect format. Column name for information you want to filter on
 #' @param col_pull String. Tidyselect format. Column name for information you want to pull.
 #' @param round_dig Integer for how many numbers to round to. Defaults to 0.
@@ -82,7 +82,7 @@ fpr_my_bcfishpass <- function(dat = bcfishpass,
                               col_pull = stream_order,
                               round_dig = 0){
   dat %>%
-    dplyr::mutate(dplyr::across(tidyselect::where(is.numeric), round, round_dig)) %>%
+    dplyr::mutate(dplyr::across(tidyselect::where(is.numeric), ~round(., round_dig))) %>%
     dplyr::filter({{col_filter}} == site) %>%
     dplyr::distinct({{col_filter}} , .keep_all = T) %>% #deals with duplicates
     dplyr::pull({{col_pull}})
