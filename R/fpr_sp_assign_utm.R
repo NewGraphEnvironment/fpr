@@ -12,6 +12,7 @@
 #' @importFrom dplyr mutate arrange select distinct group_by bind_rows
 #' @importFrom purrr map2 map
 #' @importFrom chk chk_string
+#' @importFrom cli cli_abort cli_warn
 #' @importFrom poisutils ps_error
 #' @importFrom rlang sym
 #'
@@ -36,16 +37,24 @@ fpr_sp_assign_utm <- function(dat = NULL,
                               sig_dig = 0){
 
   if (is.null(dat))
-    poisutils::ps_error('please provide "dat" (sf point dataframe) object')
+    cli::cli_abort('please provide "dat" (sf point dataframe) object')
   if (!is.data.frame(dat))
-    poisutils::ps_error('"dat" must inherit from a data.frame')
+    cli::cli_abort('"dat" must inherit from a data.frame')
   if (class(dat)[1]!="sf")
-    poisutils::ps_error('"dat" must be a sf object')
+    cli::cli_abort('"dat" must be a sf object')
   if (!attributes(sf::st_geometry(dat))$class[1] != "sfc_point")
-    poisutils::ps_error('"dat" must be a point simple feature object')
+    cli::cli_abort('"dat" must be a point simple feature object')
   chk::chk_string(col_zone)
   chk::chk_string(col_easting)
   chk::chk_string(col_northing)
+
+  # alert user if the default values for col_easting and col_northing are not present in dat and
+  # default values are used as param inputs
+  if (!col_easting %in% names(dat) | !col_northing %in% names(dat)){
+    cli::cli_warn('The values specified for `col_easting` ({col_easting}) and `col_northing` ({col_northing}) are not present in `dat`.
+                        Do want to create new columns named {col_easting} and {col_northing} or do
+                  you need to provide the existing column names for X and Y coordinates?')
+  }
 
   # capture the original crs
   crs_og <- sf::st_crs(dat, parameters = T)$epsg
