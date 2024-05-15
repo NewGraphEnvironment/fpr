@@ -7,6 +7,11 @@
 #' @param dat
 #' @param col_lat Quoted character string defining the name of the column where the northing will be stored.
 #' @param col_lon Quoted character string defining the name of the column where the easting will be stored.
+#' @importFrom cli cli_abort
+#' @importFrom chk chk_string
+#' @importFrom dplyr mutate
+#' @importFrom sf st_crs st_transform st_coordinates
+#'
 #'
 #' @family spatial operations
 #'
@@ -19,13 +24,13 @@ fpr_sp_assign_latlong <- function(dat = NULL,
                                   col_lon = 'lon'){
 
   if (is.null(dat))
-    poisutils::ps_error('please provide "dat" (sf point dataframe) object')
+    cli::cli_abort('please provide "dat" (sf point dataframe) object')
   if (!is.data.frame(dat))
-    poisutils::ps_error('"dat" must be a data.frame')
+    cli::cli_abort('"dat" must be a data.frame')
   if (class(dat)[1]!="sf")
-    poisutils::ps_error('"dat" must be a sf object')
+    cli::cli_abort('"dat" must be a sf object')
   if (!attributes(sf::st_geometry(dat))$class[1] != "sfc_point")
-    poisutils::ps_error('"dat" must be a point simple feature object')
+    cli::cli_abort('"dat" must be a point simple feature object')
   chk::chk_string(col_lon)
   chk::chk_string(col_lat)
 

@@ -10,6 +10,7 @@
 #' @importFrom tibble rowid_to_column
 #' @importFrom sf st_drop_geometry
 #' @importFrom chk chk_numeric
+#' @importFrom cli cli_abort
 #' @export
 #' @family tidy
 #' @examples
@@ -20,15 +21,15 @@
 #' date_time_start = Sys.time() + 0:3
 #' )
 #'
-#' fpr_t_site_id(dat_pass)
+#' fpr_tidy_assign_site_id(dat_pass)
 #' }
 fpr_tidy_assign_site_id <- function(dat = NULL) {
 
   # Sanity checks
   if (is.null(dat))
-    stop('please provide "dat" (dataframe) object')
+    cli::cli_abort('please provide "dat" (dataframe) object')
   if (!is.data.frame(dat))
-    stop('"dat" must inherit from a data.frame')
+    cli::cli_abort('"dat" must inherit from a data.frame')
   chk::chk_numeric(dat$pscis_crossing_id)
   chk::chk_numeric(dat$my_crossing_reference)
 
@@ -47,7 +48,7 @@ fpr_tidy_assign_site_id <- function(dat = NULL) {
       sf::st_drop_geometry() %>%
       dplyr::filter(has_both_values | has_no_values) %>%
       dplyr::select(date_time_start, pscis_crossing_id, my_crossing_reference)
-    stop("Error: Some rows have either values in both pscis_crossing_id and my_crossing_reference or are missing
+    cli::cli_abort("Error: Some rows have either values in both pscis_crossing_id and my_crossing_reference or are missing
                    values in both fields:\n", paste(capture.output(print(dat)), collapse = "\n"))
   } else {
     dat <- dat %>%

@@ -16,6 +16,9 @@
 #' @importFrom purrr map
 #' @importFrom sf st_as_sf st_transform
 #' @importFrom rlang sym
+#' @importFrom chk chk_string chk_numeric
+#' @importFrom cli cli_abort
+#'
 #'
 #' @family spatial operations
 #' @export
@@ -32,9 +35,9 @@ fpr_sp_assign_sf_from_utm <- function(
     ) {
 
   if (is.null(dat))
-    poisutils::ps_error('please provide "dat" (sf point dataframe) object')
+    cli::cli_abort('please provide "dat" (sf point dataframe) object')
   if (!is.data.frame(dat))
-    poisutils::ps_error('"dat" must be a data.frame')
+    cli::cli_abort('"dat" must be a data.frame')
   chk::chk_string(col_utm_zone)
   chk::chk_string(col_easting)
   chk::chk_string(col_northing)

@@ -44,7 +44,6 @@ Imports:
     DBI,
     glue,
     RPostgres,
-    poisutils,
     rlang,
     fasstr,
     ggdark, 
@@ -53,7 +52,6 @@ Imports:
     cli
 Remotes:  
     poissonconsulting/fwapgr,
-    poissonconsulting/poisutils
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

@@ -15,9 +15,8 @@
 #' @importFrom ggdark dark_theme_bw
 #' @importFrom dplyr mutate group_by summarise
 #' @importFrom ggplot2 ggsave ggplot geom_ribbon scale_x_date labs geom_line scale_colour_manual
-#' @importFrom cli cli_alert
+#' @importFrom cli cli_alert cli_abort
 #' @importFrom chk chk_string chk_flag chk_number
-#' @importFrom poisutils ps_error
 #'
 #' @export
 #'
@@ -31,7 +30,7 @@ fpr_create_hydrograph <- function(
     end_year = NULL){
 
   if(is.null(station)){
-    poisutils::ps_error('Please provide a station number, for example "08EE004"')
+    cli::cli_abort('Please provide a station number, for example "08EE004"')
   }
 
   chk::chk_string(station)

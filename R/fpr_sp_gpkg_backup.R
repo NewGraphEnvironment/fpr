@@ -28,10 +28,10 @@
 #'
 #' @importFrom chk chk_file chk_dir chk_logical
 #' @importFrom sf st_read st_write st_drop_geometry
-#' @importFrom poisutils ps_error
 #' @importFrom readr write_csv
 #' @importFrom tools file_path_sans_ext
 #' @importFrom fpr fpr_sp_assign_utm
+#' @importFrom cli cli_abort
 #'
 #' @family spatial operations
 #'
@@ -86,13 +86,13 @@ fpr_sp_gpkg_backup <- function(
 
   # Check data
   if (is.null(dat))
-    poisutils::ps_error('please provide "dat" (sf point dataframe) object')
+    cli::cli_abort('please provide "dat" (sf point dataframe) object')
   if (!is.data.frame(dat))
-    poisutils::ps_error('"dat" must be a data.frame')
+    cli::cli_abort('"dat" must be a data.frame')
   if (class(dat)[1]!="sf")
-    poisutils::ps_error('"dat" must be a sf object')
+    cli::cli_abort('"dat" must be a sf object')
   if (!attributes(sf::st_geometry(dat))$class[1] != "sfc_point")
-    poisutils::ps_error('"dat" must be a point simple feature object')
+    cli::cli_abort('"dat" must be a point simple feature object')
 
   if(update_utm){
     dat <-  dat %>%
