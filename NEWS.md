@@ -1,4 +1,7 @@
 # Development version
+* remove `poisutils` dependency as per [#83](https://github.com/NewGraphEnvironment/fpr/issues/83)
+* `fpr_sp_assign_utm` alerts user if the default values for col_easting and col_northing are not present in the dat sf object
+as per [#85](https://github.com/NewGraphEnvironment/fpr/issues/85)
 * `fpr_my_bcfishpass` move from `{{}}` for param columns to `ensym` and `!!` to provide flexibility for `dat` param objects other than `bcfishpass` - close [#86](https://github.com/NewGraphEnvironment/fpr/issues/86)
 * `fpr_photo_amalg_cv` - close [#46](https://github.com/NewGraphEnvironment/fpr/issues/46)
 * close [#75](https://github.com/NewGraphEnvironment/fpr/issues/75) and [#76](https://github.com/NewGraphEnvironment/fpr/issues/76) by using `fpr_kable` in `fpr_table_cv_summary_memo`
