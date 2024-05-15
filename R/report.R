@@ -81,11 +81,15 @@ fpr_my_bcfishpass <- function(dat = bcfishpass,
                               col_filter = stream_crossing_id,
                               col_pull = stream_order,
                               round_dig = 0){
+
+  col_filter <- ensym(col_filter)
+  col_pull <- ensym(col_pull)
+
   dat %>%
     dplyr::mutate(dplyr::across(tidyselect::where(is.numeric), ~round(., round_dig))) %>%
-    dplyr::filter({{col_filter}} == site) %>%
-    dplyr::distinct({{col_filter}} , .keep_all = T) %>% #deals with duplicates
-    dplyr::pull({{col_pull}})
+    dplyr::filter(!!col_filter == !!site) %>%
+    dplyr::distinct(!!col_filter, .keep_all = TRUE) %>%
+    dplyr::pull(!!col_pull)
 }
 
 

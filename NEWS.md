@@ -1,4 +1,5 @@
 # Development version
+* `fpr_my_bcfishpass` move from `{{}}` for param columns to `ensym` and `!!` to provide flexibility for `dat` param objects other than `bcfishpass` - close [#86](https://github.com/NewGraphEnvironment/fpr/issues/86)
 * `fpr_photo_amalg_cv` - close [#46](https://github.com/NewGraphEnvironment/fpr/issues/46)
 * close [#75](https://github.com/NewGraphEnvironment/fpr/issues/75) and [#76](https://github.com/NewGraphEnvironment/fpr/issues/76) by using `fpr_kable` in `fpr_table_cv_summary_memo`
 * add fpr_xref_crossings as per https://github.com/NewGraphEnvironment/fish_passage_template_reporting/issues/1
