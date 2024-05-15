@@ -25,7 +25,7 @@ my_crossing_reference = c(NA, NA, 3, NA),
 date_time_start = Sys.time() + 0:3
 )
 
-fpr_t_site_id(dat_pass)
+fpr_tidy_assign_site_id(dat_pass)
 }
 }
 \concept{tidy}
