@@ -9,7 +9,7 @@ fpr_table_bcfp_html(sites, ...)
 \arguments{
 \item{sites}{Integer value representing site.}
 
-\item{...}{Not used. Pass param to fpr_table_bcfp}
+\item{...}{Not used. Pass param to fpr_table_bcfp (or through to fpr_kable)}
 }
 \description{
 Tables will be linked to map points

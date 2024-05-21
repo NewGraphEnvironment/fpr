@@ -300,14 +300,14 @@ fpr_table_bcfp <- function(dat = bcfishpass,
 #' Tables will be linked to map points
 #'
 #' @param sites Integer value representing site.
-#' @param ... Not used. Pass param to fpr_table_bcfp
+#' @param ... Not used. Pass param to fpr_table_bcfp (or through to fpr_kable)
 #'
 #' @return
 #' @export
 #'
 #' @examples
 fpr_table_bcfp_html <- function(sites, ...){
-  fpr_table_bcfp(site = sites) %>%
+  fpr_table_bcfp(site = sites, ...) %>%
     kableExtra::kable_styling(c("condensed"), full_width = T, font_size = 18) %>%
     kableExtra::add_footnote(c('Model data is preliminary and subject to adjustments including incorporating area based estimates.',
                              'Modelled rearing habitat estimates include linear lengths of centrelines within wetlands for coho and within lakes >100ha (multiplied by 1.5) for sockeye.',
