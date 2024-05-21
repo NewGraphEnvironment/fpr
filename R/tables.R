@@ -216,10 +216,10 @@ fpr_table_wshd_sum <- function(dat = wshds, site_id = NULL){
 fpr_table_cv_html <- function(site){
   fpr_table_cv_detailed(pscis_all %>% filter(pscis_crossing_id == site)) %>%
     kable(booktabs = T) %>%
+    kableExtra::kable_styling(c("condensed"), full_width = T, font_size = 18, html_font = 'helvetica') %>%
     kableExtra::add_footnote(label = paste0('Comments: ', pscis_all %>% filter(pscis_crossing_id == site) %>%
                                               distinct(pscis_crossing_id, .keep_all = T) %>% ##might be my_crossing_refe
                                               pull(assessment_comment)), notation = 'none') %>% #this grabs the comments out
-    kableExtra::kable_styling(c("condensed"), full_width = T, font_size = 18, html_font = 'helvetica') %>%
     readr::write_file(., file = paste0("docs/sum/cv/", site, ".html"))
 }
 
@@ -308,12 +308,11 @@ fpr_table_bcfp <- function(dat = bcfishpass,
 #' @examples
 fpr_table_bcfp_html <- function(sites, ...){
   fpr_table_bcfp(site = sites) %>%
-    kable(caption = paste0('Summary of fish habitat modelling for PSCIS crossing ', sites, '.'), booktabs = T) %>%
+    kableExtra::kable_styling(c("condensed"), full_width = T, font_size = 18) %>%
     kableExtra::add_footnote(c('Model data is preliminary and subject to adjustments including incorporating area based estimates.',
                              'Modelled rearing habitat estimates include linear lengths of centrelines within wetlands for coho and within lakes >100ha (multiplied by 1.5) for sockeye.',
                              'Remediation Gain is an estimate of the amount of habitat to be gained by providing access above the crossing.  This assumes that all upstream habitat is currently unavailable and that all modelled unassessed crossings located upstream would prevent further passage.'),
                              notation = 'symbol') %>%
-    kableExtra::kable_styling(c("condensed"), full_width = T, font_size = 18) %>%
     readr::write_file(., file = paste0("docs/sum/bcfp/", sites, ".html"))
 }
 

@@ -1,4 +1,7 @@
 # Development version
+* reorder `kableExtra` calls in `fpr_table_bcfp_html` so that `kableExtra::add_footnote` is called after `kableExtra::kable_styling` to close 
+[#87](https://github.com/NewGraphEnvironment/fpr/issues/87).  Remove redundant call to `fpr_kable`) in `fpr_table_bcfp_html`
+* remove all_spawning_rearing_* columns from fpr_xref_crossings picklist so can build fpr_table_bcfp_html close [#88](https://github.com/NewGraphEnvironment/fpr/issues/88)
 * remove `poisutils` dependency as per [#83](https://github.com/NewGraphEnvironment/fpr/issues/83)
 * `fpr_sp_assign_utm` alerts user if the default values for col_easting and col_northing are not present in the dat sf object
 as per [#85](https://github.com/NewGraphEnvironment/fpr/issues/85)
