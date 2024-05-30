@@ -125,7 +125,7 @@ fpr_my_fish_sp <- function(...,
   str_to_pull <- stringr::str_replace_all(
     (fpr_my_bcfishpass(..., col_pull = {{col_pull}})),
     c("\\{" = "","\\}" = "")) %>%
-    strsplit(., ",") %>%
+    strsplit(., c(",|;")) %>%
     unlist()
   fishbc::freshwaterfish %>%
     dplyr::filter(Code %in% str_to_pull &
