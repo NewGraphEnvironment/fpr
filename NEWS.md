@@ -1,5 +1,6 @@
 # Development version
-* `fpr_my_fish_sp` now processes species codes passed as comma seperated character vectors or semi colon seperated character vectors.  This allows for more flexibility in the input of species codes. Thanks @lucy-schick ! closes [#90](https://github.com/NewGraphEnvironment/fpr/issues/89)
+* `fpr_my_fish_sp` now processes species codes passed strings seperated by commas or semi colons since new `bcfishpass.crossing.vw` outputs use 
+semi-colons vs the past convention of commas. Thanks @lucy-schick ! closes [#89](https://github.com/NewGraphEnvironment/fpr/issues/89)
 * reorder `kableExtra` calls in `fpr_table_bcfp_html` so that `kableExtra::add_footnote` is called after `kableExtra::kable_styling` to close 
 [#87](https://github.com/NewGraphEnvironment/fpr/issues/87).  Remove redundant call to `fpr_kable`) in `fpr_table_bcfp_html`
 * remove all_spawning_rearing_* columns from fpr_xref_crossings picklist so can build fpr_table_bcfp_html close [#88](https://github.com/NewGraphEnvironment/fpr/issues/88)
