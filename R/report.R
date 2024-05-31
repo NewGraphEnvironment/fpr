@@ -229,7 +229,7 @@ fpr_my_survey_dist <- function(loc = 'us', sit = my_site){
 
   seg1 <- 'The stream was surveyed '
 
-  if(identical(loc, 'us')){
+  if(stringr::str_detect(loc, 'us')){
     seg2 <- 'upstream '
     }else seg2 <- 'downstream '
 
