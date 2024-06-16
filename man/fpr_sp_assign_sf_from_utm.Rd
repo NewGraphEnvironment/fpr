@@ -21,7 +21,8 @@ fpr_sp_assign_sf_from_utm(
 
 \item{col_northing}{The name of the northing coordinate column. Default is "northing".}
 
-\item{crs_return}{Numeric. The EPSG code to transform the coordinate reference system to. Must be Geographic (ex. Albers or WSG84). Default is BC Albers - 3005.}
+\item{crs_return}{Numeric. The EPSG code to transform the coordinate reference system to. Must be Geographic
+(ex. Albers - 3005 or WSG84 - 4326). Default is BC Albers.}
 }
 \value{
 A spatial data frame.
@@ -31,7 +32,11 @@ This function is designed to work on a dataframe that contains columns with deta
 easting and northing from a NAD 83 UTM Zone coordinate systems. It prepares a spatial data frame
 by grouping based on a specified column (UTM zone), converting to a spatial data frame, transforming
 the coordinate reference system, and then binding the rows back together. The returned dataframe
-must be in a Geographic Coordinate System (BC Albers or vs a Spatial coordinate system like UTM.
+must be in a Geographic Coordinate System (ex. BC Albers or WSG84 vs a Spatial coordinate system like UTM.).
+}
+\details{
+The reason the returned dataframe must be in a Geographic Coordinate System is to avoid issues when
+input points are located in different spatial zones.
 }
 \examples{
 \dontrun{
