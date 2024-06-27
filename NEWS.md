@@ -1,4 +1,5 @@
 # Development version
+* make rayshader, elevatr and fasstr suggests to the functions they are used in, adding checks within the function sto tell the user to install it if they don't have and remove from depends in Description as per [#7](https://github.com/NewGraphEnvironment/fpr/issues/7)
 * `fpr_my_fish_sp` now processes species codes passed strings seperated by commas or semi colons since new `bcfishpass.crossing.vw` outputs use 
 semi-colons vs the past convention of commas. Thanks @lucy-schick ! closes [#89](https://github.com/NewGraphEnvironment/fpr/issues/89)
 * reorder `kableExtra` calls in `fpr_table_bcfp_html` so that `kableExtra::add_footnote` is called after `kableExtra::kable_styling` to close 
