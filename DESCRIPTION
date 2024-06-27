@@ -1,7 +1,7 @@
 Package: fpr
 Type: Package
 Title: Fish Passage Data Wrangling and Reporting Functions
-Version: 1.1.0
+Version: 1.2.0
 Author: Allan Irvine
 Maintainer: <al@newgraphenvironment.com>
 Description: Functions used in Fish Passage Reporting. 
@@ -46,7 +46,7 @@ Imports:
     ggdark, 
     ggplot2, 
     cli
-Remotes:  
+Remotes: 
     poissonconsulting/fwapgr,
 Suggests: 
     rayshader,
