@@ -9,7 +9,6 @@
 #' @param fig/hydrograph_ hydrograph figure saved to the fig folder
 #'
 #' @importFrom lubridate year
-#' @importFrom tidyhydat hy_daily_flows search_stn_number
 #' @importFrom stringr str_to_title
 #' @importFrom ggdark dark_theme_bw
 #' @importFrom dplyr mutate group_by summarise
@@ -28,7 +27,7 @@ fpr_create_hydrograph <- function(
     start_year = NULL,
     end_year = NULL){
 
-  required_packages <- c("fasstr")
+  required_packages <- c("fasstr", "tidyhydat")
 
   for (package in required_packages) {
     if (!require(package, character.only = TRUE)) {
