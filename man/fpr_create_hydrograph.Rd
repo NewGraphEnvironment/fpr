@@ -31,5 +31,5 @@ fpr_create_hydrograph(
 Creates hydrograph and hydrology stats figures for a given station.
 }
 \examples{
-\dontrun{fpr_create_hydrograph('08EE004', pane_hydat = FALSE))}
+\dontrun{fpr_create_hydrograph('08EE004', pane_hydat = FALSE)}
 }

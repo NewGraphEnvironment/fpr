@@ -18,7 +18,7 @@
 #'
 #' @export
 #'
-#' @examples \dontrun{fpr_create_hydrograph('08EE004', pane_hydat = FALSE))}
+#' @examples \dontrun{fpr_create_hydrograph('08EE004', pane_hydat = FALSE)}
 
 fpr_create_hydrograph <- function(
     station = NULL,
