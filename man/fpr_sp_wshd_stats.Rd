@@ -2,7 +2,7 @@
 % Please edit documentation in R/spatial.R
 \name{fpr_sp_wshd_stats}
 \alias{fpr_sp_wshd_stats}
-\title{Get elevation statistics}
+\title{Get elevation statistics.}
 \usage{
 fpr_sp_wshd_stats(dat)
 }
@@ -13,5 +13,17 @@ fpr_sp_wshd_stats(dat)
 sf object of polygons with elevation details (ie. p60, median, min, max) and median aspect information added.
 }
 \description{
-Get elevation statistics
+Get elevation statistics.
 }
+\examples{
+\dontrun{wshd <- fpr_sp_wshd_stats(
+fwapgr::fwa_watershed_at_measure(
+blue_line_key = 360746095, downstream_route_measure = 100) |>
+dplyr::mutate(stream_crossing_id = 1)
+)}
+}
+\seealso{
+Other spatial: 
+\code{\link{fpr_make_html_tbl}()}
+}
+\concept{spatial}

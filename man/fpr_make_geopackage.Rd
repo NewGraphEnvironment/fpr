@@ -2,7 +2,7 @@
 % Please edit documentation in R/spatial.R
 \name{fpr_make_geopackage}
 \alias{fpr_make_geopackage}
-\title{Make geopackage in directory called}
+\title{Make geopackage from an sf object.  Create directory to burn it to if it doesn't exist.}
 \usage{
 fpr_make_geopackage(
   dat,

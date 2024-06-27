@@ -8,6 +8,7 @@
 #' in the fish_passage_skeena_2021_reporting repo for now.
 #'
 #' @param dat Dataframe or tibble which usually only has one row
+#' @family spatial
 #'
 #' @return html object
 #' @export
@@ -27,7 +28,7 @@ fpr_make_html_tbl <- function(dat) {
 }
 
 
-#' Retrieve watershed geometry using fwapg
+#' Retrieve watershed geometry using fwapgr
 #'
 #' @param dat Dataframe with a stream_crossing_id, blue_line_key and downstream_route_measure defined. Ususally pulled from bcfishpass
 #'
@@ -47,15 +48,29 @@ fpr_sp_watershed <- function(dat){
     sf::st_as_sf()
 }
 
-#' Get elevation statistics
+#' Get elevation statistics.
 #'
 #' @param dat sf object of polygons to gather elevation statistics for.  Must contain `stream_crossing_id` column.
 #'
 #' @return sf object of polygons with elevation details (ie. p60, median, min, max) and median aspect information added.
+#' @family spatial
 #' @export
 #'
-#' @examples
+#' @examples \dontrun{wshd <- fpr_sp_wshd_stats(
+#' fwapgr::fwa_watershed_at_measure(
+#' blue_line_key = 360746095, downstream_route_measure = 100) |>
+#' dplyr::mutate(stream_crossing_id = 1)
+#' )}
 fpr_sp_wshd_stats <- function(dat){
+
+  required_packages <- c("elevatr", "rayshader")
+
+  for (package in required_packages) {
+    if (!require(package, character.only = TRUE)) {
+      cli::abort(paste("Package", package, "is not installed. Please install it using install.packages(\"", package, "\").", sep = ""))
+    }
+  }
+
   directions <- tibble::tibble( degree_centre = seq(0, 360 , by=22.5),
                                 cardinal = c("N","NNE","NE", "ENE", "E", "ESE", "SE", "SSE",
                                              "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW", "N")) %>%
@@ -106,7 +121,7 @@ fpr_sp_wshd_stats <- function(dat){
     arrange(stream_crossing_id)
 }
 
-#' Make geopackage in directory called
+#' Make geopackage from an sf object.  Create directory to burn it to if it doesn't exist.
 #'
 #' Names the layer the same as the name of the dataframe that is burned
 #'

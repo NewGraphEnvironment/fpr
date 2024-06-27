@@ -28,9 +28,7 @@ Imports:
     tidyselect,
     fwapgr,
     data.table,
-    elevatr,
     raster,
-    rayshader,
     readr,
     stats,
     generics,
@@ -45,7 +43,6 @@ Imports:
     glue,
     RPostgres,
     rlang,
-    fasstr,
     ggdark, 
     ggplot2, 
     tidyhydat,
@@ -53,5 +50,8 @@ Imports:
 Remotes:  
     poissonconsulting/fwapgr,
 Suggests: 
+    rayshader,
+    elevatr,
+    fasstr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

@@ -17,3 +17,8 @@ Usually just a one row tibble is transformed as this is helper function for
 making kml files from PSCIS spreadsheets.  Other functions for the kml are in the 0110-make-kml.R file
 in the fish_passage_skeena_2021_reporting repo for now.
 }
+\seealso{
+Other spatial: 
+\code{\link{fpr_sp_wshd_stats}()}
+}
+\concept{spatial}

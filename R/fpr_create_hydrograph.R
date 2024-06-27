@@ -11,7 +11,6 @@
 #' @importFrom lubridate year
 #' @importFrom tidyhydat hy_daily_flows search_stn_number
 #' @importFrom stringr str_to_title
-#' @importFrom fasstr plot_data_screening
 #' @importFrom ggdark dark_theme_bw
 #' @importFrom dplyr mutate group_by summarise
 #' @importFrom ggplot2 ggsave ggplot geom_ribbon scale_x_date labs geom_line scale_colour_manual
@@ -28,6 +27,14 @@ fpr_create_hydrograph <- function(
     single_hydat = TRUE,
     start_year = NULL,
     end_year = NULL){
+
+  required_packages <- c("fasstr")
+
+  for (package in required_packages) {
+    if (!require(package, character.only = TRUE)) {
+      cli::abort(paste("Package", package, "is not installed. Please install it using install.packages(\"", package, "\").", sep = ""))
+    }
+  }
 
   if(is.null(station)){
     cli::cli_abort('Please provide a station number, for example "08EE004"')

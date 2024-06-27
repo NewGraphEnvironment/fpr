@@ -2,7 +2,7 @@
 % Please edit documentation in R/spatial.R
 \name{fpr_sp_watershed}
 \alias{fpr_sp_watershed}
-\title{Retrieve watershed geometry using fwapg}
+\title{Retrieve watershed geometry using fwapgr}
 \usage{
 fpr_sp_watershed(dat)
 }
@@ -13,5 +13,5 @@ fpr_sp_watershed(dat)
 sf object representing watershed areas
 }
 \description{
-Retrieve watershed geometry using fwapg
+Retrieve watershed geometry using fwapgr
 }
