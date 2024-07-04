@@ -22,7 +22,7 @@ fpr_kable <- function(dat,
   }
   if(identical(scroll,TRUE)){
     dat2 <- dat2 %>%
-      kableExtra::scroll_box(width = "100%", height = scroll_box_height)
+      kableExtra::scroll_box(width = "90%", height = scroll_box_height)
   }
 
   dat2
