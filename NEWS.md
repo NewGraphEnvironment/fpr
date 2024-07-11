@@ -1,5 +1,6 @@
 # Development version
-- add `inst/staticexports` file to allow export of functions with https://github.com/wch/staticimports
+- `include.dirs = FALSE` and `recursive = FALSE` within `fpr_photo_paths_to_copy` so we don't snag out on sub-directories.  Don't think it will be a problem
+as we just look one level within directories anyway.
 
 # fpr 1.2.0
 * make rayshader, elevatr and fasstr suggests to the functions they are used in, adding checks within the function sto tell the user to install it if they don't have and remove from depends in Description as per [#7](https://github.com/NewGraphEnvironment/fpr/issues/7)
