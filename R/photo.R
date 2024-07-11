@@ -507,10 +507,10 @@ fpr_photo_paths_to_copy <- function(path_dir = 'data/photos',
   dplyr::left_join(
     list.files(path = path_dir,
                pattern = ".JPG$",
-               recursive = TRUE,
+               recursive = FALSE,
                ignore.case = T,
                full.names = T,
-               include.dirs = T) %>%
+               include.dirs = FALSE) %>%
       stringr::str_subset(., names_photos) %>%
       tibble::as_tibble() %>%
       dplyr::mutate(tag_name = stringr::str_extract(value, names_photos)),
