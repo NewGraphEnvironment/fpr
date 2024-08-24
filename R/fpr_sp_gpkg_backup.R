@@ -110,7 +110,7 @@ fpr_sp_gpkg_backup <- function(
   }
 
   if(write_to_csv){
-    dir.create(dir_backup, showWarnings = FALSE)
+    dir.create(dir_backup, showWarnings = FALSE, recursive = TRUE)
     dat %>%
       sf::st_drop_geometry() %>%
       readr::write_csv(paste0(
