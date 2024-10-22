@@ -45,7 +45,8 @@ Imports:
     rlang,
     ggdark, 
     ggplot2, 
-    cli
+    cli,
+    fs
 Remotes: 
     poissonconsulting/fwapgr,
 Suggests: 

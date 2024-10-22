@@ -32,7 +32,7 @@
 #' @importFrom tools file_path_sans_ext
 #' @importFrom fpr fpr_sp_assign_utm
 #' @importFrom cli cli_abort
-#'
+#' @importFrom fs path dir_create
 #' @family spatial operations
 #'
 #' @export
@@ -110,11 +110,11 @@ fpr_sp_gpkg_backup <- function(
   }
 
   if(write_to_csv){
-    dir.create(dir_backup, showWarnings = FALSE, recursive = TRUE)
+    fs::dir_create(dir_backup)
     dat %>%
       sf::st_drop_geometry() %>%
-      readr::write_csv(paste0(
-        dir_backup, tools::file_path_sans_ext(basename(path_gpkg)), ".csv"), na = "")
+      readr::write_csv(fs::path(
+        dir_backup, paste0(tools::file_path_sans_ext(basename(path_gpkg)), ".csv")), na = "")
   }
 
   if(write_to_rdata){
