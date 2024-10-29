@@ -645,8 +645,6 @@ fpr_photo_rename <- function(dat = form_pscis,
                                                    janitor::make_clean_names(photo_extra3_tag, allow_dupes = T, sep_out = ''),
                                                  stringr::str_detect(photo_renamed, 'photo_extra4') ~
                                                    janitor::make_clean_names(photo_extra4_tag, allow_dupes = T, sep_out = ''),
-                                                 stringr::str_detect(photo_renamed, 'photo_extra5') ~
-                                                   janitor::make_clean_names(photo_extra5_tag, allow_dupes = T, sep_out = ''),
                                                  T ~ photo_renamed),
                 photo_renamed = stringr::str_replace_all(photo_renamed, 'photo_', ''))
   # generalize above
@@ -746,5 +744,3 @@ fpr_photo_remove_dupes <- function(dir_target = NULL,
       purrr::map(file.remove)
 
 }
-
-
