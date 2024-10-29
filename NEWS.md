@@ -1,4 +1,6 @@
 # Development version
+- add 5 phto tags to `fpr_photo_rename`
+- use `fs::dir_create` in `fpr_photo_folders`
 - `include.dirs = FALSE` and `recursive = FALSE` within `fpr_photo_paths_to_copy` so we don't snag out on sub-directories.  Don't think it will be a problem
 as we just look one level within directories anyway.
 

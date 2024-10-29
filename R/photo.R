@@ -78,14 +78,14 @@ fpr_photo_resize_batch <- function(dir_source = NULL,
 #'
 #' @param site String - number of site to build folder for
 #' @param path String - path stub where photos directories are held
-#'
+#' @importFrom fs dir_create
 #' @return Makes directories
 #' @family photo
 #' @export
 #'
 #' @examples
 fpr_photo_folders <- function(site, path = 'data/photos/'){
-  dir.create(paste0(path, site), recursive = TRUE)
+  fs::dir_create(fs::path(path, site), recurse = TRUE)
 }
 
 
@@ -641,6 +641,12 @@ fpr_photo_rename <- function(dat = form_pscis,
                                                    janitor::make_clean_names(photo_extra1_tag, allow_dupes = T, sep_out = ''),
                                                  stringr::str_detect(photo_renamed, 'photo_extra2') ~
                                                    janitor::make_clean_names(photo_extra2_tag, allow_dupes = T, sep_out = ''),
+                                                 stringr::str_detect(photo_renamed, 'photo_extra3') ~
+                                                   janitor::make_clean_names(photo_extra3_tag, allow_dupes = T, sep_out = ''),
+                                                 stringr::str_detect(photo_renamed, 'photo_extra4') ~
+                                                   janitor::make_clean_names(photo_extra4_tag, allow_dupes = T, sep_out = ''),
+                                                 stringr::str_detect(photo_renamed, 'photo_extra5') ~
+                                                   janitor::make_clean_names(photo_extra5_tag, allow_dupes = T, sep_out = ''),
                                                  T ~ photo_renamed),
                 photo_renamed = stringr::str_replace_all(photo_renamed, 'photo_', ''))
   # generalize above
