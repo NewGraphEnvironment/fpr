@@ -254,6 +254,8 @@ fpr_photo_qa <- function(dat = pscis_all,
 
   fpr_photo_qa_prep <- function(site_id, dir_photos){
     list.files(path = paste0(dir_photos, site_id), full.names = FALSE) %>%
+      # here is an attempt to look for any replicates vs just the exact matches as below it
+      # stringr::str_subset(., 'barrel|outlet|upstream|downstream|inlet') %>%
       stringr::str_subset(., '_barrel\\.|_outlet\\.|_upstream\\.|_downstream\\.|_road\\.|_inlet\\.') %>%
       tibble::as_tibble() %>%
       dplyr::mutate(x = dplyr::case_when(
@@ -743,4 +745,59 @@ fpr_photo_remove_dupes <- function(dir_target = NULL,
       dplyr::pull( {{ col_photo_name }}) %>%
       purrr::map(file.remove)
 
+}
+
+#' Helper function to QA Photos to ensure reserved photo strings are used only once per site.
+#'
+#' Ensure that there are 6 named photos and no duplicates named. `fpr_photo_qa` is almost identical
+#' but looks for only 1 occurance of `12345_barrel.JPG` and allows `6789_barrel2.JPG`.  This updated function
+#' will create a
+#' Used inside of \link{fpr_photo_qa_df}.
+#'
+#' @param dat Dataframe that contains a column with the numeric site ids. Defaults to `pscis_all`
+#' @param col Column to pull to get site IDs. Defaults to site_id
+#' @param dir_photos Directory that contains the photos. Defaults to data/photos/
+#'
+#' @importFrom stringr str_subset str_detect
+#' @importFrom tibble as_tibble
+#' @importFrom dplyr mutate arrange pull
+#' @importFrom tidyr pivot_wider
+#' @importFrom purrr map set_names
+#'
+#' @return List of dataframes with photo names for 6 PSCIS photos. Will return NAs when photo not there and list of
+#' names when there is more than one that matches the pattern.
+#' @export
+#'
+#' @examples
+fpr_photo_qa2 <- function(dat = pscis_all,
+                         col = site_id,
+                         dir_photos = 'data/photos/'){
+
+  fpr_photo_qa_prep2 <- function(site_id, dir_photos){
+    list.files(path = paste0(dir_photos, site_id), full.names = FALSE) %>%
+      # here is an attempt to look for any replicates vs just the exact matches as below it
+      # stringr::str_subset(., 'barrel|outlet|upstream|downstream|inlet') %>%
+      stringr::str_subset(., 'barrel|outlet|upstream|downstream|road|inlet') %>%
+      tibble::as_tibble() %>%
+      dplyr::mutate(x = dplyr::case_when(
+        stringr::str_detect(value, 'road') ~ 'road',
+        stringr::str_detect(value, 'inlet') ~ 'inlet',
+        stringr::str_detect(value, 'upstream') ~ 'upstream',
+        stringr::str_detect(value, 'barrel') ~ 'barrel',
+        stringr::str_detect(value, 'outlet') ~ 'outlet',
+        stringr::str_detect(value, 'downstream') ~ 'downstream'
+      )) %>%
+      tidyr::pivot_wider(names_from = x) %>%
+      dplyr::mutate(site = site_id)
+  }
+
+  dat %>%
+    dplyr::arrange({{col}}) %>%
+    dplyr::pull({{col}}) %>%
+    purrr::map(fpr_photo_qa_prep2, dir_photos) %>%
+    purrr::set_names(
+      nm = dat %>%
+        dplyr::arrange({{col}}) %>%
+        dplyr::pull({{col}})
+    )
 }
