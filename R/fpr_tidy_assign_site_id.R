@@ -55,6 +55,10 @@ fpr_tidy_assign_site_id <- function(dat = NULL) {
       dplyr::select(-has_both_values, -has_no_values)
   }
 
+  # Identify duplicate values in columns if present
+  fpr_chk_dupes(dat, my_crossing_reference)
+  fpr_chk_dupes(dat, pscis_crossing_id)
+  fpr_chk_dupes(dat, site_id)
+
   return(dat)
 }
-
