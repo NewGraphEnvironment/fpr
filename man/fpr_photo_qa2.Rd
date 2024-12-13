@@ -2,7 +2,7 @@
 % Please edit documentation in R/photo.R
 \name{fpr_photo_qa2}
 \alias{fpr_photo_qa2}
-\title{Helper function to QA Photos}
+\title{Helper function to QA Photos to ensure reserved photo strings are used only once per site.}
 \usage{
 fpr_photo_qa2(dat = pscis_all, col = site_id, dir_photos = "data/photos/")
 }
@@ -18,6 +18,8 @@ List of dataframes with photo names for 6 PSCIS photos. Will return NAs when pho
 names when there is more than one that matches the pattern.
 }
 \description{
-Ensure that there are 6 named photos and no duplicates named.
+Ensure that there are 6 named photos and no duplicates named. `fpr_photo_qa` is almost identical
+but looks for only 1 occurance of `12345_barrel.JPG` and allows `6789_barrel2.JPG`.  This updated function
+will create a
 Used inside of \link{fpr_photo_qa_df}.
 }
