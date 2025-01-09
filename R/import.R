@@ -73,7 +73,7 @@ fpr_import_pscis <- function(workbook_name = 'pscis_phase1.xlsm', ##new template
                      sheet = 'PSCIS Assessment Worksheet',
                      skip = 3,
                      .name_repair = janitor::make_clean_names,
-                     col_types = fpr_xref_pscis %>% dplyr::filter(type_on_import == T) %>% dplyr::pull(type_readxl)) %>%
+                     col_types = fpr::fpr_xref_pscis %>% dplyr::filter(type_on_import == T) %>% dplyr::pull(type_readxl)) %>%
     fpr_sheet_trim(...) %>% ##recently added function above and pulled the altools package as it was a week link
     tibble::rowid_to_column() %>%
     dplyr::rename(date = date_of_assessment_yyyy_mm_dd) %>%
@@ -92,7 +92,8 @@ fpr_import_pscis <- function(workbook_name = 'pscis_phase1.xlsm', ##new template
       date_time_start = lubridate::ymd_hms(paste0(date, ' ', time_start)),
       camera_id = stringr::word(crew_members, 1), ##identify who had the camera as this is the first initials in the crew_members
       site_id = dplyr::case_when(!is.na(pscis_crossing_id) ~ pscis_crossing_id,
-                                 T ~ my_crossing_reference)
+                                 T ~ my_crossing_reference),
+      pscis_crossing_id = as.integer(pscis_crossing_id)
     )
 }
 
