@@ -92,8 +92,7 @@ fpr_import_pscis <- function(workbook_name = 'pscis_phase1.xlsm', ##new template
       date_time_start = lubridate::ymd_hms(paste0(date, ' ', time_start)),
       camera_id = stringr::word(crew_members, 1), ##identify who had the camera as this is the first initials in the crew_members
       site_id = dplyr::case_when(!is.na(pscis_crossing_id) ~ pscis_crossing_id,
-                                 T ~ my_crossing_reference),
-      pscis_crossing_id = as.integer(pscis_crossing_id)
+                                 T ~ my_crossing_reference)
     )
 }
 
