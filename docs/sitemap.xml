@@ -22,6 +22,9 @@
     <loc>http://www.newgraphenvironment.com/fpr/reference/fpr_appendix_title.html</loc>
   </url>
   <url>
+    <loc>http://www.newgraphenvironment.com/fpr/reference/fpr_chk_dupes.html</loc>
+  </url>
+  <url>
     <loc>http://www.newgraphenvironment.com/fpr/reference/fpr_create_hydrograph.html</loc>
   </url>
   <url>
@@ -139,6 +142,9 @@
     <loc>http://www.newgraphenvironment.com/fpr/reference/fpr_photo_qa.html</loc>
   </url>
   <url>
+    <loc>http://www.newgraphenvironment.com/fpr/reference/fpr_photo_qa2.html</loc>
+  </url>
+  <url>
     <loc>http://www.newgraphenvironment.com/fpr/reference/fpr_photo_qa_df.html</loc>
   </url>
   <url>
@@ -236,6 +242,12 @@
   </url>
   <url>
     <loc>http://www.newgraphenvironment.com/fpr/reference/fpr_tidy_assign_site_id.html</loc>
+  </url>
+  <url>
+    <loc>http://www.newgraphenvironment.com/fpr/reference/fpr_xfm_paw_score_cv_len.html</loc>
+  </url>
+  <url>
+    <loc>http://www.newgraphenvironment.com/fpr/reference/fpr_xfm_paw_swr.html</loc>
   </url>
   <url>
     <loc>http://www.newgraphenvironment.com/fpr/reference/fpr_xref_crossings.html</loc>
