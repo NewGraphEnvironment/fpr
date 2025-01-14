@@ -1,0 +1,77 @@
+---
+title: List of fpr_xfm_{*} Functions present in PSCIS Excel that require Transformations
+author: '`r rmdgh::get_gh_user()`'
+output:
+  rmdgh::github_issue:
+    repo: NewGraphEnvironment/fpr
+    number: 101
+    labels: xfm
+    action: create
+    draft: no
+---
+
+```{r setup, include=FALSE}
+# also useful in yaml - number: of an existing issue to make a new comment in thread
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, error = TRUE)
+```
+
+Here is my reprex:
+
+```{reprex, as.is = TRUE}
+# path <- system.file("extdata", "pscis_phase1.xlsm", package = "fpr")
+
+library(ngr)
+library(knitr)
+library(tidyverse)
+
+path <- "~/Projects/repo/fpr/inst/extdata/pscis_phase1.xlsm"
+
+f <- ngr::ngr_xl_map_formulas(path = path, 
+                              sheet = "PSCIS Assessment Worksheet", 
+                              rowid_colnames = 4, 
+                              rowid_formulas = 5)
+    
+f2 <- f |> 
+  dplyr::mutate(
+    formula_name = formula_colname,
+    formula_name = stringr::str_replace_all(formula_name, "stream_width_ratio", "swr"),
+    formula_name = stringr::str_replace_all(formula_name, "culvert_length", "culvert_len"),
+    formula_name = stringr::str_replace_all(formula_name, "culvert_", "cv_"),
+    formula_name = 
+      dplyr::case_when(
+        stringr::str_detect(formula_name, "_score$") ~ 
+          stringr::str_c("fpr_xfm_paw_score_", stringr::str_remove(formula_name, "_score$")),
+        TRUE ~ 
+          stringr::str_c("fpr_xfm_paw_", formula_name)
+      ),
+    url = paste0("https://www.newgraphenvironment.com/fpr/reference/", formula_name, ".html")
+  )
+
+f2 |> 
+ knitr::kable(
+ )
+
+# Add Markdown checkboxes
+f3 <- f2 |> 
+  dplyr::mutate(
+    formula_with_checkbox = stringr::str_c("- [ ] ", formula_name)
+  )
+
+# Print the list of checkboxes
+cat(f3$formula_with_checkbox, sep = "\n")
+
+
+```
+
+
+```{reprex, as.is = TRUE}
+# Add Markdown checkboxes
+f3 <- f2 |> 
+  dplyr::mutate(
+    formula_with_checkbox = stringr::str_c("- [ ] ", formula_name)
+  )
+
+# Print the list of checkboxes
+cat(f3$formula_with_checkbox, sep = "\n")
+```
+
