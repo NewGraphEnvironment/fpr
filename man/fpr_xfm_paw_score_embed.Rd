@@ -21,7 +21,7 @@ fpr_xfm_paw_score_embed(
 \item{col_average_depth_embededdment_meters}{Column name for average depth of embedment, as a string or tidy-select syntax. Default is `average_depth_embededdment_meters`.}
 }
 \value{
-A dataframe with `embedment_score` column added or updated.
+A dataframe with `embed_score` column added or updated.
 }
 \description{
 This function calculates the embedment score for PSCIS data based on conditions involving continuous embedment, pipe diameter, and average depth of embedment.

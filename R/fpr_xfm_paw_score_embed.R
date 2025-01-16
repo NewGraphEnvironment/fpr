@@ -7,7 +7,7 @@
 #' @param col_diameter_or_span_meters Column name for diameter or span, as a string or tidy-select syntax. Default is `diameter_or_span_meters`.
 #' @param col_average_depth_embededdment_meters Column name for average depth of embedment, as a string or tidy-select syntax. Default is `average_depth_embededdment_meters`.
 #'
-#' @return A dataframe with `embedment_score` column added or updated.
+#' @return A dataframe with `embed_score` column added or updated.
 #'
 #' @examples
 #' dat <- data.frame(
@@ -52,7 +52,7 @@ fpr_xfm_paw_score_embed <- function(
   # Calculate embedment_score
   dat <- dat |>
     dplyr::mutate(
-      embedment_score = dplyr::case_when(
+      embed_score = dplyr::case_when(
         !!col_continuous_embeddedment_yes_no == "No" ~ 10,
         is.na(!!col_diameter_or_span_meters) ~ 0,
         is.na(!!col_average_depth_embededdment_meters) ~ 0,
