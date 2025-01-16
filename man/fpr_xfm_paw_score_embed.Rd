@@ -8,20 +8,32 @@ fpr_xfm_paw_score_embed(
   dat,
   col_continuous_embeddedment_yes_no = continuous_embeddedment_yes_no,
   col_diameter_or_span_meters = diameter_or_span_meters,
-  col_average_depth_embededdment_meters = average_depth_embededdment_meters
+  col_average_depth_embededdment_meters = average_depth_embededdment_meters,
+  col_embed_score = embed_score,
+  risk_high = 10,
+  risk_mod = 5,
+  risk_low = 0
 )
 }
 \arguments{
-\item{dat}{A dataframe containing the PSCIS data.}
+\item{dat}{[dataframe] A dataframe containing the PSCIS data.}
 
-\item{col_continuous_embeddedment_yes_no}{Column name for continuous embedment ("Yes" or "No"), as a string or tidy-select syntax. Default is `continuous_embeddedment_yes_no`.}
+\item{col_continuous_embeddedment_yes_no}{[character] A column name specifying continuous embedment ("Yes" or "No"), as a string or tidy-select syntax. Default is `continuous_embeddedment_yes_no`.}
 
-\item{col_diameter_or_span_meters}{Column name for diameter or span, as a string or tidy-select syntax. Default is `diameter_or_span_meters`.}
+\item{col_diameter_or_span_meters}{[character] A column name specifying the diameter or span, as a string or tidy-select syntax. Default is `diameter_or_span_meters`.}
 
-\item{col_average_depth_embededdment_meters}{Column name for average depth of embedment, as a string or tidy-select syntax. Default is `average_depth_embededdment_meters`.}
+\item{col_average_depth_embededdment_meters}{[character] A column name specifying the average depth of embedment, as a string or tidy-select syntax. Default is `average_depth_embededdment_meters`.}
+
+\item{col_embed_score}{[character] A column name for the output embedment score, as a string or tidy-select syntax. Default is `embed_score`.}
+
+\item{risk_high}{[numeric] A numeric value representing the risk score for non-continuous embedment. Default is `10`, aligning with the Pisces assessment worksheet.}
+
+\item{risk_mod}{[numeric] A numeric value representing the risk score for moderate embedment conditions. Default is `5`, aligning with the Pisces assessment worksheet.}
+
+\item{risk_low}{[numeric] A numeric value representing the risk score for low-risk embedment conditions. Default is `0`, aligning with the Pisces assessment worksheet.}
 }
 \value{
-A dataframe with `embed_score` column added or updated.
+[dataframe] A dataframe with the specified column for embedment score added or updated.
 }
 \description{
 This function calculates the embedment score for PSCIS data based on conditions involving continuous embedment, pipe diameter, and average depth of embedment.
@@ -40,6 +52,7 @@ fpr_xfm_paw_score_embed(
 \seealso{
 Other xfm paw: 
 \code{\link{fpr_xfm_paw_score_cv_len}()},
+\code{\link{fpr_xfm_paw_score_outlet_drop}()},
 \code{\link{fpr_xfm_paw_swr}()}
 }
 \concept{xfm paw}
