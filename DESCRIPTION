@@ -6,7 +6,7 @@ Authors@R: c(person("Allan", "Irvine", email = "al@newgraphenvironment.com", rol
 Maintainer: <al@newgraphenvironment.com>
 Description: Functions used in Fish Passage Reporting. 
 License: MIT + file LICENSE
-URL: https://github.com/NewGraphEnvironment/fpr, http://www.newgraphenvironment.com/fpr/
+URL: https://github.com/NewGraphEnvironment/fpr
 Encoding: UTF-8
 RoxygenNote: 7.3.1
 BugReports: https://github.com/NewGraphEnvironment/fpr/issues

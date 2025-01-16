@@ -16,10 +16,6 @@
 #' @importFrom dplyr mutate case_when
 #' @importFrom cli cli_abort
 #' @importFrom chk chk_data
-#' @seealso
-#' [fpr_xfm_paw_swr()], [fpr_xfm_paw_score_cv_len()], [fpr_xfm_paw_score_embed()],
-#' [fpr_xfm_paw_score_outlet_drop()], [fpr_xfm_paw_score_cv_slope()],
-#' [fpr_xfm_paw_score_swr()], [fpr_xfm_paw_score_final()], [fpr_xfm_paw_barrier_result()]
 #'
 #' @family xfm paw
 #' @export

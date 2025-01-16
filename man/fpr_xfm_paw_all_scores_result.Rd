@@ -24,10 +24,6 @@ head(result[, grep("score|barrier", names(result), ignore.case = TRUE)])
 
 }
 \seealso{
-[fpr_xfm_paw_swr()], [fpr_xfm_paw_score_cv_len()], [fpr_xfm_paw_score_embed()],
-[fpr_xfm_paw_score_outlet_drop()], [fpr_xfm_paw_score_cv_slope()],
-[fpr_xfm_paw_score_swr()], [fpr_xfm_paw_score_final()], [fpr_xfm_paw_barrier_result()]
-
 Other xfm paw: 
 \code{\link{fpr_xfm_paw_barrier_result}()},
 \code{\link{fpr_xfm_paw_score_cv_len}()},
