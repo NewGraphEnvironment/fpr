@@ -33,7 +33,7 @@ fpr_xfm_paw_score_final(
 [dataframe] A dataframe with the specified column for the final score added or updated.
 }
 \description{
-This function calculates the final score for BC Provincial Stream Crossing Inventory System data by summing specified score columns.
+This function calculates the final score for BC Provincial Stream Crossing Inventory System (PSCIS) data by summing specified score columns.
 }
 \examples{
 dat <- data.frame(
@@ -50,6 +50,7 @@ fpr_xfm_paw_score_final(
 }
 \seealso{
 Other xfm paw: 
+\code{\link{fpr_xfm_paw_all_scores_result}()},
 \code{\link{fpr_xfm_paw_barrier_result}()},
 \code{\link{fpr_xfm_paw_score_cv_len}()},
 \code{\link{fpr_xfm_paw_score_cv_slope}()},

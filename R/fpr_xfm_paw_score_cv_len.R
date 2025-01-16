@@ -1,6 +1,6 @@
 #' Transform PSCIS Assessment Worksheet Data by Calculating Culvert Length Score
 #'
-#' This function calculates the culvert length score for PSCIS data based on the given length or width column.
+#' This function calculates the culvert length score for BC Provincial Stream Crossing Inventory System (PSCIS) data based on the given length or width column.
 #'
 #' @param dat A dataframe containing the PSCIS data.
 #' @param col_length_or_width_meters Column name for length or width, as a string or tidy-select syntax. Default is `length_or_width_meters`.

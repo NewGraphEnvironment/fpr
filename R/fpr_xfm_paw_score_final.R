@@ -1,6 +1,6 @@
 #' Transform PSCIS Assessment Worksheet Data by Calculating Final Score
 #'
-#' This function calculates the final score for BC Provincial Stream Crossing Inventory System data by summing specified score columns.
+#' This function calculates the final score for BC Provincial Stream Crossing Inventory System (PSCIS) data by summing specified score columns.
 #'
 #' @param dat [dataframe] A dataframe containing the score data.
 #' @param col_final_score [character] A column name for the final score output, as a string or tidy-select syntax. Default is `final_score`.

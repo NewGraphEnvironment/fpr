@@ -36,7 +36,7 @@ fpr_xfm_paw_score_embed(
 [dataframe] A dataframe with the specified column for embedment score added or updated.
 }
 \description{
-This function calculates the embedment score for PSCIS data based on conditions involving continuous embedment, pipe diameter, and average depth of embedment.
+This function calculates the embedment score for BC Provincial Stream Crossing Inventory System (PSCIS) data based on conditions involving continuous embedment, pipe diameter, and average depth of embedment.
 }
 \examples{
 dat <- data.frame(
@@ -51,6 +51,7 @@ fpr_xfm_paw_score_embed(
 }
 \seealso{
 Other xfm paw: 
+\code{\link{fpr_xfm_paw_all_scores_result}()},
 \code{\link{fpr_xfm_paw_barrier_result}()},
 \code{\link{fpr_xfm_paw_score_cv_len}()},
 \code{\link{fpr_xfm_paw_score_cv_slope}()},

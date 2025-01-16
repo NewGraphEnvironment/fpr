@@ -36,7 +36,7 @@ fpr_xfm_paw_score_cv_slope(
 [dataframe] A dataframe with the specified column for culvert slope score added or updated.
 }
 \description{
-This function calculates the culvert slope score for PSCIS data based on conditions involving culvert slope percent.
+This function calculates the culvert slope score for BC Provincial Stream Crossing Inventory System (PSCIS) data based on conditions involving culvert slope percent.
 }
 \examples{
 dat <- data.frame(
@@ -49,6 +49,7 @@ fpr_xfm_paw_score_cv_slope(
 }
 \seealso{
 Other xfm paw: 
+\code{\link{fpr_xfm_paw_all_scores_result}()},
 \code{\link{fpr_xfm_paw_barrier_result}()},
 \code{\link{fpr_xfm_paw_score_cv_len}()},
 \code{\link{fpr_xfm_paw_score_embed}()},

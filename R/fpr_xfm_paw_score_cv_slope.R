@@ -1,6 +1,6 @@
 #' Transform PSCIS Assessment Worksheet Data by Calculating Culvert Slope Score
 #'
-#' This function calculates the culvert slope score for PSCIS data based on conditions involving culvert slope percent.
+#' This function calculates the culvert slope score for BC Provincial Stream Crossing Inventory System (PSCIS) data based on conditions involving culvert slope percent.
 #'
 #' @param dat [dataframe] A dataframe containing the PSCIS data.
 #' @param col_culvert_slope_percent [character] A column name specifying the culvert slope percent, as a string or tidy-select syntax. Default is `culvert_slope_percent`.

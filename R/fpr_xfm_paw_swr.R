@@ -1,6 +1,7 @@
 #' Transform PSCIS Assessment Worksheet Data by Calculating Stream Width Ratio
 #'
-#' This function calculates the stream width ratio (SWR) for PSCIS data based on the ratio of two specified columns: one for downstream channel width and one for diameter or span.
+#' This function calculates the stream width ratio (SWR) for C Provincial Stream Crossing Inventory System (PSCIS) data
+#' based on the ratio of two specified columns: one for downstream channel width and one for diameter or span.
 #'
 #' @param dat A dataframe containing the PSCIS data.
 #' @param col_downstream_channel_width_meters Column name for downstream channel width, as a string or tidy-select syntax. Default is `downstream_channel_width_meters`.

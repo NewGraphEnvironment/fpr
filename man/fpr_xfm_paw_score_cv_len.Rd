@@ -18,7 +18,7 @@ fpr_xfm_paw_score_cv_len(
 A dataframe with `culvert_length_score` column added or updated.
 }
 \description{
-This function calculates the culvert length score for PSCIS data based on the given length or width column.
+This function calculates the culvert length score for BC Provincial Stream Crossing Inventory System (PSCIS) data based on the given length or width column.
 }
 \examples{
 dat <- data.frame(
@@ -32,6 +32,7 @@ fpr_xfm_culvert_length_score(
 }
 \seealso{
 Other xfm paw: 
+\code{\link{fpr_xfm_paw_all_scores_result}()},
 \code{\link{fpr_xfm_paw_barrier_result}()},
 \code{\link{fpr_xfm_paw_score_cv_slope}()},
 \code{\link{fpr_xfm_paw_score_embed}()},

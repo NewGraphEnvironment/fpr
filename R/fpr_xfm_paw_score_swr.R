@@ -1,6 +1,6 @@
 #' Transform PSCIS Assessment Worksheet Data by Calculating Stream Width Ratio Score
 #'
-#' This function calculates the stream width ratio (SWR) score for PSCIS data based on specified thresholds.
+#' This function calculates the stream width ratio (SWR) score for BC Provincial Stream Crossing Inventory System (PSCIS) data based on specified thresholds.
 #'
 #' @param dat [dataframe] A dataframe containing the PSCIS data.
 #' @param col_stream_width_ratio [character] A column name specifying the stream width ratio, as a string or tidy-select syntax. Default is `stream_width_ratio`.

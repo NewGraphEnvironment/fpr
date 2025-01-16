@@ -1,6 +1,6 @@
 #' Transform PSCIS Assessment Worksheet Data by Calculating Embedment Score
 #'
-#' This function calculates the embedment score for PSCIS data based on conditions involving continuous embedment, pipe diameter, and average depth of embedment.
+#' This function calculates the embedment score for BC Provincial Stream Crossing Inventory System (PSCIS) data based on conditions involving continuous embedment, pipe diameter, and average depth of embedment.
 #'
 #' @param dat [dataframe] A dataframe containing the PSCIS data.
 #' @param col_continuous_embeddedment_yes_no [character] A column name specifying continuous embedment ("Yes" or "No"), as a string or tidy-select syntax. Default is `continuous_embeddedment_yes_no`.

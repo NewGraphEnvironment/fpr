@@ -8,7 +8,7 @@ fpr_xfm_paw_swr(
   dat,
   col_downstream_channel_width_meters = downstream_channel_width_meters,
   col_diameter_or_span_meters = diameter_or_span_meters,
-  digits = 1
+  digits = 2
 )
 }
 \arguments{
@@ -24,7 +24,8 @@ fpr_xfm_paw_swr(
 A dataframe with `stream_width_ratio` column added or updated.
 }
 \description{
-This function calculates the stream width ratio (SWR) for PSCIS data based on the ratio of two specified columns: one for downstream channel width and one for diameter or span.
+This function calculates the stream width ratio (SWR) for C Provincial Stream Crossing Inventory System (PSCIS) data
+based on the ratio of two specified columns: one for downstream channel width and one for diameter or span.
 }
 \examples{
 dat <- data.frame(
@@ -40,6 +41,7 @@ fpr_xfm_paw_score_swr(
 }
 \seealso{
 Other xfm paw: 
+\code{\link{fpr_xfm_paw_all_scores_result}()},
 \code{\link{fpr_xfm_paw_barrier_result}()},
 \code{\link{fpr_xfm_paw_score_cv_len}()},
 \code{\link{fpr_xfm_paw_score_cv_slope}()},

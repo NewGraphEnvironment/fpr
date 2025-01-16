@@ -36,7 +36,7 @@ fpr_xfm_paw_score_swr(
 [dataframe] A dataframe with the specified column for SWR score added or updated.
 }
 \description{
-This function calculates the stream width ratio (SWR) score for PSCIS data based on specified thresholds.
+This function calculates the stream width ratio (SWR) score for BC Provincial Stream Crossing Inventory System (PSCIS) data based on specified thresholds.
 }
 \examples{
 dat <- data.frame(
