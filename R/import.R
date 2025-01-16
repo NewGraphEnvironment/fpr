@@ -67,8 +67,8 @@ fpr_import_pscis <- function(workbook_name = 'pscis_phase1.xlsm', ##new template
   chk::chk_file(paste0(dir_root, "/", workbook_name))
 
   sig_fig0 <- c('length_or_width_meters')
-  sig_fig1 <- c('culvert_slope_percent', 'stream_width_ratio')
-  sig_fig2 <- c('outlet_drop_meters')
+  sig_fig1 <- c('culvert_slope_percent')
+  sig_fig2 <- c('outlet_drop_meters', 'stream_width_ratio')
   readxl::read_excel(path = paste0(dir_root, "/", workbook_name),
                      sheet = 'PSCIS Assessment Worksheet',
                      skip = 3,
