@@ -49,8 +49,10 @@ fpr_xfm_paw_score_cv_slope(
 }
 \seealso{
 Other xfm paw: 
+\code{\link{fpr_xfm_paw_barrier_result}()},
 \code{\link{fpr_xfm_paw_score_cv_len}()},
 \code{\link{fpr_xfm_paw_score_embed}()},
+\code{\link{fpr_xfm_paw_score_final}()},
 \code{\link{fpr_xfm_paw_score_outlet_drop}()},
 \code{\link{fpr_xfm_paw_score_swr}()},
 \code{\link{fpr_xfm_paw_swr}()}

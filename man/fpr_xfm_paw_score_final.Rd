@@ -50,6 +50,7 @@ fpr_xfm_paw_score_final(
 }
 \seealso{
 Other xfm paw: 
+\code{\link{fpr_xfm_paw_barrier_result}()},
 \code{\link{fpr_xfm_paw_score_cv_len}()},
 \code{\link{fpr_xfm_paw_score_cv_slope}()},
 \code{\link{fpr_xfm_paw_score_embed}()},
