@@ -28,7 +28,7 @@ fpr_xfm_paw_swr <- function(
     dat,
     col_downstream_channel_width_meters = downstream_channel_width_meters,
     col_diameter_or_span_meters = diameter_or_span_meters,
-    digits = 1
+    digits = 2
 ) {
   # Check input validity
   chk::chk_data(dat)
