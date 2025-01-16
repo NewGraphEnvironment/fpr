@@ -1,14 +1,14 @@
 #' Transform PSCIS Assessment Worksheet Data by Calculating Stream Width Ratio
 #'
-#' This function calculates the stream width ratio (SWR) for C Provincial Stream Crossing Inventory System (PSCIS) data
-#' based on the ratio of two specified columns: one for downstream channel width and one for diameter or span.
+#' This function calculates the stream width ratio (SWR) for PSCIS data based on the ratio of two specified columns: one for downstream channel width and one for diameter or span.
 #'
-#' @param dat A dataframe containing the PSCIS data.
-#' @param col_downstream_channel_width_meters Column name for downstream channel width, as a string or tidy-select syntax. Default is `downstream_channel_width_meters`.
-#' @param col_diameter_or_span_meters Column name for diameter or span, as a string or tidy-select syntax. Default is `diameter_or_span_meters`.
-#' @param digits Passed to `[round()]` function to specify the number of decimal places in the output. The default value is `1`.
+#' @param dat [data.frame] A dataframe containing the PSCIS data.
+#' @param col_downstream_channel_width_meters [character] Column name for downstream channel width, as a string or tidy-select syntax. Default is `downstream_channel_width_meters`.
+#' @param col_diameter_or_span_meters [character] Column name for diameter or span, as a string or tidy-select syntax. Default is `diameter_or_span_meters`.
+#' @param col_stream_width_ratio [character] Column name for the output stream width ratio, as a string. Default is `stream_width_ratio`.
+#' @param digits [numeric] Passed to `[round()]` function to specify the number of decimal places in the output. The default value is `2`.
 #'
-#' @return A dataframe with `stream_width_ratio` column added or updated.
+#' @return [data.frame] A dataframe with the specified `col_stream_width_ratio` column added or updated.
 #'
 #' @examples
 #' dat <- data.frame(
@@ -29,6 +29,7 @@ fpr_xfm_paw_swr <- function(
     dat,
     col_downstream_channel_width_meters = downstream_channel_width_meters,
     col_diameter_or_span_meters = diameter_or_span_meters,
+    col_stream_width_ratio = stream_width_ratio,
     digits = 2
 ) {
   # Check input validity
@@ -37,6 +38,7 @@ fpr_xfm_paw_swr <- function(
   # Evaluate tidy-select columns
   col_downstream_channel_width_meters <- rlang::ensym(col_downstream_channel_width_meters)
   col_diameter_or_span_meters <- rlang::ensym(col_diameter_or_span_meters)
+  col_stream_width_ratio <- rlang::ensym(col_stream_width_ratio)
 
   # Check if required columns exist in the dataframe
   required_cols <- c(as.character(col_downstream_channel_width_meters), as.character(col_diameter_or_span_meters))
@@ -49,7 +51,7 @@ fpr_xfm_paw_swr <- function(
   # Calculate stream_width_ratio
   dat <- dat |>
     dplyr::mutate(
-      stream_width_ratio = dplyr::case_when(
+      !!col_stream_width_ratio := dplyr::case_when(
         is.na(!!col_downstream_channel_width_meters) ~ 0,
         is.na(!!col_diameter_or_span_meters) | !!col_diameter_or_span_meters <= 0 ~ 0,
         TRUE ~ round((!!col_downstream_channel_width_meters / !!col_diameter_or_span_meters), digits)
