@@ -96,4 +96,14 @@ test_that("fpr_xfm_paw_score_swr calculates stream_width_ratio correctly", {
   expect_true(all(result$chk_score == 0))
 })
 
+test_that("fpr_xfm_paw_score_final calculates stream_width_ratio correctly", {
+  result <- result_prep |>
+    fpr_xfm_paw_score_final(col_final_score = final_score_fpr) |>
+    dplyr::mutate(
+      chk_score = final_score_fpr - final_score
+    )
+  # Check if all calculated values match expected `swr`
+  expect_true(all(result$chk_score == 0))
+})
+
 
