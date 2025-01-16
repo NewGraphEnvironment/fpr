@@ -1,10 +1,5 @@
-path <- system.file("extdata", "pscis_phase1.xlsm", package = "fpr")
+# path <- system.file("extdata", "pscis_phase1.xlsm", package = "fpr")
 
-# dat <- fpr_import_pscis(dir_root = fs::path_dir(path))
-#
-# result <- fpr_xfm_paw_all_scores_result(dat)
-#
-# head(result[, grep("score|barrier", names(result), ignore.case = TRUE)])
 
 paths <- c(
   "~/Projects/repo/fpr/inst/extdata/pscis_phase1.xlsm",
@@ -22,35 +17,16 @@ xl_raw <- paths |>
   ) |>
   dplyr::bind_rows()
 
-
-result_prep <- xl_raw |>
-  dplyr::mutate(
-    stream_width_ratio_raw = stream_width_ratio,
-    culvert_length_score_raw = culvert_length_score,
-  )
-
-result <- result_prep |>
-  fpr_xfm_paw_score_cv_len() |>
-  fpr_xfm_paw_swr() |>
-  fpr_xfm_paw_score_embed(col_embed_score = "col_embed_score_r") |>
-  dplyr::mutate(
-    chk_stream_width_ratio = stream_width_ratio_raw - stream_width_ratio,
-    chk_culvert_length_score = culvert_length_score_raw - culvert_length_score,
-    chk_embed_score = col_embed_score_r - embed_score
-  )
-
-
 test_that("fpr_xfm_paw_score_cv_len calculates correctly", {
-
+  result <- xl_raw |>
+    fpr_xfm_paw_score_cv_len(col_culvert_length_score = "culvert_length_score_fpr") |>
+    dplyr::mutate(
+      chk_score = culvert_length_score_fpr - culvert_length_score
+    )
   # Check if all calculated values match expected `swr`
-  expect_true(all(result$chk_culvert_length_score == 0))
+  expect_true(all(result$chk_score == 0))
 })
 
-test_that("fpr_xfm_paw_swr calculates correctly", {
-
-  # Check if all calculated values match expected `swr`
-  expect_true(all(result$chk_stream_width_ratio == 0))
-})
 
 test_that("fpr_xfm_paw_swr throws an error for missing required columns", {
   dat_no_col <- xl_raw |>
@@ -62,18 +38,29 @@ test_that("fpr_xfm_paw_swr throws an error for missing required columns", {
   )
 })
 
-test_that("fpr_xfm_paw_score_embed calculates correctly", {
-  result <- result_prep |>
-    fpr_xfm_paw_score_embed(col_embed_score = "col_embed_score_fpr") |>
+
+test_that("fpr_xfm_paw_swr calculates correctly", {
+  result <- xl_raw |>
+    fpr_xfm_paw_swr(col_stream_width_ratio = "stream_width_ratio_fpr") |>
     dplyr::mutate(
-      chk_score = col_embed_score_fpr - embed_score
+      chk_score = stream_width_ratio_fpr - stream_width_ratio
+    )
+  # Check if all calculated values match expected `swr`
+  expect_true(all(result$chk_score == 0))
+})
+
+test_that("fpr_xfm_paw_score_embed calculates correctly", {
+  result <- xl_raw |>
+    fpr_xfm_paw_score_embed(col_embed_score = "embed_score_fpr") |>
+    dplyr::mutate(
+      chk_score = embed_score_fpr - embed_score
     )
   # Check if all calculated values match expected `swr`
   expect_true(all(result$chk_score == 0))
 })
 
 test_that("fpr_xfm_paw_score_outlet_drop calculates correctly", {
-  result <- result_prep |>
+  result <- xl_raw |>
     fpr_xfm_paw_score_outlet_drop(col_outlet_drop_score = outlet_drop_score_fpr) |>
     dplyr::mutate(
       chk_score = outlet_drop_score_fpr - outlet_drop_score
@@ -83,7 +70,7 @@ test_that("fpr_xfm_paw_score_outlet_drop calculates correctly", {
 })
 
 test_that("fpr_xfm_paw_score_cv_slope calculates correctly", {
-  result <- result_prep |>
+  result <- xl_raw |>
     fpr_xfm_paw_score_cv_slope(col_culvert_slope_score = culvert_slope_score_fpr) |>
     dplyr::mutate(
       chk_score = culvert_slope_score_fpr - culvert_slope_score
@@ -93,7 +80,7 @@ test_that("fpr_xfm_paw_score_cv_slope calculates correctly", {
 })
 
 test_that("fpr_xfm_paw_score_swr calculates correctly", {
-  result <- result_prep |>
+  result <- xl_raw |>
     fpr_xfm_paw_score_swr(col_stream_width_ratio_score = stream_width_ratio_score_fpr) |>
     dplyr::mutate(
       chk_score = stream_width_ratio_score_fpr - stream_width_ratio_score
@@ -103,7 +90,7 @@ test_that("fpr_xfm_paw_score_swr calculates correctly", {
 })
 
 test_that("fpr_xfm_paw_score_final calculates correctly", {
-  result <- result_prep |>
+  result <- xl_raw |>
     fpr_xfm_paw_score_final(col_final_score = final_score_fpr) |>
     dplyr::mutate(
       chk_score = final_score_fpr - final_score
@@ -113,7 +100,7 @@ test_that("fpr_xfm_paw_score_final calculates correctly", {
 })
 
 test_that("fpr_xfm_paw_barrier_result calculates correctly", {
-  result <- result_prep |>
+  result <- xl_raw |>
     fpr_xfm_paw_barrier_result(col_barrier_result = barrier_result_fpr) |>
     dplyr::mutate(
       chk_score = barrier_result_fpr == barrier_result
