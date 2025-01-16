@@ -1,4 +1,10 @@
-# path <- system.file("extdata", "pscis_phase1.xlsm", package = "fpr")
+path <- system.file("extdata", "pscis_phase1.xlsm", package = "fpr")
+
+# dat <- fpr_import_pscis(dir_root = fs::path_dir(path))
+#
+# result <- fpr_xfm_paw_all_scores_result(dat)
+#
+# head(result[, grep("score|barrier", names(result), ignore.case = TRUE)])
 
 paths <- c(
   "~/Projects/repo/fpr/inst/extdata/pscis_phase1.xlsm",
@@ -34,13 +40,13 @@ result <- result_prep |>
   )
 
 
-test_that("fpr_xfm_paw_score_cv_len calculates stream_width_ratio correctly", {
+test_that("fpr_xfm_paw_score_cv_len calculates correctly", {
 
   # Check if all calculated values match expected `swr`
   expect_true(all(result$chk_culvert_length_score == 0))
 })
 
-test_that("fpr_xfm_paw_swr calculates stream_width_ratio correctly", {
+test_that("fpr_xfm_paw_swr calculates correctly", {
 
   # Check if all calculated values match expected `swr`
   expect_true(all(result$chk_stream_width_ratio == 0))
@@ -56,7 +62,7 @@ test_that("fpr_xfm_paw_swr throws an error for missing required columns", {
   )
 })
 
-test_that("fpr_xfm_paw_score_embed calculates stream_width_ratio correctly", {
+test_that("fpr_xfm_paw_score_embed calculates correctly", {
   result <- result_prep |>
     fpr_xfm_paw_score_embed(col_embed_score = "col_embed_score_fpr") |>
     dplyr::mutate(
@@ -66,7 +72,7 @@ test_that("fpr_xfm_paw_score_embed calculates stream_width_ratio correctly", {
   expect_true(all(result$chk_score == 0))
 })
 
-test_that("fpr_xfm_paw_score_outlet_drop calculates stream_width_ratio correctly", {
+test_that("fpr_xfm_paw_score_outlet_drop calculates correctly", {
   result <- result_prep |>
     fpr_xfm_paw_score_outlet_drop(col_outlet_drop_score = outlet_drop_score_fpr) |>
     dplyr::mutate(
@@ -76,7 +82,7 @@ test_that("fpr_xfm_paw_score_outlet_drop calculates stream_width_ratio correctly
   expect_true(all(result$chk_score == 0))
 })
 
-test_that("fpr_xfm_paw_score_cv_slope calculates stream_width_ratio correctly", {
+test_that("fpr_xfm_paw_score_cv_slope calculates correctly", {
   result <- result_prep |>
     fpr_xfm_paw_score_cv_slope(col_culvert_slope_score = culvert_slope_score_fpr) |>
     dplyr::mutate(
@@ -86,7 +92,7 @@ test_that("fpr_xfm_paw_score_cv_slope calculates stream_width_ratio correctly", 
   expect_true(all(result$chk_score == 0))
 })
 
-test_that("fpr_xfm_paw_score_swr calculates stream_width_ratio correctly", {
+test_that("fpr_xfm_paw_score_swr calculates correctly", {
   result <- result_prep |>
     fpr_xfm_paw_score_swr(col_stream_width_ratio_score = stream_width_ratio_score_fpr) |>
     dplyr::mutate(
@@ -96,7 +102,7 @@ test_that("fpr_xfm_paw_score_swr calculates stream_width_ratio correctly", {
   expect_true(all(result$chk_score == 0))
 })
 
-test_that("fpr_xfm_paw_score_final calculates stream_width_ratio correctly", {
+test_that("fpr_xfm_paw_score_final calculates correctly", {
   result <- result_prep |>
     fpr_xfm_paw_score_final(col_final_score = final_score_fpr) |>
     dplyr::mutate(
@@ -106,7 +112,7 @@ test_that("fpr_xfm_paw_score_final calculates stream_width_ratio correctly", {
   expect_true(all(result$chk_score == 0))
 })
 
-test_that("fpr_xfm_paw_barrier_result calculates stream_width_ratio correctly", {
+test_that("fpr_xfm_paw_barrier_result calculates correctly", {
   result <- result_prep |>
     fpr_xfm_paw_barrier_result(col_barrier_result = barrier_result_fpr) |>
     dplyr::mutate(
@@ -116,4 +122,28 @@ test_that("fpr_xfm_paw_barrier_result calculates stream_width_ratio correctly", 
   expect_true(all(result$chk_score == TRUE))
 })
 
+test_that("fpr_xfm_paw_all_scores_result calculates stream_width_ratio columns correctly", {
+  result <- xl_raw |>
+    dplyr::select(-dplyr::contains(c("score", "barrier", "stream_width_ratio"))) |>
+    fpr_xfm_paw_all_scores_result()
+  # Check if all calculated values match expected `swr`
+  expect_equal(sort(names(xl_raw)), sort(names(result)))
+})
+
+test_that("fpr_xfm_paw_all_scores_result maintains values for removed columns", {
+  # Remove columns from original data and apply transformation
+  result <- xl_raw |>
+    dplyr::select(-dplyr::contains(c("score", "barrier", "stream_width_ratio"))) |>
+    fpr_xfm_paw_all_scores_result()
+
+  # Extract columns of interest from both original and result
+  original_cols <- xl_raw |>
+    dplyr::select(dplyr::contains(c("score", "barrier", "stream_width_ratio")))
+
+  result_cols <- result |>
+    dplyr::select(dplyr::contains(c("score", "barrier", "stream_width_ratio")))
+
+  # Check if the column values are identical
+  expect_equal(original_cols, result_cols)
+})
 
