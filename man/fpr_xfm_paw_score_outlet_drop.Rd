@@ -50,7 +50,9 @@ fpr_xfm_paw_score_outlet_drop(
 \seealso{
 Other xfm paw: 
 \code{\link{fpr_xfm_paw_score_cv_len}()},
+\code{\link{fpr_xfm_paw_score_cv_slope}()},
 \code{\link{fpr_xfm_paw_score_embed}()},
+\code{\link{fpr_xfm_paw_score_swr}()},
 \code{\link{fpr_xfm_paw_swr}()}
 }
 \concept{xfm paw}

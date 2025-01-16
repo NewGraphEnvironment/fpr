@@ -55,38 +55,61 @@
 <span>  <span class="va">dat</span>,</span>
 <span>  col_continuous_embeddedment_yes_no <span class="op">=</span> <span class="va">continuous_embeddedment_yes_no</span>,</span>
 <span>  col_diameter_or_span_meters <span class="op">=</span> <span class="va">diameter_or_span_meters</span>,</span>
-<span>  col_average_depth_embededdment_meters <span class="op">=</span> <span class="va">average_depth_embededdment_meters</span></span>
+<span>  col_average_depth_embededdment_meters <span class="op">=</span> <span class="va">average_depth_embededdment_meters</span>,</span>
+<span>  col_embed_score <span class="op">=</span> <span class="va">embed_score</span>,</span>
+<span>  risk_high <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  risk_mod <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  risk_low <span class="op">=</span> <span class="fl">0</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>dat</dt>
-<dd><p>A dataframe containing the PSCIS data.</p></dd>
+<dd><p>[dataframe] A dataframe containing the PSCIS data.</p></dd>
 
 
 <dt>col_continuous_embeddedment_yes_no</dt>
-<dd><p>Column name for continuous embedment ("Yes" or "No"), as a string or tidy-select syntax. Default is `continuous_embeddedment_yes_no`.</p></dd>
+<dd><p>[character] A column name specifying continuous embedment ("Yes" or "No"), as a string or tidy-select syntax. Default is `continuous_embeddedment_yes_no`.</p></dd>
 
 
 <dt>col_diameter_or_span_meters</dt>
-<dd><p>Column name for diameter or span, as a string or tidy-select syntax. Default is `diameter_or_span_meters`.</p></dd>
+<dd><p>[character] A column name specifying the diameter or span, as a string or tidy-select syntax. Default is `diameter_or_span_meters`.</p></dd>
 
 
 <dt>col_average_depth_embededdment_meters</dt>
-<dd><p>Column name for average depth of embedment, as a string or tidy-select syntax. Default is `average_depth_embededdment_meters`.</p></dd>
+<dd><p>[character] A column name specifying the average depth of embedment, as a string or tidy-select syntax. Default is `average_depth_embededdment_meters`.</p></dd>
+
+
+<dt>col_embed_score</dt>
+<dd><p>[character] A column name for the output embedment score, as a string or tidy-select syntax. Default is `embed_score`.</p></dd>
+
+
+<dt>risk_high</dt>
+<dd><p>[numeric] A numeric value representing the risk score for non-continuous embedment. Default is `10`, aligning with the Pisces assessment worksheet.</p></dd>
+
+
+<dt>risk_mod</dt>
+<dd><p>[numeric] A numeric value representing the risk score for moderate embedment conditions. Default is `5`, aligning with the Pisces assessment worksheet.</p></dd>
+
+
+<dt>risk_low</dt>
+<dd><p>[numeric] A numeric value representing the risk score for low-risk embedment conditions. Default is `0`, aligning with the Pisces assessment worksheet.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A dataframe with `embed_score` column added or updated.</p>
+<p>[dataframe] A dataframe with the specified column for embedment score added or updated.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other xfm paw: 
 <code><a href="fpr_xfm_paw_score_cv_len.html">fpr_xfm_paw_score_cv_len</a>()</code>,
+<code><a href="fpr_xfm_paw_score_cv_slope.html">fpr_xfm_paw_score_cv_slope</a>()</code>,
+<code><a href="fpr_xfm_paw_score_outlet_drop.html">fpr_xfm_paw_score_outlet_drop</a>()</code>,
+<code><a href="fpr_xfm_paw_score_swr.html">fpr_xfm_paw_score_swr</a>()</code>,
 <code><a href="fpr_xfm_paw_swr.html">fpr_xfm_paw_swr</a>()</code></p></div>
     </div>
 
