@@ -23,7 +23,6 @@ fpr_db_query(query = fpr_dbq_subset())
 \seealso{
 Other database postgres: 
 \code{\link{fpr_db_conn}()},
-\code{\link{fpr_dbq_clip}()},
 \code{\link{fpr_dbq_lscols}()},
 \code{\link{fpr_dbq_lstables}()},
 \code{\link{fpr_dbq_subset}()}

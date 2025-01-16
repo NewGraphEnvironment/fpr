@@ -24,7 +24,6 @@ List names of all columns in a postgres table
 Other database postgres: 
 \code{\link{fpr_db_conn}()},
 \code{\link{fpr_db_query}()},
-\code{\link{fpr_dbq_clip}()},
 \code{\link{fpr_dbq_lstables}()},
 \code{\link{fpr_dbq_subset}()}
 }

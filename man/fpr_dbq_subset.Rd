@@ -45,7 +45,6 @@ Build query to read in subset table from postgres database.
 Other database postgres: 
 \code{\link{fpr_db_conn}()},
 \code{\link{fpr_db_query}()},
-\code{\link{fpr_dbq_clip}()},
 \code{\link{fpr_dbq_lscols}()},
 \code{\link{fpr_dbq_lstables}()}
 }
