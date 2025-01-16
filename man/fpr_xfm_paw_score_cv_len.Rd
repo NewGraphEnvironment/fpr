@@ -32,6 +32,7 @@ fpr_xfm_culvert_length_score(
 }
 \seealso{
 Other xfm paw: 
+\code{\link{fpr_xfm_paw_score_embed}()},
 \code{\link{fpr_xfm_paw_swr}()}
 }
 \concept{xfm paw}
