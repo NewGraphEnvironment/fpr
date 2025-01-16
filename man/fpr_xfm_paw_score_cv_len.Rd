@@ -6,16 +6,34 @@
 \usage{
 fpr_xfm_paw_score_cv_len(
   dat,
-  col_length_or_width_meters = length_or_width_meters
+  col_length_or_width_meters = length_or_width_meters,
+  col_culvert_length_score = culvert_length_score,
+  risk_low_value = 15,
+  risk_high_value = 30,
+  risk_low_score = 0,
+  risk_mod_score = 3,
+  risk_high_score = 6
 )
 }
 \arguments{
-\item{dat}{A dataframe containing the PSCIS data.}
+\item{dat}{[dataframe] A dataframe containing the PSCIS data.}
 
-\item{col_length_or_width_meters}{Column name for length or width, as a string or tidy-select syntax. Default is `length_or_width_meters`.}
+\item{col_length_or_width_meters}{[character] Column name for length or width, as a string or tidy-select syntax. Default is `length_or_width_meters`.}
+
+\item{col_culvert_length_score}{[character] Column name for the culvert length score, as a string. Default is `culvert_length_score`.}
+
+\item{risk_low_value}{[numeric] A numeric value representing the lower threshold for culvert length risk. Default is `15`.}
+
+\item{risk_high_value}{[numeric] A numeric value representing the threshold for culvert length risk. Default is `30`.}
+
+\item{risk_low_score}{[numeric] A numeric value representing the low risk score. Default is `0`.}
+
+\item{risk_mod_score}{[numeric] A numeric value representing the moderate risk score. Default is `3`.}
+
+\item{risk_high_score}{[numeric] A numeric value representing the high risk score. Default is `6`.}
 }
 \value{
-A dataframe with `culvert_length_score` column added or updated.
+[dataframe] A dataframe with `culvert_length_score` column added or updated.
 }
 \description{
 This function calculates the culvert length score for BC Provincial Stream Crossing Inventory System (PSCIS) data based on the given length or width column.
