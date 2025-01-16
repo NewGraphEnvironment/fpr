@@ -21,22 +21,16 @@ result_prep <- xl_raw |>
   dplyr::mutate(
     stream_width_ratio_raw = stream_width_ratio,
     culvert_length_score_raw = culvert_length_score,
-    embed_score_raw = embed_score,
-    outlet_drop_score_raw = outlet_drop_score,
-    culvert_slope_score_raw = culvert_slope_score,
-    stream_width_ratio_score_raw = stream_width_ratio_score,
-    final_score_raw = final_score,
-    barrier_result_raw = barrier_result
   )
 
 result <- result_prep |>
   fpr_xfm_paw_score_cv_len() |>
   fpr_xfm_paw_swr() |>
-  fpr_xfm_paw_score_embed() |>
+  fpr_xfm_paw_score_embed(col_embed_score = "col_embed_score_r") |>
   dplyr::mutate(
     chk_stream_width_ratio = stream_width_ratio_raw - stream_width_ratio,
     chk_culvert_length_score = culvert_length_score_raw - culvert_length_score,
-    chk_embed_score = embed_score_raw - embed_score
+    chk_embed_score = col_embed_score_r - embed_score
   )
 
 
@@ -63,7 +57,43 @@ test_that("fpr_xfm_paw_swr throws an error for missing required columns", {
 })
 
 test_that("fpr_xfm_paw_score_embed calculates stream_width_ratio correctly", {
-
+  result <- result_prep |>
+    fpr_xfm_paw_score_embed(col_embed_score = "col_embed_score_fpr") |>
+    dplyr::mutate(
+      chk_score = col_embed_score_fpr - embed_score
+    )
   # Check if all calculated values match expected `swr`
-  expect_true(all(result$chk_embed_score == 0))
+  expect_true(all(result$chk_score == 0))
 })
+
+test_that("fpr_xfm_paw_score_outlet_drop calculates stream_width_ratio correctly", {
+  result <- result_prep |>
+    fpr_xfm_paw_score_outlet_drop(col_outlet_drop_score = outlet_drop_score_fpr) |>
+    dplyr::mutate(
+      chk_score = outlet_drop_score_fpr - outlet_drop_score
+    )
+  # Check if all calculated values match expected `swr`
+  expect_true(all(result$chk_score == 0))
+})
+
+test_that("fpr_xfm_paw_score_cv_slope calculates stream_width_ratio correctly", {
+  result <- result_prep |>
+    fpr_xfm_paw_score_cv_slope(col_culvert_slope_score = culvert_slope_score_fpr) |>
+    dplyr::mutate(
+      chk_score = culvert_slope_score_fpr - culvert_slope_score
+    )
+  # Check if all calculated values match expected `swr`
+  expect_true(all(result$chk_score == 0))
+})
+
+test_that("fpr_xfm_paw_score_swr calculates stream_width_ratio correctly", {
+  result <- result_prep |>
+    fpr_xfm_paw_score_swr(col_stream_width_ratio_score = stream_width_ratio_score_fpr) |>
+    dplyr::mutate(
+      chk_score = stream_width_ratio_score_fpr - stream_width_ratio_score
+    )
+  # Check if all calculated values match expected `swr`
+  expect_true(all(result$chk_score == 0))
+})
+
+
