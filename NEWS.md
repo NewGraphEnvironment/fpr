@@ -1,4 +1,5 @@
 # Development version
+- update `fpr_plot_fish_box()` to theme_bw to close [#35](https://github.com/NewGraphEnvironment/fpr/issues/35)
 - initial commit of `fpr_photo_qa2` that should catch all reserve photo name duplicates as per [#61](https://github.com/NewGraphEnvironment/fpr/issues/61)
 - add 4 photo tags to `fpr_photo_rename`
 - use `fs::dir_create` in `fpr_photo_folders`
