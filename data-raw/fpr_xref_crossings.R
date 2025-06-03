@@ -5,14 +5,13 @@
 
 
 #How this data can be made and updated-----------------------------------------------------------------------------------------------------
-# connect to the database
-conn <- fpr_db_conn()
 
 bcfishpass <- fpr_db_query(
   "SELECT * from bcfishpass.crossings_vw LIMIT 1;"
   )
 
-# comments_table should be `crossings_vw` but that has NO comments. crossings is incomplete but is example
+# comments_table should be `crossings_vw` but that has NO comments. crossings is incomplete but is example.  Basically
+# this workflow is broken as per https://github.com/NewGraphEnvironment/fish_passage_template_reporting/issues/1
 comments_table <- "crossings"
 
 bcfishpass_column_comments <- fpr_db_query(
@@ -39,6 +38,22 @@ bcfishpass_names_updated <- left_join(
 #this is how we line up our new column names and put things in order for reporting on the fish habitat modeling
 # we need to update this sometimes.  When we do we update 02_prep_reporting/0160-load-bcfishpass-data.R,
 # get the data from  rename the xref_bcfishpass_names tribble to xref_bcfishpass_names_old  and go through the following procedure
+
+
+# this is a one timer where we needed to add bt_spawning_km and bt_rearing_km
+xref_bcfishpass_names_old <- fpr_xref_crossings() |>
+  # add bt_spawning_km and bt_rearing_km with tibble
+  dplyr::bind_rows(
+    tibble::tribble(
+      ~bcfishpass, ~report, ~id_join, ~id_side, ~column_comment,
+      "bt_spawning_km", "BT Spawning (km)", NA, NA, "Length of stream upstream of point modelled as potential bull trout spawning habitat",
+      "bt_rearing_km", "BT Rearing (km)", NA, NA, "Length of stream upstream of point modelled as potential bull trout rearing habitat",
+      "bt_spawning_belowupstrbarriers_km", "BT Spawning Below Barriers (km)", NA, NA, "Length of stream upstream of point and below any additional upstream barriers, modelled as potential bull trout spawning habitat",
+      "bt_rearing_belowupstrbarriers_km", "BT Rearing Below Barriers (km)", NA, NA, "Length of stream upstream of point and below any additional upstream barriers, modelled as potential bull trout rearing habitat",
+    )
+  )
+
+
 xref_bcfishpass_names_old <- fpr_xref_crossings()
 
 
