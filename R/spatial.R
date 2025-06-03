@@ -127,7 +127,7 @@ fpr_sp_wshd_stats <- function(dat){
 #'
 #' @param dat Dataframe with coordinates to burn to geopackage
 #' @param gpkg_name String Name of the geopackage
-#' @param utm_zone Integer UTM zone
+#' @param utm_zone Integer UTM zone - must be supplied
 #' @param x String (quoted) representing column name where x coordinates are stored
 #' @param y String (quoted) representing column name where y coordinates are stored
 #' @param crs Integer destination CRS. Defaults to 4326
@@ -140,7 +140,7 @@ fpr_sp_wshd_stats <- function(dat){
 fpr_make_geopackage <- function(dat,
                                 dir = "data/fishpass_mapping/",
                                 gpkg_name = 'fishpass_mapping',
-                                utm_zone = 9,
+                                utm_zone,
                                 x = 'utm_easting',
                                 y = 'utm_northing',
                                 crs = 4326){
