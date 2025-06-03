@@ -2,12 +2,13 @@
 % Please edit documentation in R/fpr_make_geopackage.R
 \name{fpr_make_geopackage}
 \alias{fpr_make_geopackage}
-\title{Make Geopackage from an sf Object}
+\title{Make Geopackage from an dataframe with UTM coordinates}
 \usage{
 fpr_make_geopackage(
   dat,
   dir = "data/fishpass_mapping/",
   gpkg_name = "fishpass_mapping",
+  crs = 4326,
   ...
 )
 }
@@ -18,9 +19,9 @@ fpr_make_geopackage(
 
 \item{gpkg_name}{[character] A string representing the name of the GeoPackage file. Default is "fishpass_mapping".}
 
-\item{...}{Additional arguments passed to [fpr_sp_assign_sf_from_utm()].}
-
 \item{crs}{[integer] Coordinate reference system to transform to. Default is `4326`.}
+
+\item{...}{Additional arguments passed to [fpr_sp_assign_sf_from_utm()].}
 }
 \value{
 The written GeoPackage layer, invisibly.
@@ -47,8 +48,7 @@ dat <- data.frame(
 fpr_make_geopackage(
   dat = dat,
   col_easting = "utm_easting",
-  col_northing = "utm_northing",
-  crs_return = 4326
+  col_northing = "utm_northing"
 )
 }
 \seealso{
