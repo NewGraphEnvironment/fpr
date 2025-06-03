@@ -14,7 +14,6 @@
 #' @param dat [data.frame] A data frame with coordinates to burn to a GeoPackage.
 #' @param dir [character] A string representing the path to the output directory. Default is "data/fishpass_mapping/".
 #' @param gpkg_name [character] A string representing the name of the GeoPackage file. Default is "fishpass_mapping".
-#' @param crs [integer] Coordinate reference system to transform to. Default is `4326`.
 #' @param ... Additional arguments passed to [fpr_sp_assign_sf_from_utm()].
 #'
 #' @return The written GeoPackage layer, invisibly.
@@ -34,12 +33,12 @@
 #' fpr_make_geopackage(
 #'   dat = dat,
 #'   col_easting = "utm_easting",
-#'   col_northing = "utm_northing"
+#'   col_northing = "utm_northing",
+#'   crs_return = 4326
 #' )
 fpr_make_geopackage <- function(dat,
                                 dir = "data/fishpass_mapping/",
                                 gpkg_name = "fishpass_mapping",
-                                crs = 4326,
                                 ...) {
   if (is.null(dat))
   cli::cli_abort('please provide "dat" object')
@@ -47,14 +46,12 @@ fpr_make_geopackage <- function(dat,
     cli::cli_abort('"dat" must be a data.frame')
   chk::chk_string(dir)
   chk::chk_string(gpkg_name)
-  chk::chk_number(crs)
 
   fs::dir_create(dir)
   nm <- deparse(substitute(dat))
 
   dat |>
     fpr_sp_assign_sf_from_utm(...) |>
-    sf::st_transform(crs = crs) |>
     sf::st_write(fs::path(dir, paste0(gpkg_name, ".gpkg")), nm, delete_layer = TRUE) |>
     invisible()
 }

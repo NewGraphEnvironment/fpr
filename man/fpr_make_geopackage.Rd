@@ -8,7 +8,6 @@ fpr_make_geopackage(
   dat,
   dir = "data/fishpass_mapping/",
   gpkg_name = "fishpass_mapping",
-  crs = 4326,
   ...
 )
 }
@@ -18,8 +17,6 @@ fpr_make_geopackage(
 \item{dir}{[character] A string representing the path to the output directory. Default is "data/fishpass_mapping/".}
 
 \item{gpkg_name}{[character] A string representing the name of the GeoPackage file. Default is "fishpass_mapping".}
-
-\item{crs}{[integer] Coordinate reference system to transform to. Default is `4326`.}
 
 \item{...}{Additional arguments passed to [fpr_sp_assign_sf_from_utm()].}
 }
@@ -48,7 +45,8 @@ dat <- data.frame(
 fpr_make_geopackage(
   dat = dat,
   col_easting = "utm_easting",
-  col_northing = "utm_northing"
+  col_northing = "utm_northing",
+  crs_return = 4326
 )
 }
 \seealso{
