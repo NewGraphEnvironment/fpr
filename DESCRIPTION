@@ -8,7 +8,7 @@ Description: Functions used in Fish Passage Reporting.
 License: MIT + file LICENSE
 URL: https://github.com/NewGraphEnvironment/fpr
 Encoding: UTF-8
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2.9000
 BugReports: https://github.com/NewGraphEnvironment/fpr/issues
 LazyData: true
 Depends: 
