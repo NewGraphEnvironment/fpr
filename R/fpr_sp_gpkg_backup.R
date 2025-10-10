@@ -127,9 +127,9 @@ fpr_sp_gpkg_backup <- function(
     # Assign the value of dat to the new object in the function environment
     assign(obj_name, dat, envir = environment())
 
-    # Save the new object
     save(list = obj_name,
-         file = paste0(dir_backup, obj_name, ".RData"))
+         file = fs::path(dir_backup, obj_name, ext = "RData")
+    )
 
     # Remove the temporary object from the function environment
     rm(list = obj_name, envir = environment())
