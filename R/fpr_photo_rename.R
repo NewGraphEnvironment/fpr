@@ -21,6 +21,8 @@
 #' @importFrom dplyr  if_all contains starts_with
 #' @importFrom stringr str_detect
 #' @importFrom janitor make_clean_names
+#' @importFrom fs file_copy
+#' @importFrom cli cli_alert_danger cli_alert_info
 #'
 #' @return Duplicates of existing photos renamed with directories specified by col_directories param
 #' @export
@@ -76,41 +78,75 @@ photo_renamed = dplyr::case_when(stringr::str_detect(photo_renamed, 'photo_extra
                 photo_renamed = stringr::str_replace_all(photo_renamed, 'photo_', ''))
   # generalize above
 
+  # if(identical(col_string_add, FALSE)){
+  #   dat3 <- dat2 %>%
+  #     dplyr::mutate(photo_renamed = paste0(dir_to_stub,
+  #                                          {{ col_directories }},
+  #                                          '/',
+  #                                          tools::file_path_sans_ext(basename(photo_og)),
+  #                                          '_',
+  #                                          photo_renamed,
+  #                                          # stringr::str_extract(photo_renamed, '_.*$'),
+  #                                          '.JPG'),
+  #                   photo_og = paste0(dir_from_stub, basename(photo_og))
+  #     )
+  # }else dat3 <- dat2 %>%
+  #   dplyr::mutate(photo_renamed = paste0(dir_to_stub,
+  #                                        {{ col_directories }},
+  #                                        '/',
+  #                                        tools::file_path_sans_ext(basename(photo_og)),
+  #                                        '_',
+  #                                        {{ col_string_append }},
+  #                                        '_',
+  #                                        photo_renamed,
+  #                                        # stringr::str_extract(photo_renamed, '_.*$'),
+  #                                        '.JPG'),
+  #                 photo_og = paste0(dir_from_stub, basename(photo_og))
+  #   )
   if(identical(col_string_add, FALSE)){
-    dat3 <- dat2 %>%
-      dplyr::mutate(photo_renamed = paste0(dir_to_stub,
+    dat3 <- dat2 |>
+      dplyr::mutate(photo_renamed = fs::path(dir_to_stub,
                                            {{ col_directories }},
-                                           '/',
-                                           tools::file_path_sans_ext(basename(photo_og)),
+                                           paste0(tools::file_path_sans_ext(basename(photo_og)),
                                            '_',
-                                           photo_renamed,
-                                           # stringr::str_extract(photo_renamed, '_.*$'),
-                                           '.JPG'),
-                    photo_og = paste0(dir_from_stub, basename(photo_og))
+                                           photo_renamed),
+                                           ext = "JPG"),
+                    photo_og = fs::path(dir_from_stub, basename(photo_og))
       )
-  }else dat3 <- dat2 %>%
-    dplyr::mutate(photo_renamed = paste0(dir_to_stub,
+  }else dat3 <- dat2 |>
+    dplyr::mutate(photo_renamed = fs::path(dir_to_stub,
                                          {{ col_directories }},
-                                         '/',
-                                         tools::file_path_sans_ext(basename(photo_og)),
+                                         paste0(tools::file_path_sans_ext(basename(photo_og)),
                                          '_',
                                          {{ col_string_append }},
                                          '_',
-                                         photo_renamed,
-                                         # stringr::str_extract(photo_renamed, '_.*$'),
-                                         '.JPG'),
-                  photo_og = paste0(dir_from_stub, basename(photo_og))
+                                         photo_renamed),
+                                         ext = "JPG"),
+                  photo_og = fs::path(dir_from_stub, basename(photo_og))
     )
 
-  mapply(file.copy,
-         from =  dat3 %>% dplyr::pull(photo_og),
-         to = dat3 %>% dplyr::pull(photo_renamed),
-         overwrite = T,
-         copy.mode = TRUE)
+  # fs::file_copy(
+  #   path = dat3 |> dplyr::pull(photo_og),
+  #   new_path = dat3 |> dplyr::pull(photo_renamed),
+  #   overwrite = TRUE
+  # )
+
+  paths_from <- dat3 |> dplyr::pull(photo_og)
+  paths_to   <- dat3 |> dplyr::pull(photo_renamed)
+
+  for (i in seq_along(paths_from)) {
+    tryCatch(
+      fs::file_copy(paths_from[i], paths_to[i], overwrite = TRUE),
+      error = function(e) {
+        cli::cli_alert_danger(paste0("Failed to copy: ", paths_from[i]))
+        cli::cli_alert_info(e$message)
+      }
+    )
+  }
 
   if(return_df){
     dat3 |>
-      dplyr::select(site_id, contains('photo'))
+      dplyr::select({{ col_directories }}, contains('photo'))
   }
   # dat3 %>% select(site_id, crew_members, mergin_user, contains('photo')) %>% slice_tail(n=6)
 }
