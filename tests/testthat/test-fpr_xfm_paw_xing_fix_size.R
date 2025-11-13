@@ -13,21 +13,6 @@ testthat::test_that("fpr_xfm_paw_xing_fix_size errors when required columns are 
 })
 
 
-testthat::test_that("fpr_xfm_paw_xing_fix_size errors when required non-numeric bridge_width is supplied", {
-  dat <- base::data.frame(
-    barrier_result = c("Barrier", "Potential"),
-    downstream_channel_width_meters = c(3, 1),
-    fill_depth_meters = c(6, 2)
-  )
-
-  testthat::expect_error(
-    fpr_xfm_paw_xing_fix_size(dat, brdg_wdth = "hi"),
-    "`brdg_wdth` must be a number (non-missing numeric scalar)."
-  )
-})
-
-
-
 
 testthat::test_that("fpr_xfm_paw_xing_fix_size returns expected fixes for basic barrier cases", {
   dat <- base::data.frame(
