@@ -13,7 +13,6 @@
 #' @importFrom purrr map2 map
 #' @importFrom chk chk_string
 #' @importFrom cli cli_abort cli_warn
-#' @importFrom poisutils ps_error
 #' @importFrom rlang sym
 #'
 #' @family spatial operations

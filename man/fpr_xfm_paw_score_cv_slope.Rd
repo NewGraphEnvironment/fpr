@@ -56,6 +56,7 @@ Other xfm paw:
 \code{\link{fpr_xfm_paw_score_final}()},
 \code{\link{fpr_xfm_paw_score_outlet_drop}()},
 \code{\link{fpr_xfm_paw_score_swr}()},
-\code{\link{fpr_xfm_paw_swr}()}
+\code{\link{fpr_xfm_paw_swr}()},
+\code{\link{fpr_xfm_paw_xing_fix_size}()}
 }
 \concept{xfm paw}
