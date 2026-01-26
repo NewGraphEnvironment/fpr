@@ -67,7 +67,7 @@ fpr_sp_wshd_stats <- function(dat){
 
   for (package in required_packages) {
     if (!require(package, character.only = TRUE)) {
-      cli::abort(paste("Package", package, "is not installed. Please install it using install.packages(\"", package, "\").", sep = ""))
+      cli::cli_abort(paste("Package", package, "is not installed. Please install it using install.packages(\"", package, "\").", sep = ""))
     }
   }
 
