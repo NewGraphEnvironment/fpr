@@ -26,7 +26,6 @@ Imports:
     knitr,
     magick,
     tidyselect,
-    fwapgr,
     data.table,
     raster,
     readr,
@@ -45,15 +44,12 @@ Imports:
     rlang,
     ggplot2, 
     cli,
-    fs
+    fs,
+    rayshader,
+    elevatr
 Remotes: 
     poissonconsulting/fwapgr,
     nsgrantham/ggdark
 Suggests: 
-    rayshader,
-    elevatr,
-    fasstr,
-    tidyhydat,
-    testthat (>= 3.0.0),
-    ngr
+    testthat (>= 3.0.0)
 Config/testthat/edition: 3
