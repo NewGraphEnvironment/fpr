@@ -50,6 +50,7 @@ Imports:
 Remotes: 
     poissonconsulting/fwapgr,
     nsgrantham/ggdark
-Suggests: 
-    testthat (>= 3.0.0)
+Suggests:
+    testthat (>= 3.0.0),
+    hexSticker
 Config/testthat/edition: 3
