@@ -2,7 +2,7 @@ Package: fpr
 Type: Package
 Title: Fish Passage Data Wrangling and Reporting Functions
 Version: 1.2.0
-Authors@R: c(person("Allan", "Irvine", email = "al@newgraphenvironment.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3495-2128")), person("Lucy", "Schick", email = "lucy@enewgraphenvironment.com", role = "aut"))
+Authors@R: c(person("Allan", "Irvine", email = "al@newgraphenvironment.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3495-2128")), person("Lucy", "Schick", email = "lucy@enewgraphenvironment.com", role = "ctb"))
 Maintainer: <al@newgraphenvironment.com>
 Description: Functions used in Fish Passage Reporting. 
 License: MIT + file LICENSE
