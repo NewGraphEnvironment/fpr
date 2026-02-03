@@ -2,9 +2,14 @@
 # Uses hexSticker package to create a simple black and white design
 # with NG logo icon and package name
 
+if (!requireNamespace("pak", quietly = TRUE)) {
+  install.packages("hexSticker")
+}
+
+
 # Install hexSticker if not already installed
 if (!requireNamespace("hexSticker", quietly = TRUE)) {
-  install.packages("hexSticker")
+  pak::pkg_install("hexSticker")
 }
 
 library(hexSticker)
@@ -33,18 +38,19 @@ sticker(
   package = package_name,
   # Logo positioning and size
   s_x = 1,           # Logo x position (center)
-  s_y = 0.75,        # Logo y position (slightly above center)
-  s_width = 0.4,     # Logo width
-  s_height = 0.4,    # Logo height (will maintain aspect ratio)
+  s_y = 1.15,        # Logo y position (balanced)
+  s_width = 0.45,    # Logo width
+  s_height = 0.45,   # Logo height
   # Package name styling
-  p_size = 20,       # Package name font size
+  p_size = 22,       # Package name font size
   p_x = 1,           # Package name x position (center)
-  p_y = 1.45,        # Package name y position (below logo)
+  p_y = 0.50,        # Package name y position (below logo)
   p_color = "white", # Package name color
+  p_family = "Helvetica",  # Clean, professional font
   # Hex sticker styling
   h_fill = "black",  # Background fill color
   h_color = "white", # Border color
-  h_size = 1.5,      # Border thickness
+  h_size = 1.2,      # Border thickness (elegant, not heavy)
   # Output settings
   filename = output_file,
   dpi = 300          # High resolution for quality
@@ -58,16 +64,17 @@ sticker(
   subplot = logo_file,
   package = package_name,
   s_x = 1,
-  s_y = 0.75,
-  s_width = 0.4,
-  s_height = 0.4,
-  p_size = 20,
+  s_y = 1.05,
+  s_width = 0.45,
+  s_height = 0.45,
+  p_size = 22,
   p_x = 1,
-  p_y = 1.45,
+  p_y = 0.58,
   p_color = "white",
+  p_family = "Helvetica",
   h_fill = "black",
   h_color = "white",
-  h_size = 1.5,
+  h_size = 1.2,
   filename = readme_logo,
   dpi = 150  # Lower DPI for web display
 )
