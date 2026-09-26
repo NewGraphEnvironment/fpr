@@ -39,6 +39,20 @@ Other xfm paw:
 ``` r
 path <- system.file("extdata", "pscis_phase1.xlsm", package = "fpr")
 dat <- fpr_import_pscis(dir_root = fs::path_dir(path))
+#> Warning: There was 1 warning in `dplyr::mutate()`.
+#> ℹ In argument: `dplyr::across(dplyr::all_of(sig_fig0), round, 0)`.
+#> Caused by warning:
+#> ! The `...` argument of `across()` is deprecated as of dplyr 1.1.0.
+#> Supply arguments directly to `.fns` through an anonymous function instead.
+#> 
+#>   # Previously
+#>   across(a:b, mean, na.rm = TRUE)
+#> 
+#>   # Now
+#>   across(a:b, \(x) mean(x, na.rm = TRUE))
+#> ℹ The deprecated feature was likely used in the fpr package.
+#>   Please report the issue at
+#>   <https://github.com/NewGraphEnvironment/fpr/issues>.
 result <- fpr_xfm_paw_all_scores_result(dat)
 head(result[, grep("score|barrier", names(result), ignore.case = TRUE)])
 #> # A tibble: 6 × 7
