@@ -1,0 +1,26 @@
+# ------------------------------------------------
+# CITATION.cff file created with {cffr} R package
+# See also: https://docs.ropensci.org/cffr/
+# ------------------------------------------------
+ 
+cff-version: 1.2.0
+message: 'To cite package "fpr" in publications use:'
+type: software
+license: MIT
+title: 'fpr: Fish Passage Data Wrangling and Reporting Functions'
+version: 1.2.0
+abstract: Functions used in Fish Passage Reporting.
+authors:
+- family-names: Irvine
+  given-names: Allan
+  email: al@newgraphenvironment.com
+  orcid: https://orcid.org/0000-0002-3495-2128
+repository-code: https://github.com/NewGraphEnvironment/fpr
+url: http://www.newgraphenvironment.com/fpr/
+date-released: '2024-06-27'
+contact:
+- family-names: Irvine
+  given-names: Allan
+  email: al@newgraphenvironment.com
+  orcid: https://orcid.org/0000-0002-3495-2128
+
