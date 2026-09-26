@@ -25,6 +25,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # pkgdown renders EVERY root-level .md except a hardcoded allowlist (README,
+      # LICENSE, NEWS and two GitHub templates), and there is no config option to
+      # exclude one. `.Rbuildignore` does not help — it governs `R CMD build`, not the
+      # docs site. Removing the file before the build is the only thing that stops all
+      # three copies being produced: the rendered page, a verbatim copy of the source,
+      # and the full-text search index.
+      - name: Keep internal notes out of the published site
+        run: rm -f CLAUDE.md
+
       - uses: r-lib/actions/setup-pandoc@v2
 
       - uses: r-lib/actions/setup-r@v2
@@ -39,6 +48,61 @@ jobs:
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
+
+      # The step above stops the file being built. This stops the NEXT one being built
+      # without anyone noticing — a root-level .md added a year from now would otherwise
+      # publish silently, which is exactly how this went unnoticed here.
+      #
+      # Add a name to `allowed` only after deciding the page should be public. An entry
+      # here is a decision, not a formality.
+      - name: Fail if an unexpected page reached the site
+        run: |
+          set -eu
+          allowed="404 authors index LICENSE LICENSE-text"
+
+          # An empty result set is not a pass. A loop over nothing exits 0, so a build
+          # that produced no pages at all would report "all declared" — the guard
+          # asserting success about work that never happened. Check the population
+          # exists before checking what is in it.
+          [ -f docs/index.html ] || { echo "docs/index.html missing — the build produced no site"; exit 1; }
+
+          # Exact token match. `case " $allowed " in *" $b "*)` reads equivalent and is
+          # not: it matches a contiguous SUBSTRING of the list, so a page named
+          # "authors index" passes. That fails toward pass, which is the direction that
+          # matters in a guard.
+          is_allowed() {
+            for a in $allowed; do
+              if [ "$a" = "$1" ]; then return 0; fi
+            done
+            return 1
+          }
+
+          # Both extensions. pkgdown writes a rendered .html AND a markdown twin for
+          # every root page, so checking only one leaves the other free to leak. Strip
+          # the suffix that actually matched — stripping both unconditionally reduces
+          # "index.md.html" to "index".
+          unexpected=""
+          for f in docs/*.html docs/*.md; do
+            [ -e "$f" ] || continue
+            b=$(basename "$f")
+            case "$f" in
+              *.html) b="${b%.html}" ;;
+              *.md)   b="${b%.md}"   ;;
+            esac
+            if is_allowed "$b"; then continue; fi
+            seen=0
+            for u in $unexpected; do
+              if [ "$u" = "$b" ]; then seen=1; break; fi
+            done
+            if [ "$seen" = "0" ]; then unexpected="$unexpected $b"; fi
+          done
+
+          if [ -n "$unexpected" ]; then
+            echo "Unexpected root pages reached the site:$unexpected"
+            echo "If one of these should be public, add it to \`allowed\` in this workflow."
+            exit 1
+          fi
+          echo "Root pages are all declared."
 
       - name: Deploy to GitHub pages 🚀
         if: github.event_name != 'pull_request'
