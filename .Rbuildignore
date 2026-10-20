@@ -7,3 +7,5 @@
 ^docs$
 ^pkgdown$
 ^man/figures$
+^\.git$
+^CITATION\.cff$
