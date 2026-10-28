@@ -15,6 +15,21 @@ authors:
   given-names: Allan
   email: al@newgraphenvironment.com
   orcid: https://orcid.org/0000-0002-3495-2128
+preferred-citation:
+  title: 'fpr: Fish Passage Data Wrangling and Reporting Functions'
+  authors:
+  - family-names: Irvine
+    given-names: Allan
+    email: al@newgraphenvironment.com
+    orcid: https://orcid.org/0000-0002-3495-2128
+  version: 1.2.0
+  date-released: '2024-06-27'
+  url: http://www.newgraphenvironment.com/fpr/
+  repository-code: https://github.com/NewGraphEnvironment/fpr
+  license: MIT
+  type: software
+  publisher:
+    name: New Graph Environment Ltd.
 repository-code: https://github.com/NewGraphEnvironment/fpr
 url: http://www.newgraphenvironment.com/fpr/
 date-released: '2024-06-27'
