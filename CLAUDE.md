@@ -25,10 +25,8 @@ remedy stays in the rule (`code-check.md`'s header; `/compact-prep` step 5).
 **Every duration claim comes from `date`, never from how much waiting felt like
 it happened.**
 
-Background `sleep` returns immediately from the agent's side, and the number of
-times you have polled is not evidence of elapsed time. Two consecutive tool
-calls can be 15 seconds apart by the clock while feeling like ten minutes of
-waiting.
+Background `sleep` returns at once, and a count of polls is not elapsed time: two tool calls
+15 seconds apart by the clock can feel like ten minutes of waiting.
 
 **How to apply:** before saying *any* duration — "still running after N
 minutes", "this has been X a while", "longer than usual" — run `date -u` and
@@ -63,8 +61,8 @@ waiting when it is not. Pick the instrument by how many answers you need:
 | a value you must have before the next step | a **foreground** call, so the blocking is explicit |
 | a long job that notifies when it exits | `Bash(run_in_background)` with the command as plain foreground text: no `&`, no `nohup` |
 
-A repeated `sleep N; grep` is right in none of them. **Tell: if you are about to
-spawn a second waiter for the same thing, the first one was the wrong shape.**
+A repeated `sleep N; grep` suits none of them. **Tell: if you are about to spawn a second
+waiter for the same thing, the first was the wrong shape.**
 
 **An `until` waiter over `ssh` to a Mac exits 0 whatever the remote command did:** gate on
 what it prints (`code-check-shell.md`, "Over Tailscale SSH to a Mac, `ssh` exits 0").
@@ -74,30 +72,26 @@ own state in a foreground call before reporting it done, against a marker only t
 can produce: clear it at launch, or check it is newer than a stamp touched at launch
 (`code-check.md`, "A wrapper's exit is not the work"), never a string grepped out of a log.
 
-A `Monitor` filter must also match the failure states, not just the success
-one — silence looks identical to "still running", so a watcher that greps only
-for the happy path stays quiet through a crash.
+A `Monitor` filter must match the failure states too: silence looks like "still running", so a
+happy-path-only grep stays quiet through a crash.
 
-**Never end a backgrounded call's command with a trailing `&`.** A trailing `&` (or
-`nohup … &`) with nothing in the same command waiting on it, sent with `run_in_background`,
-lets the wrapper exit at once, so the notification reports **exit 0** whatever the job
-then does. Pick one mechanism from the table, never two.
+**Never end a backgrounded call's command with a trailing `&`.** With nothing in the same
+command waiting on it, a `run_in_background` call's wrapper exits at once, so the notification
+reports **exit 0** whatever the job then does. Pick one mechanism from the table, never two.
 
 *20 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ### Don't edit files a long-running suite is still reading
 
-`devtools::test()` and its equivalents load each test file **when they reach it**,
-not at launch, so edits made mid-run are half-applied and the result describes a tree
-that never existed. **The tell is a moving denominator:** 3490 passes, then 3496, then
-3500, on "the same" tree. `Rscript file.R` parses incrementally too, and there the tell is
-a **syntax error quoting a line that does not exist**.
+`devtools::test()` and its equivalents load each test file **when they reach it**, so edits
+made mid-run are half-applied and the result describes a tree that never existed. **The tell
+is a moving denominator:** 3490 passes, then 3496, then 3500, on "the same" tree.
+`Rscript file.R` parses incrementally too, and there the tell is a **syntax error quoting a
+line that does not exist**.
 
-Before a long run, commit. While it runs, do work that touches nothing it reads —
-issue bodies, PR text, reading, planning. If an edit cannot wait, kill the run
-rather than let it produce a result that has to be re-litigated. And when a long run
-fails, get the `file:line` before forming any theory: a mid-flight edit and a real
-regression look identical in a summary line.
+Before a long run, commit. While it runs, touch nothing it reads: do issue bodies, PR text,
+reading, planning. If an edit cannot wait, kill the run rather than keep a result that has to be re-litigated. When a long run fails, get the `file:line` before forming any theory: a
+mid-flight edit and a real regression look identical in a summary line.
 
 *9 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
@@ -146,11 +140,10 @@ inline.
 
 ### Don't block
 
-Spawn a background subagent, then keep working on the lowest-risk part of the
-task — scaffolding, data files, tests. When findings arrive, treat them as a
-review of landed work rather than a precondition for starting it. If a result genuinely
-must precede the next step, run it synchronously (`run_in_background: false`) so the
-blocking is explicit and visible.
+Spawn a background subagent, then keep working on the lowest-risk part of the task
+(scaffolding, data files, tests). Treat findings as a review of landed work, not a
+precondition. If a result must precede the next step, run it synchronously
+(`run_in_background: false`) so the blocking is explicit.
 
 *8 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
@@ -167,9 +160,8 @@ edits the checkout the run reads. Each class is asked until the answer ledger pr
 
 **Never report an agent as stalled, or as still working, on status alone.** A subagent's
 `tasks/<id>.output` is a symlink that `ls -l` reports as frozen; `ls -lL` follows it.
-Never read the transcript itself, it overflows the context. Even a growing transcript shows
-activity, not that a report will arrive. So decide nothing on it; wait for the event,
-against a clock:
+Never read the transcript itself, it overflows the context; even a growing one shows activity,
+not that a report will arrive. Decide nothing on it; wait for the event, against a clock:
 
 - **Note the spawn time with `date -u`** (§1) and wait for the completion notification, not a
   file waiter. Until it arrives, the report is "spawned at T, no notification yet", never
@@ -189,17 +181,16 @@ spawn idles instead of completing.
 ### Verify claims, in both directions
 
 Subagent output is evidence, not verdict: acting on a wrong finding and dismissing a late
-review wholesale both happen. **Cheap probe first, then act.** Reproduce the claim before
-you fix it, and before you dismiss it. A finding you cannot reproduce is a finding you do
-not yet understand.
+review wholesale both happen. **Cheap probe first, then act.** Reproduce the claim before you fix it
+and before you dismiss it: a finding you cannot reproduce is one you do not yet understand.
 
 *5 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ### Fan out inside one process
 
-A workflow that shells out **once per item** costs one permission prompt per item; the same
-work **inside one process** costs one prompt total. An unattended run that stops for
-approval on item 3 of 200 has gone idle, and the wrapper reports nothing.
+A workflow that shells out **once per item** costs one permission prompt per item; **inside
+one process** it costs one. An unattended run that stops for approval on item 3 of 200 has
+gone idle, and the wrapper reports nothing.
 
 - **Prefer one process doing N items over N processes doing one.** Loop inside the
   language runtime; shell out once, for the batch.
@@ -212,12 +203,12 @@ approval on item 3 of 200 has gone idle, and the wrapper reports nothing.
 
 ### A subagent that must not know the answer must be a Plan or Explore type
 
-A `general-purpose` subagent carries the project's `CLAUDE.md`, and `Plan` and `Explore` do not, so a
-blind reader, a blind reviewer or any control that must not see prior results is spawned as `Plan` or
-`Explore`. Check it rather than trusting the brief: a canary of each type, given no tools and asked only
-whether its context mentions the term in question, settles it in seconds. Neither type can write, so take
-its output from the transcript by script, not by retyping, and audit the transcript's tool calls for reads
-outside what it was given.
+A `general-purpose` subagent carries the project's `CLAUDE.md`; `Plan` and `Explore` do not.
+So a blind reader, a blind reviewer or any control that must not see prior results is spawned
+as `Plan` or `Explore`. Check it rather than trusting the brief: a canary of each type, given
+no tools and asked whether its context mentions the term, settles it in seconds. Neither
+type can write, so take its output from the transcript by script, not by retyping, and audit
+the transcript's tool calls for reads outside what it was given.
 
 *4 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
@@ -247,7 +238,7 @@ answers differently, and a rule written from one is wrong about the other. Name 
 each was taken from, and which one the claim is about, before calling either wrong.
 
 **A host that times out from one machine is not blocked until the local link is ruled out**:
-ping the gateway and try a second machine.
+ping the gateway, try a second machine.
 
 *23 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
@@ -359,9 +350,9 @@ says, not just what exists**: an issue that already assigned the boundary settle
 
 #### The storage version: one store is not the world
 
-A negative result is only ever as wide as the store you looked in. **`aws s3` and `s3cmd`
-address different clouds and are invisible to each other**, so enumerate the stores before
-searching them, and prefer the job that stages data to whatever a bucket happens to hold.
+A negative result is only as wide as the store you looked in. **`aws s3` and `s3cmd` address
+different clouds and are invisible to each other**, so enumerate the stores before searching
+them, and prefer the job that stages data to whatever a bucket happens to hold.
 The same holds for **checkouts**: a local `grep` across the local checkouts answers a question
 about this disk. Use `gh api -X GET search/code -f q="org:NewGraphEnvironment <term>"`,
 which indexes **default branches only**: a file on a feature branch needs
@@ -389,9 +380,8 @@ for t in issue pr; do gh api -X GET search/issues -f q="repo:NewGraphEnvironment
 
 **Ask at the plan gate. After approval, run to the PR. Before a plan exists, a question wants an answer.**
 
-The first three subsections are one rule on one axis — *when* to come back to the
-user — and they are only correct as a set. The rest decide what the user is handed when
-you do come back.
+The first three subsections are one rule on one axis, *when* to come back to the user, and
+are only correct as a set. The rest decide what the user is handed when you do.
 
 ### After plan approval, run every phase to the PR
 
@@ -413,11 +403,10 @@ user invokes it or the instruction says so.
 
 ### Before a plan exists, a question wants an answer
 
-The same terseness that means "go" after approval means "answer me" before it. A
-turn that ends in a question mark, with no approved plan, gets an answer and a
-one-line offer of the work — not the first commit toward it. When the ask is to understand
-something, keep it short and concrete; a worked example beats a taxonomy. **The mandate
-starts at plan approval.**
+The same terseness that means "go" after approval means "answer me" before it. A turn that
+ends in a question mark, with no approved plan, gets an answer and a one-line offer of the
+work, not the first commit toward it. To explain something, be short and concrete: a worked
+example beats a taxonomy. **The mandate starts at plan approval.**
 
 **When an answer settles a plan or moves an issue's scope, end with one offer** to write it into
 #N's body as `## Plan` / `## Decisions` (a fold names both issues), and edit the body once
@@ -435,9 +424,9 @@ ask it the same way — options, recommendation first, phone-answerable — comm
 continue on the phases that do not depend on it while the answer is outstanding
 (`planning.md`, "When Something Keeps Failing" — escalating is not stopping).
 
-In plan mode, collect the "this changes what I build" forks and ask them together before
-`ExitPlanMode`. Mechanism is never a question (§2), nor is anything with a conventional
-default: pick it, say so, move on.
+In plan mode, ask the "this changes what I build" forks together before `ExitPlanMode`.
+Mechanism is never a question (§2), nor is anything with a conventional default: pick it, say
+so, move on.
 
 *4 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
@@ -453,9 +442,9 @@ under a promoted class is still reported.
 
 ### Never post outside our own repos without approval
 
-Never post to a venue outside NGE's own repositories without the user's explicit
-approval for that specific post — upstream GitHub issues and PR comments, mailing
-lists, forums, third-party trackers. **Drafting is welcome and expected**: write the
+Never post to a venue outside NGE's own repositories (upstream GitHub issues and PR comments,
+mailing lists, forums, third-party trackers) without the user's explicit approval for that
+specific post. **Drafting is welcome and expected**: write the
 comment, show it, wait. The sending needs the word: an upstream comment is published under
 our name, indexed at once, and cannot be unpublished.
 
@@ -469,7 +458,7 @@ our name, indexed at once, and cannot be unpublished.
 
 We build on other people's work: gratitude and humility in every step that touches it.
 Maintainers may read anything we write about their code, so describe what we saw rather than
-diagnose their design, offer rather than propose, and leave them every road to lead.
+diagnose their design, offer rather than propose (no imperative, a polite one included), and leave them every road to lead.
 
 - **Fix on our fork the same day,** one concern per branch from upstream's default branch,
   no planning files and no `#N` in its commits, the draft in a fork issue labelled
@@ -478,7 +467,8 @@ diagnose their design, offer rather than propose, and leave them every road to l
 - **Upstream gets a short issue that offers:** thanks, a reprex, the options as we see them,
   and a pull request if it helps. Send one when asked, or first only where outside pull
   requests are routinely merged. One open item per maintainer, timed around their load.
-- **About 200 words, no SRED line.** A design change goes in as a question.
+- **A fix of a few lines goes in the issue as its reviewed diff** (about 20 lines), introduced as what we tested, fork branch and test linked, pull request on offer. Only the version that survived `/code-check` goes inline. A larger fix is described, linked and offered. Where AI-assisted contributions are unwelcome, send no diff either.
+- **About 200 words besides an inline diff, no SRED line.** A design change goes in as a question.
 - **Say plainly that Claude Code helped,** in a sentence from the `upstream-draft` on, and offer
   an `Assisted-by` reword in the pull request unless the maintainer has already merged a Claude
   co-authored commit (check their log). Where AI-assisted contributions are unwelcome, send no code.
@@ -492,7 +482,7 @@ diagnose their design, offer rather than propose, and leave them every road to l
 - Raise upstream only what would help their other users. If a maintainer would rather not
   hear from us, keep the fork or move on.
 
-*32 lines of evidence for this rule are in `conventions/agent-operations.md`.*
+*33 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ### Credit Claude; a session link only on a cloud PR in a private repo
 
@@ -501,37 +491,34 @@ and issues carry no Claude line bar an `upstream-draft`'s sentence. A session li
 home: the PR body a **cloud** session opens in a **private** repo keeps the harness's footer;
 commits, local sessions and public repos carry none. The harness's attribution reminder asks
 for a `Claude-Session:` trailer and a URL, and defers to a repo's rule: this one.
-`attribution.sessionUrl: false` silences it after `/claude-settings-init`; a SessionStart hook
-says when it has not run. A cloud session reads no user settings: in a public repo only this
-line guards it until a repo-level setting lands. `/gh-pr-merge` step 3b strips a public PR
-body's link; trailers in commits stay.
+`attribution.sessionUrl: false` silences it after `/claude-settings-init`, and a SessionStart
+hook says when it has not run. A cloud session reads no user settings, so in a public repo
+only this line guards it. `/gh-pr-merge` step 3b strips a public PR body's link; trailers stay.
 
 *13 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ### Auto mode refuses a production write whatever the chat says
 
-Auto mode's classifier can refuse a command as a production write: a live store rewritten,
-a deploy, a publish. When it does, approval given in chat does not reach it. On the **first** such refusal, say so once and offer two routes:
-the user leaves auto mode for that step (Shift+Tab) and approves the prompt, or runs the
-bare command themselves (below). Do not retry, and do not suggest a restart.
+Auto mode's classifier can refuse a command as a production write (a live store rewritten, a
+deploy, a publish), and approval given in chat does not reach it. On the **first** such
+refusal, say so once and offer two routes: the user leaves auto mode for that step (Shift+Tab)
+and approves the prompt, or runs the bare command themselves (below). Do not retry or suggest a restart.
 
 It names a **category** ("Production Deploy"), not *earlier conversation content*, so it is
 not the secret-read clamp (`newgraph.md`), which needs a restart.
 
 **It classifies the command text, so it also fires on a write the file tools can make
-safely.** Where what was refused is an edit to a tracked file rather than the publish
-itself, take that route first — Read and Edit, which the denial text offers as a safer
-method — and say the classification was wrong. Keep the two routes above for the command
-that really does publish.
+safely.** Where what was refused is an edit to a tracked file rather than the publish itself,
+take Read and Edit first, as the denial text offers, and say the classification was wrong.
+Keep the two routes above for the command that really does publish.
 
 *23 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ### Hand the user bare commands
 
-When the user must run a command themselves — an interactive login, a
-sudo-needs-TTY operation, anything the Bash tool is blocked from running — give the
-**bare command**, in a fenced block, ready to paste. Never prefix it with `!`: here it does
-not run, or runs from `$HOME`.
+When the user must run a command themselves (an interactive login, a sudo-needs-TTY
+operation, anything the Bash tool is blocked from running), give the **bare command** in a
+fenced block, ready to paste. Never prefix it with `!`: here it does not run, or runs from `$HOME`.
 
 - **Anchor every path**: absolute, or after `cd <repo-root> &&` on the same line.
 - Keep it paste-safe, **short enough not to wrap**, and say what the first output line must read (`PUBLISH run`), so a
@@ -556,8 +543,8 @@ before asking about it.
 
 ### Link every issue and PR you name to the user
 
-When a message to the user names an issue or a PR, make the number a link the user can
-click: `[repo#12](https://github.com/<owner>/<repo>/issues/12)`,
+When a message to the user names an issue or a PR, make the number a link:
+`[repo#12](https://github.com/<owner>/<repo>/issues/12)`,
 `[repo PR #13](https://github.com/<owner>/<repo>/pull/13)`.
 
 - **Say what each one is** in a few words, unless its sentence already does: a list of bare
@@ -575,10 +562,9 @@ click: `[repo#12](https://github.com/<owner>/<repo>/issues/12)`,
 ### Surface upstream defects and gaps; do not work around them
 
 When a dependency or an external API misbehaves, or its contract lacks a concept you need,
-surface it and ask rather than
-coding around it: a workaround hides the defect from whoever could fix it, and most of the
-dependencies in question are **first-party**, so a local patch leaves the bug in place for
-every other consumer. Same instinct as `newgraph.md`'s "install missing packages, don't
+surface it and ask rather than coding around it: a workaround hides the defect from whoever
+could fix it, and most such dependencies are **first-party**, so a local patch leaves the bug
+for every other consumer. Same instinct as `newgraph.md`'s "install missing packages, don't
 workaround", applied to a *broken* dependency.
 
 **How to apply:** first check an installed package is current (`check_pkg_stale.sh`, then our
@@ -590,7 +576,9 @@ repro and the exact lines (a third party's: a fork issue first, above), report i
 **A gap is a change request:** file it with the contract's owner before coining a name, and
 bring the choice to the plan gate. Tell: you are explaining why your names are not the contract's.
 
-*16 lines of evidence for this rule are in `conventions/agent-operations.md`.*
+At design time the same holds for scope: `newgraph.md`, "A first-party package's current scope is not a design constraint".
+
+*17 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 
 # Cartography
@@ -2489,7 +2477,7 @@ Skip planning for single-file edits, quick fixes, or tasks with obvious next ste
 
    **Do not wait for it.** Spawn, then start the lowest-risk phase. Background agents have repeatedly returned late — in one case after the entire issue had shipped — so treating the review as a precondition stalls the work for as long as the agent takes (see `agent-operations.md` §2). Fold findings in whenever they land: pre-baseline they edit the plan; mid-implementation they become follow-up commits — unless the finding is a stored-data fork of the kind `agent-operations.md` §4 reserves for the user. If you genuinely cannot proceed without the result, run it with `run_in_background: false` so the blocking is explicit.
 
-   **On a park the review runs at the resume, beside Phase 1.** Keep it a review of the plan: read it against the issue, its comments and the code it names. One cheap probe (a grep, a listing) may settle a design fork; a question needing more becomes a checkbox in the phase that measures it.
+   **On a plain park the review runs at the resume, beside Phase 1.** Keep it a review of the plan: read it against the issue, its comments and the code it names. One cheap probe (a grep, a listing) may settle a design fork; anything more becomes a checkbox in the phase that measures it.
 
    Verify before acting, in both directions. Findings have been confidently wrong (a "BLOCKER" disproved by a 30-second probe) and confidently right about things nobody suspected. Reproduce the claim first.
 
