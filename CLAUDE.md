@@ -389,7 +389,8 @@ Plan approval is the authorization for every mechanical step after it. Run every
 phase, commit atomically per phase, archive the PWF, push, open the PR, and report
 **once**, at the end. Do not stop between phases to report progress. **The merge is a
 separate instruction** — *to the PR* ends at the open PR, and `/gh-pr-merge` runs when the
-user invokes it or the instruction says so.
+user invokes it or the instruction says so. One exception: soul's `/coordinator` merges a PR
+that passes its every merge gate, and builds a parked plan that passes its plan gate.
 
 - **Inside it:** correcting the plan when a review disproves it (reported in the summary),
   unless the correction is itself a fork of the kind below; filing issues, opening PRs and
@@ -399,7 +400,7 @@ user invokes it or the instruction says so.
   its own gate — the merge, a change to the machine (`newgraph.md`), a push into an artifact
   a human is testing on (`code-check.md`).
 
-*8 lines of evidence for this rule are in `conventions/agent-operations.md`.*
+*9 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ### Before a plan exists, a question wants an answer
 
@@ -436,7 +437,7 @@ A hook (`settings/hooks/answers_log.py`) records each `AskUserQuestion`; record 
 asked in prose with its `--manual` form. `/backlog-sweep` in soul proposes a class with a run
 of approvals and no refusal as a standing authorization. The classes this section reserves
 (stored data, posting outside our repos, machine changes, merges) are never proposed, and work
-under a promoted class is still reported.
+under a promoted class is still reported. The coordinator's gated merge is not a promotion.
 
 *2 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
@@ -491,8 +492,7 @@ and issues carry no Claude line bar an `upstream-draft`'s sentence. A session li
 home: the PR body a **cloud** session opens in a **private** repo keeps the harness's footer;
 commits, local sessions and public repos carry none. The harness's attribution reminder asks
 for a `Claude-Session:` trailer and a URL, and defers to a repo's rule: this one.
-`attribution.sessionUrl: false` silences it after `/claude-settings-init`, and a SessionStart
-hook says when it has not run. A cloud session reads no user settings, so in a public repo
+A cloud session reads no user settings, so in a public repo
 only this line guards it. `/gh-pr-merge` step 3b strips a public PR body's link; trailers stay.
 
 *13 lines of evidence for this rule are in `conventions/agent-operations.md`.*
@@ -530,7 +530,7 @@ fenced block, ready to paste. Never prefix it with `!`: here it does not run, or
 **A file under `~/Downloads` may be unreadable by the agent process.** Probe with
 `ls ~/Downloads >/dev/null 2>&1 && echo readable || echo blocked`; Desktop and Documents are
 granted separately, so probe each. If blocked, ask for one copy into the repo, with absolute
-paths. Full Disk Access for the terminal app removes the block.
+paths.
 
 *13 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
