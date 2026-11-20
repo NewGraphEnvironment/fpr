@@ -979,6 +979,9 @@ Read an HTTP status from `curl::curl_fetch_disk()`'s `status_code`, never from `
 ### A URL handed to a reader goes through R's 60 s connection timeout
 Download a large remote file to a `tempfile()` with httr2 or curl and read the copy, never `jsonlite::fromJSON(url)`, `readRDS(url(u))` or `read.csv(u)`.
 
+### A raw-accept `gh::gh()` result is bytes, and a GraphQL failure arrives with HTTP 200
+Read a raw-accept `gh::gh()` result with `rawToChar(unclass(x))`, and stop on a non-NULL `$errors` after `gh::gh_gql()`.
+
 ### `on.exit()` at a script's top level never fires
 - `on.exit()` registers a handler on the *current frame*.
 
@@ -1114,11 +1117,17 @@ A named `FUN.VALUE` looks like it guarantees row names on the returned matrix.
 ### One very long table cell hangs paged.js, and it presents as a Chrome timeout
 A ~600-character free-text field in a `kable` cell wedged `pagedown::chrome_print` indefinitely.
 
+### `kable()` with no `format` writes a pipe table, and `kable_styling()` rebuilds it without `table.attr`
+Pass `format = "html"` to `knitr::kable()` whenever its `table.attr` must reach the page through `kableExtra::kable_styling()`, and leave `label` at its default.
+
 ### `stats::aggregate()` has three separate silent behaviours, and each fails in a different direction
 All three measured on R 4.5, all three met inside one 800-line script (drift#67).
 
 ### `stats::mad()` is already scaled to an SD
 Use `stats::mad(x)` itself as the robust standard deviation: its default `constant = 1.4826` already scales it, so multiplying by 1.4826 again inflates the SD by half.
+
+### A design matrix does not hold everything a formula says
+Refuse an `offset()` or `|` your design matrix loses (`attr(terms(f), "offset")`, `all.names(f)`), and say which covariate functions `predict()` re-evaluates.
 
 ### `deparse(body(f))` excludes formal defaults, so a body scan cannot see a default
 A guard that scans function bodies for a forbidden literal is blind to that literal in a **signature**.
@@ -1128,6 +1137,9 @@ Scan R source for non-ASCII with `tools:::.check_package_ASCII_code()`, as `R CM
 
 ### `package_version()` errors on a pre-release version string
 `package_version("3.9.0beta1")` raises rather than returning `NA`, so strip a pre-release suffix before asserting a version floor.
+
+### `chk::chk_whole_number()` passes `Inf` and near-whole doubles
+Round the value after `chk::chk_whole_number()`, before arithmetic, and refuse non-finite values separately.
 
 ### `tryCatch(warning = )` DISCARDS the value the expression produced
 A `warning =` handler is not a filter — it replaces the whole expression, so a call that **succeeded** and merely warned returns the handler's value and the result is thrown away.
@@ -1232,7 +1244,7 @@ Read the exit status off the result: `st <- attr(out, "status")`, which is `NULL
 Fit models in parallel on socket workers (`parallel::makeCluster()` with `parLapply()`), not forks.
 
 ### `clusterApply()` returns `NULL` for no tasks, not an empty list
-Guard an empty input before naming or indexing a `clusterApply()` or `clusterApplyLB()` result: given zero tasks both return `NULL`, where `parLapply()` and `lapply()` return `list()`.
+Guard an empty input before naming or indexing a `clusterApply()` or `clusterApplyLB()` result.
 
 ### `c(name = x)` keeps `x`'s own name, so a value from a named vector becomes `name.X`
 Strip the name before you label it: `c(axis = unname(v[1]))` or `c(axis = v[[1]])`.
@@ -1393,7 +1405,7 @@ After a `git add`, `git checkout <path>` reinstates the broken *staged* copy —
 Pass the flag that names the question you mean.
 
 ### A value validated with one numeric grammar and consumed with another
-Normalise a numeric string once (digits only and at most 9 of them, then `x=$((10#$x))`, then a bounded range): `test` reads base 10, `$(( ))` reads a leading zero as octal and wraps past 2^63.
+Normalise a numeric string once (digits only and at most 9 of them, then `x=$((10#$x))`, then a bounded range).
 
 ### `wait` with no argument waits for every background job in the shell
 Wait on the PIDs you started (`wait "$pid"`), because a bare `wait` also blocks on every other background job in the shell.
@@ -1495,7 +1507,7 @@ Open every block after the first with guards on what it inherits: re-set its var
 Keep apostrophes out of the message of a `"${VAR:?…}"` guard.
 
 ### An apostrophe in a comment inside a single-quoted program closes the program
-Keep apostrophes out of comments inside an `awk '…'`, `sed '…'` or `python3 -c '…'` program in a script: the shell ends the quote at the `'`, whatever the program reads as a comment.
+Keep apostrophes out of comments inside an `awk '…'`, `sed '…'` or `python3 -c '…'` program in a script.
 
 ### A `git push` can land and still report failure, so confirm the ref rather than the exit code
 After a rejected push, read the remote ref before concluding anything: `git fetch -q origin && git merge-base --is-ancestor HEAD origin/<branch>`.
@@ -1519,7 +1531,7 @@ Remove only your own registration: `git worktree remove --force "$wt"`, and on f
 Take the reason from the `!` row's third tab field, falling back to the last line that is not `Done`: `awk -F'\t' '$1 == "!" { print $3; exit }'`.
 
 ### In a Perl replacement, `$1` followed by a digit is a different group
-Write `${1}` whenever the text after a backreference starts with a digit: Perl reads `$1281399` as group 1281399, which does not exist, so the replacement is empty and the run exits 0.
+Write `${1}` whenever the text after a backreference starts with a digit.
 
 ### `for x in $(cmd | grep … || true)` hides a failing `cmd`
 Assign the command on its own line under `set -e` (`out=$(cmd)`), then filter `out` with `|| true`.
@@ -1548,7 +1560,7 @@ terra, sf, bcdata, GDAL/OGR CLIs.
 - BC longitudes are all negative, so `--bounds -124.73 49.485 -124.595 49.565` fails with `Error: No such option: -1`.
 
 ### bcdata: an empty result raises AttributeError, it does not return an empty collection
-- A bbox query matching nothing exits non-zero with `AttributeError: You are calling a geospatial method on the GeoDataFrame, but the active geometry column to use has not been set.` — geopandas complaining about an empty frame, several layers below the query.
+- A bbox query matching nothing exits non-zero with an `AttributeError` from geopandas about an unset geometry column.
 
 ### bcdata: `filter()` translates the calls inside it, so build strings, value lists and transforms before the query
 Compute any query string, value list or transformed geometry into a variable before `bcdata::filter()`, or wrap the call in `local()`.
@@ -1581,7 +1593,7 @@ The obvious way to feed WKB into a canonicalizer is a `is.raw(x)` branch that he
 `st_join(largest = TRUE)` matches by intersection area whatever `join =` says, and drops zero-area geometries, so point and line overlays cannot use it.
 
 ### sf: name validation must account for the geometry column
-- The active geometry column is a named entry in `names(x)`, but its name is **not fixed** — `"geometry"` from `sf::st_read()` of some sources, `"geom"` from a GeoPackage/PostGIS layer, `"geometry"` or `"_ogr_geometry_"` elsewhere.
+- The active geometry column is a named entry in `names(x)`, but its name is **not fixed**.
 
 ### sf: `st_intersection()` / `st_difference()` return a GEOMETRYCOLLECTION that QGIS will not draw
 - Intersecting or differencing two polygon layers yields a `GEOMETRYCOLLECTION` wherever the inputs *also* touch along a line or at a point.
@@ -1590,7 +1602,7 @@ The obvious way to feed WKB into a canonicalizer is a `is.raw(x)` branch that he
 - To hand a geographic (EPSG:4326) bounding box to a bbox-filtered query (WFS/OGC features, `?bbox=`), reproject the whole AOI **geometry** then take its bbox: `sf::st_bbox(sf::st_transform(aoi, 4326))`.
 
 ### An offset regex must be anchored to a time, or a date looks like a zone
-- Refusing or stripping a trailing UTC offset with something like `[+-][0-9]{2}(:?[0-9]{2})?$` also matches the end of a plain ISO date: `"2026-08-15"` ends in `-15`, which reads as a −15 hour zone.
+- Refusing or stripping a trailing UTC offset with something like `[+-][0-9]{2}(:?[0-9]{2})?$` also matches the end of a plain ISO date.
 
 ### A reader that accepts a UTC offset may not be applying it
 GDAL accepts a UTC offset in a GeoPackage `DATETIME` and silently drops it, returning wall-clock digits that are then read in the machine's zone, so one file gives a different instant on every machine.
@@ -1737,7 +1749,7 @@ Run it on the invalid rows only (`!st_is_valid(x)`), or keep the original geomet
 Drop Z with `sf::st_zm()` before any `st_union()` or `st_combine()` on data that may mix XY and XYZ rings and has been through `st_transform()`.
 
 ### terra: `unique()` and `freq()` on a factor return its labels, not its codes
-Read a factor raster's codes from a copy with its levels stripped (`levels(y) <- NULL`), never from `terra::unique(x)[, 1]` or `terra::freq(x)$value`, which on a factor return the active category's labels.
+Read a factor raster's codes from a copy with its levels stripped (`levels(y) <- NULL`), never from `terra::unique(x)[, 1]` or `terra::freq(x)$value`.
 
 ### A GDAL failure partway through `sf::st_read()` returns the rows read so far, with only a warning
 Treat any warning during a read whose completeness matters as a failed read: wrap it in `withCallingHandlers(st_read(...), warning = function(w) stop(...))`, retry, then stop.
@@ -1782,7 +1794,7 @@ Keep one row per licence, purpose, point of diversion, `QUANTITY_FLAG` and units
 Fetch Wayback imagery with GDAL or curl into a local raster, choosing the release by its **capture** date (from the release's `metadataLayerUrl`), never by its release date.
 
 ### A VRT composites over a source's mask band, so overlapping chips must be clipped with nodata
-Clip overlapping rasters bound for one VRT with a nodata value, not a mask band: a VRT honours a source's nodata when it composites and ignores its mask, so the source listed last overwrites its neighbour.
+Clip overlapping rasters bound for one VRT with a nodata value, not a mask band.
 
 ### Test HTTP range support by a 206, not by `Accept-Ranges`
 Trust a `Range` GET's `206`, not a HEAD's `Accept-Ranges`, and refuse a `200` (the whole object).
@@ -1809,7 +1821,7 @@ Subtract a local origin before `pdist::pdist()`: at BC Albers magnitudes it retu
 Take a segment's top from the next segment's `downstream_route_measure`, and compare measures from different sources within 1 mm.
 
 ### FWA main flow is not edge type 1000 alone
-Select main flow with `edge_type IN (1000, 1050, 1200, 1250, 1450)`, and test what the layer is for rather than that it is non-empty: 1000 is single-line stream only, so a filter built on it draws no large river.
+Select main flow with `edge_type IN (1000, 1050, 1200, 1250, 1450)`, and test what the layer is for rather than that it is non-empty.
 
 ### terra: `focal(na.rm = TRUE)` drops NA cells from the vote, so where you fill NA around a filter changes its output
 Fill NA with the value you mean (`ifel(is.na(x), 0L, x)`) **before** a `focal()` majority or min/max filter, not after it, whenever those cells should count.
@@ -1871,7 +1883,7 @@ When an ad-hoc probe reports that long-shipped code is broken, the prior belongs
 Changing the writer changes nothing already written.
 
 ### Serialization loses meaning silently
-Set `na=` and `null=` explicitly on every writer, because a serializer's default for no value is usually a valid-looking value (`"NA"`, `{}`, `'None'`) that every schema check accepts.
+Set `na=` and `null=` explicitly on every writer.
 
 ### One fact derived twice
 A count taken from one artifact and the things counted produced from another, with a guard comparing the two.
