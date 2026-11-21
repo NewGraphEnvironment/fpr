@@ -986,7 +986,7 @@ Read a raw-accept `gh::gh()` result with `rawToChar(unclass(x))`, and stop on a 
 - `on.exit()` registers a handler on the *current frame*.
 
 ### A `data-raw/` script must load the source tree, not the installed package
-- `requireNamespace("pkg")` succeeds whenever **any** version is installed, so a guard shaped like `if (!requireNamespace("pkg")) pkgload::load_all()` silently runs against the installed one.
+- `requireNamespace("pkg")` succeeds whenever **any** version is installed.
 
 ### `lintr` also resolves against the installed package, not the source tree
 For a `no visible binding` lint on a constant added on this branch, check `exists(name, asNamespace(pkg))` and reinstall before changing code.
@@ -1020,6 +1020,9 @@ Chunk labels must be unique **within a document**.
 
 ### `R CMD build` ships the `.git` FILE when you build from a worktree
 A package built from a `git worktree` ships `.git` (a file holding the developer's absolute path), because R excludes only a `.git` directory; list `^\.git$` in `.Rbuildignore`.
+
+### Shiny serves a dependency's whole `src`
+Give an `htmlDependency` a `src` holding only its files: Shiny ignores `all_files`.
 
 ### `.Rbuildignore` has no comment syntax — every line is a live regex
 `tools:::inRbuildignore` loops over every non-empty line and ORs `grepl()` of it against the file list.
@@ -1076,13 +1079,16 @@ Leading empties survive and trailing ones do not, which is what makes it hard to
 Compare the file itself (`tools::md5sum()`) to show it was not modified, never two reader results.
 
 ### Under `R CMD check`, tests run from a temp dir against the INSTALLED package
-Two shapes, both green under `devtools::test()` and broken under `R CMD check`, `devtools::check()`, a tarball check, or an installed-tests run — the direction that costs the most time.
+Two shapes, both green under `devtools::test()` and broken under `R CMD check`, the direction that costs the most time.
 
 ### `dbConnect(SQLite(), path)` CREATES the file, so a read has a write side effect
 SQLite creates a database on connect.
 
 ### CSV whitespace: `trim_ws` and `strip.white` do not do what the name suggests
 - `readr::read_csv()` defaults to **`trim_ws = TRUE`** and silently strips leading and trailing whitespace.
+
+### readr crashes R on a byte its declared encoding does not define
+Before a `readr` read with a single-byte `locale(encoding = )`, refuse a file holding a byte that encoding leaves undefined.
 
 ### `R CMD check` rejects a filename containing a space
 - "checking for portable file names" fails on any file in the built package whose name has a space.
@@ -1094,7 +1100,7 @@ Sort with `method = "radix"` wherever the order builds a canonical string.
 A function whose *units* or *algorithm* are chosen by a session-wide setting behaves differently depending on what the caller did before reaching your code.
 
 ### `identical(-0, 0)` is TRUE in R, and the two still digest differently
-A hash over R's serialized bytes — which is what `digest::digest()` takes by default — separates positive and negative zero, even though every value comparison says they are the same.
+A hash over R's serialized bytes, as `digest::digest()` takes by default, separates positive and negative zero.
 
 ### Two repos pinning the same remote at different tags is an unsolvable install
 `Remotes:` pins are per-repo, but resolution is global.
@@ -1116,6 +1122,9 @@ A named `FUN.VALUE` looks like it guarantees row names on the returned matrix.
 
 ### One very long table cell hangs paged.js, and it presents as a Chrome timeout
 A ~600-character free-text field in a `kable` cell wedged `pagedown::chrome_print` indefinitely.
+
+### `pagedown::chrome_print()` in a test leaves Chrome's scratch directories in `$TMPDIR`
+Run it under `withr::with_envvar(c(TMPDIR = tempdir()))`: on Linux R CMD check reports the leftover `com.google.Chrome.*` directories as detritus.
 
 ### `kable()` with no `format` writes a pipe table, and `kable_styling()` rebuilds it without `table.attr`
 Pass `format = "html"` to `knitr::kable()` whenever its `table.attr` must reach the page through `kableExtra::kable_styling()`, and leave `label` at its default.
@@ -1142,7 +1151,7 @@ Scan R source for non-ASCII with `tools:::.check_package_ASCII_code()`, as `R CM
 Round the value after `chk::chk_whole_number()`, before arithmetic, and refuse non-finite values separately.
 
 ### `tryCatch(warning = )` DISCARDS the value the expression produced
-A `warning =` handler is not a filter — it replaces the whole expression, so a call that **succeeded** and merely warned returns the handler's value and the result is thrown away.
+A `warning =` handler is not a filter: it replaces the whole expression.
 
 ### Do not abort inside a handler for a warning raised from C++; note it and abort after the call returns
 Record a flag in the `withCallingHandlers()` handler, `invokeRestart("muffleWarning")`, and raise once the call has returned.
@@ -1169,7 +1178,7 @@ Putting per-group results back in input order by naming them looks right and ret
 `expect_equal(x, 12.529, tolerance = 2e-2)` accepts anything within **two percent** — so a figure published to three decimals survives drifting to `12.629`.
 
 ### `cli` reads `{.name}` as a STYLE, not a variable, and a fold can swallow an interpolation
-Two ways a `cli` message loses a value.
+Three ways a `cli` message misleads: two lose a value, one runs code.
 
 ### `[[` on a named ATOMIC vector with an absent key is an error, not `NULL`
 A list returns `NULL` for a missing `[[` key.
@@ -1196,7 +1205,7 @@ Normalise a numeric YAML sequence at load.
 testthat 3e writes `tests/testthat/_problems/*.R` and `tests/testthat/testthat-problems.rds` when tests fail.
 
 ### Postgres row order is never fixed unless the query fixes it, so a pick, a float sum and a presence check can each depend on it
-End every `ORDER BY` on a unique key, order any fetch whose rows are summed, and ask whether a value is loaded with an index walk, not `DISTINCT` or `EXISTS`.
+End every `ORDER BY` on a unique key.
 
 ### `sprintf("%g", x)` writes `Inf` and `NA` into SQL as bare words, which Postgres reads as column names
 A numeric formatter such as `sprintf("%.10g", x)` has no SQL form for non-finite values.
@@ -1223,7 +1232,7 @@ Inject a local value into a data-masked verb with `!!x` or `.env$x`, never a bar
 Search NASA's CMR and download with `curl` given the netrc directly, or check `earthdatalogin:::has_edl_netrc()` yourself first.
 
 ### A fetcher's test helper must make the network fail, not just mock the reader
-When a test mocks a downloader's reader and supplies fixture files, also mock the search and download functions to `stop()` by default, and re-mock them only in the tests that exercise that path.
+Where a test mocks a downloader's reader, mock its search and download functions to `stop()` too.
 
 ### testthat 3e `expect_message()` returns the condition, not the expression's value
 Assign inside the call, `expect_message(h <- f(x), "msg")`, never `h <- expect_message(f(x), "msg")`.
@@ -1256,10 +1265,10 @@ Give `returnValue()` a default and check its length: `trace(f, exit = quote(rec(
 Write `Rscript -e 'expr' a b`, not `Rscript -e 'expr' --args a b`.
 
 ### `read.delim()` quotes by default, so a `"` in a field silently swallows rows
-Read a TSV you wrote unquoted with `quote = "", na.strings = character(), comment.char = ""`.
+Read a TSV you wrote unquoted with `quote = "", na.strings = character(), comment.char = "", fill = FALSE`.
 
 ### duckdb in R: the query that autoloads `icu` binds unreliably, so `LOAD icu` before it
-Run `LOAD icu` on the connection before any query that needs it (`epoch()`, `year()`, a cast to `DATE` on a `TIMESTAMPTZ`), or use a function that needs no extension (`epoch_ms()`).
+Run `LOAD icu` on the connection before any query that needs it, or use a function that needs no extension.
 
 ### duckdb refuses a parent delete in the transaction that deleted its children
 Delete rows a foreign key still points at as separate autocommit statements, children first, never inside one `DBI::dbWithTransaction()`.
@@ -1280,7 +1289,7 @@ Assert a `function(...)` mock's argument names against the real callee's `formal
 The condition message carries the trailing newline, so an end anchor fails and the test reports "did not throw a message" even though the message printed.
 
 ### `load_all()` refuses an installed dependency below the `Imports:` floor, so measure old-against-new from a frozen worktree
-Run the old-dependency side of a before/after comparison from a `git worktree` of the pre-bump commit, and install the new version only after those runs finish.
+Run the old-dependency side of a before/after comparison from a `git worktree` of the pre-bump commit.
 
 ### `tryCatch()` nests its handlers, so a `stop()` in one is caught by a later one
 Record the condition in the handler (`hit <<- TRUE`) and raise after `tryCatch()` returns.
@@ -1823,6 +1832,9 @@ Take a segment's top from the next segment's `downstream_route_measure`, and com
 ### FWA main flow is not edge type 1000 alone
 Select main flow with `edge_type IN (1000, 1050, 1200, 1250, 1450)`, and test what the layer is for rather than that it is non-empty.
 
+### FWA lookup area follows watershed codes, so side channels get the river's
+Never take a side channel's area (edge type 1100, 1150, 1300 or 1350) from `fwa_streams_watersheds_lut`, and check a mouth segment's polygon has its own `wscode_ltree`.
+
 ### terra: `focal(na.rm = TRUE)` drops NA cells from the vote, so where you fill NA around a filter changes its output
 Fill NA with the value you mean (`ifel(is.na(x), 0L, x)`) **before** a `focal()` majority or min/max filter, not after it, whenever those cells should count.
 
@@ -1979,7 +1991,7 @@ For non-trivial issue-driven work, follow this checklist. Each step exists for a
 3. **Name with intent** — functions, parameters, internal helpers carry the naming style of the package they live in. Look at existing exports as the guide; consistency over cleverness. For files rather than functions — shell scripts and operational R scripts under `scripts/` or `data-raw/` — the standard is the `noun_verb-detail` pattern in `newgraph.md`, noun first.
 4. **Examples that run** — every exported function gets a runnable `@examples` block. Pkgdown renders them; CI executes them. An example that doesn't run is documentation rot.
 5. **Code-check before it merges** — `/code-check` on the staged diff before each commit, or `/code-check branch` once over the branch before the PR ("When to Skip" below). Catches what tests miss: edge cases, hard-coded paths, unguarded variables, security issues.
-6. **Atomic commits** — each commit bundles code change + checkbox flip in `task_plan.md`. The diff and the progress live in the same commit; `git log -- planning/` tells the full story.
+6. **Atomic commits** — each commit bundles code change + checkbox flip in `task_plan.md`. The diff and the progress live in the same commit, a tick or review file with no code riding in the next one; `git log -- planning/` tells the full story.
 7. **`/planning-archive` when complete** — moves PWF to `archive/YYYY-MM-issue-N-slug/`, creates a fresh `active/`. Then `/gh-pr-push` opens the PR; `/gh-pr-merge` handles the release bookkeeping.
 
 ## Where the checkpoints are not
@@ -2484,7 +2496,7 @@ Skip planning for single-file edits, quick fixes, or tasks with obvious next ste
 2. **Plan to files** — Write the plan into 3 files in `planning/active/`:
    - `task_plan.md` — Phases with checkbox tasks
    - `findings.md` — Research, discoveries, technical analysis
-   - `progress.md` — Session log with timestamps and commit refs
+   - `progress.md` — One entry per phase, with commit refs
 3. **Plan-review with the Plan agent — concurrently, not as a gate** — Once `task_plan.md` is scaffolded, spawn the Plan subagent (`Agent({subagent_type: "Plan", prompt: "..."}`) and ask it to critically review the task_plan against the issue body + actual codebase. Categorize findings as Blocker / Gap / Ordering / Assumption / Scope / Acceptance. The agent reads files fresh — it catches what you miss when you've been thinking about the design too long.
 
    **Do not wait for it.** Spawn, then start the lowest-risk phase. Background agents have repeatedly returned late — in one case after the entire issue had shipped — so treating the review as a precondition stalls the work for as long as the agent takes (see `agent-operations.md` §2). Fold findings in whenever they land: pre-baseline they edit the plan; mid-implementation they become follow-up commits — unless the finding is a stored-data fork of the kind `agent-operations.md` §4 reserves for the user. If you genuinely cannot proceed without the result, run it with `run_in_background: false` so the blocking is explicit.
@@ -2535,17 +2547,18 @@ Skip planning for single-file edits, quick fixes, or tasks with obvious next ste
    enumeration of the candidate set showing nothing sits above its source of truth**
    (`code-check.md`, "A guard's scope, escape hatches, and remedies"), a mutation table for
    the guards a fix introduced. `/code-check` treats three rounds as the floor and keeps
-   going while a round finds a defect inside the previous fix.
+   going while a round finds a defect inside the previous fix. In prose, where each round
+   rewords the last fix, cut back to the verified claims and end on a claim-by-evidence list.
 
    Ask for the **mechanism**, not more instances, such as an invariant enforced by two lists happening to agree.
 
    The thing reviewers catch that self-probing does not is **interop**. Ask the consumer.
 
-*35 lines of evidence for this rule are in `conventions/planning.md`.*
+*39 lines of evidence for this rule are in `conventions/planning.md`.*
 
 4. **Lock naming before the baseline** — If naming feedback surfaces during planning (legacy filename, inconsistency with an existing file family), fold the rename into the convention + task_plan BEFORE the baseline commit, not as a follow-up. Pre-baseline it's free; retrofitting after implementation cascades (measured: `build_exec_pdf.R` → `run_pagedown_exec_summary.R` locked in pre-baseline meant zero downstream rework).
 5. **Commit the plan** — After Plan-agent review + fixes. This is the baseline.
-6. **Work in atomic commits** — Each commit bundles code changes WITH checkbox updates in the planning files. The diff shows both what was done and the checkbox marking it done.
+6. **Work in atomic commits** — Each commit bundles code changes WITH their checkbox flips; bookkeeping rides with a neighbour (Atomic Commits, below).
 7. **Code check before commit** — Run `/code-check` on staged diffs before committing, or once over the branch with `/code-check branch` before the PR (`feature-workflow.md`, "When to Skip"). Per commit, don't mark a task done until its diff passes review. In branch mode each commit still carries its own checkbox flip (Atomic Commits, below), the Validation box for `/code-check` is the one that waits for the branch review, and its fixes land as follow-up commits.
 8. **Archive when complete** — Move `planning/active/` to `planning/archive/` via `/planning-archive`. Write a README.md in the archive directory with a one-paragraph outcome summary and closing commit/PR ref — future sessions scan these to catch up fast. Where the work produced measurements, that README is also the evidence record; see below.
 
@@ -2611,12 +2624,14 @@ Configuration blocks — that is the archive README's `Measurement` and `Evidenc
 the raw numbers (committed logs). A living document revised as knowledge moves is the shape
 that moves the state of knowledge; a dated run record duplicates the archive.
 
-*5 lines of evidence for this rule are in `conventions/planning.md`.*
+*7 lines of evidence for this rule are in `conventions/planning.md`.*
 
 ### One topic file, revised in place — git is the version record
 
-`research/<topic>.md`, noun-first, **no date in the filename**. A new measurement that
-changes what is known revises the topic file; it does not add a dated sibling.
+`research/<topic>.md`, noun-first, **no date in the filename**. A finding revises the statement
+it changes and deletes what it supersedes ("until #N, X" only where a reader needs it), adding
+no dated sibling and no section per issue. soul's `research_check.sh` flags a file grown into a log
+or gone stale; `/backlog-sweep` proposes the fix.
 `git log --follow research/<topic>.md` is the dated history, the archive README it cites
 is the *why*, and the logs are the numbers — everything an R&D claim needs, with no second
 copy of any of it.
@@ -2683,12 +2698,12 @@ public: report findings from internal work aggregated, never by the names of who
 
 ## Atomic Commits (Critical)
 
-Every commit that completes a planned task MUST include:
-- The code/script changes
-- The checkbox update in `task_plan.md` (`- [ ]` -> `- [x]`)
-- A progress entry in `progress.md` if meaningful
-
-This creates a git audit trail where `git log -- planning/` tells the full story. Each commit is self-documenting — you can backtrack with git and understand everything that happened.
+A commit that completes a planned task carries its code and its checkbox flip in `task_plan.md`,
+so `git log -- planning/` tells the full story. Bookkeeping rides with a neighbour: a box ticked
+with no code goes in the next code commit or the archive, a review round's file in the commit
+fixing its findings (after a clean round, the next commit). Only the baseline, the archive,
+`/compact-prep`'s session entry and `/planning-update` commit alone. `progress.md` gets one entry
+per phase.
 
 ## File Formats
 
@@ -2729,12 +2744,12 @@ Append-only research log. Discoveries, technical analysis, things learned.
 
 ### progress.md
 
-Session entries with commit references.
+One entry per phase, with commit references.
 
 ```markdown
 # Progress
 
-## Session YYYY-MM-DD
+## Phase N, YYYY-MM-DD
 - Completed: [items]
 - Commits: [refs]
 - Next: [items]
@@ -2908,9 +2923,6 @@ hex sticker, etc.). README layout is `readme.md`, with `link` as its worked exam
 Follow R Packages (2e) conventions:
 - `R/` for functions, `tests/testthat/` for tests, `man/` for docs
 - `DESCRIPTION` with proper fields (Title, Description, Authors@R)
-- `DESCRIPTION` URL field: include both the GitHub repo and the pkgdown site
-  so pkgdown links correctly (e.g., `URL: https://github.com/OWNER/PKG,
-  https://owner.github.io/PKG/`)
 - `NAMESPACE` managed by roxygen2 (`#' @export`, `#' @import`, `#' @importFrom`)
 - Never edit `NAMESPACE` or `man/` by hand
 
@@ -3090,7 +3102,6 @@ Then keep the vignette and its bundle true as both move:
 - `@import` or `@importFrom` in the package-level doc (`R/<pkg>-package.R`)
   to populate NAMESPACE — don't rely on `::` everywhere in function bodies
 - pkgdown site for public packages with `_pkgdown.yml` (bootstrap 5)
-- GitHub Action for pkgdown (`usethis::use_github_action("pkgdown")`)
 
 ## lintr
 
@@ -3161,31 +3172,14 @@ exclusions: list(
 
 ## Repository Setup
 
-### Branch protection
-
-Protect main from deletion and force pushes:
-
-```bash
-gh api repos/OWNER/REPO/rulesets --method POST --input - <<'EOF'
-{
-  "name": "Protect main",
-  "target": "branch",
-  "enforcement": "active",
-  "bypass_actors": [
-    { "actor_id": 5, "actor_type": "RepositoryRole", "bypass_mode": "always" }
-  ],
-  "conditions": { "ref_name": { "include": ["refs/heads/main"], "exclude": [] } },
-  "rules": [ { "type": "deletion" }, { "type": "non_fast_forward" } ]
-}
-EOF
-```
-
 ### Scaffold checklist
 
+- Right after `gh repo create`, the repo's `ecosystem.yml` row, with a tagline, in its own soul PR with soul's README re-rendered (`uv run --script scripts/ecosystem/ecosystem_registry.py render --readme README.md`), merged before the next daily registry check at 13:17 UTC, which fails a repo with no row
 - `usethis::create_package(".")`
 - `usethis::use_mit_license("New Graph Environment Ltd.")`; `Authors@R` as in `/citation-cff`
-- `usethis::use_testthat(edition = 3)`
-- `usethis::use_pkgdown()`
+- `usethis::use_testthat(edition = 3)`, with one real test: git keeps no empty `tests/testthat/`, and testthat aborts on one with `No test files found.`
+- `NEWS.md` opens `# <pkg> 0.0.0.9000 (development version)`: R never reads entries under a version-less heading, and `R CMD check` notes `No news entries found` until a release sits below it
+- `usethis::use_pkgdown()`, then the site URL in `_pkgdown.yml`'s `url:` and in DESCRIPTION's `URL` beside the repo (`URL: https://github.com/OWNER/PKG, https://owner.github.io/PKG/`): `pkgdown::check_pkgdown()` aborts without either
 - `usethis::use_directory("dev")` — reproducible setup script
 - `usethis::use_directory("data-raw")` — data generation scripts
 - Hex sticker: copy soul's `templates/make_hexsticker.R` to `data-raw/`
