@@ -1123,6 +1123,9 @@ A named `FUN.VALUE` looks like it guarantees row names on the returned matrix.
 ### One very long table cell hangs paged.js, and it presents as a Chrome timeout
 A ~600-character free-text field in a `kable` cell wedged `pagedown::chrome_print` indefinitely.
 
+### chromote waits on a private event loop, and a throw inside a paged.js hook hangs `chrome_print()`
+Serve a page chromote must load from a separate process, and never `throw` inside a paged.js hook.
+
 ### `pagedown::chrome_print()` in a test leaves Chrome's scratch directories in `$TMPDIR`
 Run it under `withr::with_envvar(c(TMPDIR = tempdir()))`: on Linux R CMD check reports the leftover `com.google.Chrome.*` directories as detritus.
 
@@ -1463,6 +1466,9 @@ Two traps from seeding one repo out of another's history (2026-09-02), both sile
 
 ### Assert capabilities, not versions — a tool upgrade can remove one silently
 A tool upgrade across the fleet can remove a capability without reporting failure.
+
+### An Excel save driven by AppleScript can report success while the file keeps the old version
+Read the saved file back from disk (readxl or openpyxl) before every commit, never trusting the save's return, and keep to one editor at a time.
 
 ### An amd64-only image needs `--platform`, and it works on your machine because it is cached
 Pass `--platform` to `docker run` for an amd64-only image.
@@ -1834,6 +1840,9 @@ Select main flow with `edge_type IN (1000, 1050, 1200, 1250, 1450)`, and test wh
 
 ### FWA lookup area follows watershed codes, so side channels get the river's
 Never take a side channel's area (edge type 1100, 1150, 1300 or 1350) from `fwa_streams_watersheds_lut`, and check a mouth segment's polygon has its own `wscode_ltree`.
+
+### A relation between FWA watershed codes is not a place
+A placement derived from watershed codes needs an independent check before it is trusted: a relation between watershed codes says which watersheds are related, not which polygon a segment touches.
 
 ### terra: `focal(na.rm = TRUE)` drops NA cells from the vote, so where you fill NA around a filter changes its output
 Fill NA with the value you mean (`ifel(is.na(x), 0L, x)`) **before** a `focal()` majority or min/max filter, not after it, whenever those cells should count.
@@ -3267,6 +3276,12 @@ Say where each place is by the river it joins and the nearest town with a compas
 
 ### Write each article to stand alone
 Never use a sibling article as the reference point: describe each method, bar and comparison on its own terms, and carry the sentence the reader needs rather than the sibling's figure or paragraph.
+
+### A number says what it is of, in the sentence that carries it
+Write a difference of two shares in percentage points, and a transformed value as what it means.
+
+### Each section, bullet and caption reads alone
+Restate in a few words what a passage depends on, since a reader arrives from a link.
 
 ### Define a term in its own place, before it is used
 Give a term the article depends on its own short section before its first use, with its rule, why it exists, and how many cases fall each way.
