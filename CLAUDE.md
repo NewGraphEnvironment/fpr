@@ -61,8 +61,9 @@ waiting when it is not. Pick the instrument by how many answers you need:
 | a value you must have before the next step | a **foreground** call, so the blocking is explicit |
 | a long job that notifies when it exits | `Bash(run_in_background)` with the command as plain foreground text: no `&`, no `nohup` |
 
-A repeated `sleep N; grep` suits none of them. **Tell: if you are about to spawn a second
-waiter for the same thing, the first was the wrong shape.**
+A repeated `sleep N; grep` suits none of them. **Every background loop has a deadline**
+(`timeout 6h …`, or a count), never a `pgrep -f` gate. **Tell: if you are about to spawn a
+second waiter for the same thing, the first was the wrong shape.**
 
 **An `until` waiter over `ssh` to a Mac exits 0 whatever the remote command did:** gate on
 what it prints (`code-check-shell.md`, "Over Tailscale SSH to a Mac, `ssh` exits 0").
@@ -72,14 +73,12 @@ own state in a foreground call before reporting it done, against a marker only t
 can produce: clear it at launch, or check it is newer than a stamp touched at launch
 (`code-check.md`, "A wrapper's exit is not the work"), never a string grepped out of a log.
 
-A `Monitor` filter must match the failure states too: silence looks like "still running", so a
-happy-path-only grep stays quiet through a crash.
+A `Monitor` filter must match failure states too: silence reads as "still running".
 
-**Never end a backgrounded call's command with a trailing `&`.** With nothing in the same
-command waiting on it, a `run_in_background` call's wrapper exits at once, so the notification
-reports **exit 0** whatever the job then does. Pick one mechanism from the table, never two.
+**Never end a backgrounded call's command with a trailing `&`.** Nothing in it waits on the
+job, so the call's wrapper exits at once and notifies **exit 0** whatever the job then does. Pick one mechanism from the table, never two.
 
-*20 lines of evidence for this rule are in `conventions/agent-operations.md`.*
+*22 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ### Don't edit files a long-running suite is still reading
 
@@ -147,14 +146,13 @@ precondition. If a result must precede the next step, run it synchronously
 
 *8 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
-### When your own queue is empty, offer backlog work for the wait
+### When your own queue is empty, wait; a new move starts elsewhere
 
-With nothing of the task left while a review or a long run is in flight, offer 2 or 3 queued
-pieces (`planning/backlog.md`, `umbrella.sh next`) sized to the wait, in one phone-answerable
-question, safest first: read-only, issue work in our repos, a park in its own worktree. None
-edits the checkout the run reads. Each class is asked until the answer ledger promotes it (§4).
+With nothing of the task left while a review or a long run is in flight, wait or finish without
+asking, and name the free moves (`planning/backlog.md`, `umbrella.sh next`) in the report. A
+waiting session starts none; a move starts in a fresh session.
 
-*3 lines of evidence for this rule are in `conventions/agent-operations.md`.*
+*7 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ### Don't trust status
 
@@ -409,9 +407,9 @@ ends in a question mark, with no approved plan, gets an answer and a one-line of
 work, not the first commit toward it. To explain something, be short and concrete: a worked
 example beats a taxonomy. **The mandate starts at plan approval.**
 
-**When an answer settles a plan or moves an issue's scope, end with one offer** to write it into
-#N's body as `## Plan` / `## Decisions` (a fold names both issues), and edit the body once
-agreed: the next session reads the body, not this conversation.
+**When the owner agrees a plan or a scope change about an open issue, write it into #N's body**
+as `## Plan` / `## Decisions` (a fold names both issues) and say so in the reply: the next
+session reads the body, not this conversation.
 
 *6 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
@@ -420,26 +418,28 @@ agreed: the next session reads the body, not this conversation.
 A decision that permanently shapes stored data — a key, an identifier, a schema
 choice, a deprecation shim versus a hard rename — is the user's, and it goes to the
 **plan gate**, batched, as two or three concrete options with the recommended one
-first and the consequence stated, including a word or field an upstream contract lacks. Found mid-run, it is still not the agent's to decide:
-ask it the same way — options, recommendation first, phone-answerable — commit, and
-continue on the phases that do not depend on it while the answer is outstanding
-(`planning.md`, "When Something Keeps Failing" — escalating is not stopping).
+first and the consequence stated, including a word or field an upstream contract lacks. Found mid-run, it is still the user's:
+ask it the same way, commit, and continue on the phases that do not depend on it
+(`planning.md`, "When Something Keeps Failing": escalating is not stopping).
 
 In plan mode, ask the "this changes what I build" forks together before `ExitPlanMode`.
-Mechanism is never a question (§2), nor is anything with a conventional default: pick it, say
-so, move on.
+**Ask only a real fork** (stored data, a post outside our repos, a machine change, a merge, scope
+and priority); do anything else and report it. A question opens with what is happening (what
+started, where, what it does first) and a link to catch up from, then the options.
 
-*4 lines of evidence for this rule are in `conventions/agent-operations.md`.*
+*8 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ### Record the owner's answers; promote a class only on the record
 
 A hook (`settings/hooks/answers_log.py`) records each `AskUserQuestion`; record a question
-asked in prose with its `--manual` form. `/backlog-sweep` in soul proposes a class with a run
-of approvals and no refusal as a standing authorization. The classes this section reserves
-(stored data, posting outside our repos, machine changes, merges) are never proposed, and work
-under a promoted class is still reported. The coordinator's gated merge is not a promotion.
+asked in prose with its `--manual` form. `/backlog-sweep` in soul proposes a class after 5
+recommended answers in a row; an issue writes an accepted one here. The real forks above,
+scope included, are never proposed; work under a promoted class is still reported. The coordinator's gated merge is not a promotion.
 
-*2 lines of evidence for this rule are in `conventions/agent-operations.md`.*
+**Promoted 2026-11-22: mechanism** (decide it, name it in the report; one reaching upstream
+is still asked) **and idle-work** (§2).
+
+*4 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ### Never post outside our own repos without approval
 
@@ -457,33 +457,36 @@ our name, indexed at once, and cannot be unpublished.
 
 ### Upstream, we are guests: fork first, offer an issue, disclose AI
 
-We build on other people's work: gratitude and humility in every step that touches it.
-Maintainers may read anything we write about their code, so describe what we saw rather than
-diagnose their design, offer rather than propose (no imperative, a polite one included), and leave them every road to lead.
+We build on other people's work, with gratitude and humility. Maintainers may read anything
+we write about their code: describe what we saw rather than diagnose their design, offer
+rather than propose (no imperative, a polite one included), and leave them every road to lead.
 
-- **Fix on our fork the same day,** one concern per branch from upstream's default branch,
-  no planning files and no `#N` in its commits, the draft in a fork issue labelled
-  `upstream-draft`. Pin our packages to the fork's integration branch until upstream holds
-  every fix on it, their way.
+- **The finding session captures; a fork session fixes.** The finder files the reprex, versions,
+  exact lines and whether it blocks as an `upstream-draft` stub on our fork (in soul if none; the `upstream` track queues them),
+  never opens the fork, and files nothing that would not help their other users. The fork
+  session fixes, does the homework and drafts: one concern per branch from upstream's default
+  branch, no planning files, no `#N` in commits, no whitespace-only hunks (Edit drops trailing
+  spaces). Only a blocking defect is fixed the same day, the finder pinning the fork's
+  integration branch until upstream holds every fix.
 - **Upstream gets a short issue that offers:** thanks, a reprex, the options as we see them,
-  and a pull request if it helps. Send one when asked, or first only where outside pull
-  requests are routinely merged. One open item per maintainer, timed around their load.
-- **A fix of a few lines goes in the issue as its reviewed diff** (about 20 lines), introduced as what we tested, fork branch and test linked, pull request on offer. Only the version that survived `/code-check` goes inline. A larger fix is described, linked and offered. Where AI-assisted contributions are unwelcome, send no diff either.
-- **About 200 words besides an inline diff, no SRED line.** A design change goes in as a question.
-- **Say plainly that Claude Code helped,** in a sentence from the `upstream-draft` on, and offer
-  an `Assisted-by` reword in the pull request unless the maintainer has already merged a Claude
-  co-authored commit (check their log). Where AI-assisted contributions are unwelcome, send no code.
+  and a pull request if it helps; about 200 words besides an inline diff, no SRED line, a design
+  change as a question. Send one when asked, or first only where outside pull requests are
+  routinely merged. One open item per repo, timed around the maintainers' load.
+- **Smallest first, written their way.** When they ask for more, send the smallest fix alone
+  and offer the rest one at a time. Match their merged commits; leave their changelog to them
+  where their log shows they write it.
+- **A fix of a few lines (about 20) goes in the issue as its reviewed diff,** as what we tested, branch and test linked, pull request on offer; only the version that survived `/code-check`. A larger fix is described, linked and offered.
+- **Say plainly that Claude Code helped,** from the `upstream-draft` on, and offer an
+  `Assisted-by` reword in the pull request unless they have merged a Claude co-authored commit
+  (check their log). Where AI help is unwelcome, send no code.
 - **Never ping by accident:** in our repos' issues and pull requests an upstream item is
-  backticked, never a URL, link or bare `#N` (a fork's reached upstream's once), unless the user
-  wants the ping; commit messages name none, even backticked. An edit cannot take a ping
-  back. In a fork checkout `gh` targets upstream, so pass `--repo` for our fork.
-- **Homework before, notes after:** who contributes, stated policy, AI use, current load,
-  response pace, kept in soul's `research/upstream-projects.md`, revised after every reply,
-  merge or silence.
-- Raise upstream only what would help their other users. If a maintainer would rather not
-  hear from us, keep the fork or move on.
+  backticked, never a URL, link or bare `#N`, unless the user wants the ping; commit messages
+  name none. In a fork checkout `gh` targets upstream: pass
+  `--repo` for our fork.
+- **Homework before, notes after:** who contributes, policy, AI use, load, pace, kept in
+  soul's `research/upstream-projects.md`, revised after every reply.
 
-*33 lines of evidence for this rule are in `conventions/agent-operations.md`.*
+*37 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ### Credit Claude; a session link only on a cloud PR in a private repo
 
@@ -564,19 +567,15 @@ When a message to the user names an issue or a PR, make the number a link:
 When a dependency or an external API misbehaves, or its contract lacks a concept you need,
 surface it and ask rather than coding around it: a workaround hides the defect from whoever
 could fix it, and most such dependencies are **first-party**, so a local patch leaves the bug
-for every other consumer. Same instinct as `newgraph.md`'s "install missing packages, don't
-workaround", applied to a *broken* dependency.
+for every other consumer.
 
 **How to apply:** first check an installed package is current (`check_pkg_stale.sh`, then our
 package's tag and `main`, a CRAN package's CRAN) and state the versions beside the diagnosis.
 Then reproduce it minimally, file an issue in the owning repo with the
-repro and the exact lines (a third party's: a fork issue first, above), report it, and carry on if it is not blocking. The rule is
-*do not hide it*, not *do not continue*.
+repro and the exact lines (a third party's: a fork stub, above), report it, and carry on if it is not blocking: *do not hide it*, not *do not continue*.
 
 **A gap is a change request:** file it with the contract's owner before coining a name, and
 bring the choice to the plan gate. Tell: you are explaining why your names are not the contract's.
-
-At design time the same holds for scope: `newgraph.md`, "A first-party package's current scope is not a design constraint".
 
 *17 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
@@ -2186,7 +2185,8 @@ behaviour **in terms of the package's own inputs and conditions**. Our machines,
 ports, local env files and private repos stay out, with the two exceptions below. Check
 where the text lands before you draft it, naming the destination: with no argument, `gh`
 reports the repo the session stands in, which reads private when you file from a private
-repo into a public one.
+repo into a public one. A `pre-public` repo (`.claude/visibility`) is held to it from its
+first commit.
 
 ```bash
 gh repo view <owner>/<repo> --json nameWithOwner,visibility --jq '"\(.nameWithOwner): \(.visibility)"'
@@ -2472,7 +2472,8 @@ source showed it fine.
 Same family as the cross-reference gotcha already noted for vignettes (`\@ref(fig:…)` compiling
 to a literal): bookdown output formats do not carry all of bookdown's machinery through pkgdown,
 and each missing piece fails quietly in its own way. Verify anything structural — footnotes,
-cross-references, numbered captions — against the built page the first time you use it.
+cross-references — against the built page the first time you use it. Numbered captions
+are not on the site at all: `r-packages.md`, Vignettes, says why and what `as_is` costs.
 
 ## Tables in an article: a footnote goes through kableExtra on an HTML kable
 
@@ -3051,32 +3052,27 @@ At least one vignette showing the full pipeline on real data:
 
 What a vignette says, and in what order, is `writing.md`.
 
-**Output format:** Use `bookdown::html_vignette2` (not
-`rmarkdown::html_vignette`) for figure numbering. Requires `bookdown` in
-Suggests and chunks must have `fig.cap` / `caption =` for numbered
-figures and tables.
+**Output format:** Use `bookdown::html_vignette2`, with `bookdown` in Suggests and
+`fig.cap` / `caption =` on chunks. It numbers captions in the
+installed vignette (R CMD check, `rmarkdown::render()`), **not on the pkgdown site**, which
+renders articles through its own `html_document` and prints them unnumbered.
+`pkgdown: as_is: true` restores site numbering but drops every htmlwidget's scripts (DT,
+leaflet, mapgl, plotly), so an article with a widget does not use it.
 
-**Gotcha — cross-references don't resolve in vignettes.** `Table \@ref(tab:foo)`
-and `Figure \@ref(fig:foo)` markers compile to a literal `\@ref(...)` in
-the rendered HTML rather than a numbered link. Bookdown's cross-ref
-machinery isn't fully wired through `html_vignette2` under pkgdown.
-Use natural language instead — "the table below", "the floodplain map",
-"the parameter table" — and let the captions speak for themselves. If
-you need real numbered cross-refs, use `bookdown::html_document2`
-(matches the cd-style report-appendix pattern) and accept that the
-output is no longer a true package vignette.
+**Gotcha: `Table \@ref(tab:foo)` and `Figure \@ref(fig:foo)` compile to a literal `\@ref(...)`
+on the site.** Write prose that holds either way ("the table below") and let the captions speak. For real
+cross-refs use `bookdown::html_document2` and accept that it is no longer a true package vignette.
 
 **Vignettes that need external resources (DB, API, STAC):** Do NOT use
-the `.Rmd.orig` pre-knit pattern — it breaks `bookdown` figure numbering
-because knitr evaluates chunks during pre-knit and emits `![](path)`
-markdown that bookdown can't number.
+the `.Rmd.orig` pre-knit pattern: knitr evaluates the chunks during
+pre-knit and emits `![](path)` markdown that bookdown can't number in the installed vignette.
 
 Instead, separate data generation from presentation:
 1. `data-raw/vignette_data.R` — runs the queries, saves results as `.rds`
    to `inst/testdata/` (or `inst/vignette-data/`)
 2. Vignette loads `.rds` files, all chunks run live during pkgdown build
 3. A comment in the vignette's setup chunk names the script: `# data from data-raw/script.R`
-4. bookdown controls all chunks — figure numbers, cross-refs work
+4. bookdown controls all chunks, so the installed vignette's captions number
 
 Then keep the vignette and its bundle true as both move:
 
@@ -3191,9 +3187,10 @@ exclusions: list(
 - `usethis::use_pkgdown()`, then the site URL in `_pkgdown.yml`'s `url:` and in DESCRIPTION's `URL` beside the repo (`URL: https://github.com/OWNER/PKG, https://owner.github.io/PKG/`): `pkgdown::check_pkgdown()` aborts without either
 - `usethis::use_directory("dev")` — reproducible setup script
 - `usethis::use_directory("data-raw")` — data generation scripts
-- Hex sticker: copy soul's `templates/make_hexsticker.R` to `data-raw/`
+- Hex sticker: copy soul's `templates/make_hexsticker.R` to `data-raw/` (a repo named `stac_<type>_bc` gets the catalogue layout, `stac` / icon / `<type> bc`, which `Rscript data-raw/make_hexsticker.R <type>` also draws)
 - CI: copy soul's `templates/R-CMD-check.yaml` and `templates/pkgdown.yaml` (callers of `NewGraphEnvironment/flows`) to `.github/workflows/`
 - Set GitHub Pages to serve from `gh-pages` branch
+- Bound for public: `/claude-md-init --pre-public` first
 
 ### dev/dev.R
 
