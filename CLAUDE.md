@@ -1341,6 +1341,12 @@ Write a JSON object with an empty key as text, not through `toJSON()`.
 ### Probing a TMB objective can break `vcov()` on the fit
 Compute `vcov()` and `SE()` before probing a TMB objective, or save and restore `env$last.par.best` and `env$value.best` around the probe.
 
+### Numeric routines that err at their edge, and `round()`
+`besselI(x, nu, expon.scaled = TRUE)` returns 0 with no warning for large `x`.
+
+### knitr and pandoc rewrite a caption: `fig.cap` is evaluated late, and `alt` copies it
+Set `fig.alt` from a call, not from the caption's value.
+
 # Code Check — Shell
 Tool-level traps in bash, sed, git and `gh`, and in the host toolchain those commands depend on.
 
@@ -1425,7 +1431,7 @@ Wait on the PIDs you started (`wait "$pid"`), because a bare `wait` also blocks 
 Inside the branch, `$?` is the status of the `!` compound — which is **0 by construction**, because the negation succeeded.
 
 ### A `pgrep -f` waiter matches a waiter's command line, so it never exits
-Wait on a PID with `while kill -0 "$PID"; do sleep 30; done`, never on `pgrep -f "job"`, whose pattern matches a waiting loop's command line so it never exits.
+Wait on a PID with `while ps -p "$PID" >/dev/null 2>&1; do sleep 30; done`, never on `pgrep -f "job"`, whose pattern matches a waiting loop's command line so it never exits.
 
 ### `timeout` is GNU coreutils — a portable deadline
 An assertion around something that might hang can only pass or hang, never fail (`code-check.md`, "Restore the bug and prove the guard fires").
@@ -1564,6 +1570,12 @@ Give each setup step its own `|| exit 1` and branch with `if`.
 
 ### An Actions `run:` step with no `shell:` has no `pipefail`
 Set `defaults: run: shell: bash` on the job, since a Linux step with no `shell:` runs `bash -e {0}`.
+
+### `git mv -k` on an untracked file exits 0 and moves nothing
+Rename an untracked file with `mv` and a tracked one with `git mv` without `-k`, then check the new path exists.
+
+### `pipefail` fails `cmd | head -N | grep -q` on SIGPIPE
+Capture the output first (`out=$(cmd 2>&1)`) and test the variable, or run the probe without `pipefail`.
 
 # Code Check — Spatial
 terra, sf, bcdata, GDAL/OGR CLIs.
@@ -1858,6 +1870,12 @@ Before calling two DEMs the same surface, regress their difference on the refere
 ### A nodata value written to PNG comes back from magick as alpha
 Read a PNG that terra or GDAL wrote with `magick::image_convert(magick::image_read(f), matte = FALSE)`: their nodata becomes a tRNS chunk, which magick reads as alpha.
 
+### An ogr2ogr load's column order depends on whether it was the database's first
+Set a loaded table's column order yourself when anything hashes its rows: the first load into a database puts the geometry last, every later one second.
+
+### Headless Chrome's `--screenshot` captures a MapLibre map before it draws
+Capture a mapgl or MapLibre page after a real wait (`chromote`, `Sys.sleep(15)`), never with Chrome's `--screenshot --virtual-time-budget`.
+
 # Code Check Conventions
 Structured checklist for reviewing diffs before commit.
 
@@ -2025,10 +2043,10 @@ Before opening a PR, and again before merging:
 ```bash
 git fetch -q origin
 git log --oneline HEAD..origin/main          # what landed while you worked
-git diff origin/main -- DESCRIPTION NEWS.md  # a version you did not bump
+git diff origin/main -- DESCRIPTION NEWS.md  # a NEWS bullet you did not write
 ```
 
-**A version bump you did not make is the tell**, and usually the only one — the tree is
+**A release you did not make is the tell**, and usually the only one — the tree is
 clean, the branch is healthy, and nothing in git hints that someone solved your problem
 an hour ago.
 
@@ -3083,7 +3101,8 @@ Then keep the vignette and its bundle true as both move:
 3. **Check every number the prose quotes** with a `stopifnot()` in the chunk that computes
    it, so the build fails when the data no longer supports the sentence.
 4. **Prove a refactor did not move the numbers:** render before and after, strip the HTML
-   to text, and diff. Only the prose you meant to change differs.
+   to text, and diff, then compare `alt`, `title`, `aria-label`, `id` and `href` as well: a
+   text diff is blind to attributes. Only the prose you meant to change differs.
 5. **The bundle carries provenance**, the commit and date it was built at, which the
    vignette prints. A regeneration forced by a script change asserts every other element
    `identical()` to the old bundle; rebuild where it was built when values pass through BLAS.
@@ -3092,7 +3111,7 @@ Then keep the vignette and its bundle true as both move:
    installed copy's bundle, while `rmarkdown::render()` after `pkgload::load_all()` reads
    the source tree's: the same article can pass one way and fail the other.
 
-*13 lines of evidence for this rule are in `conventions/r-packages.md`.*
+*14 lines of evidence for this rule are in `conventions/r-packages.md`.*
 
 ### Test data
 
@@ -3171,9 +3190,10 @@ exclusions: list(
      Link to the pkgdown reference page for details — don't duplicate it.
    - Don't list every function; the pkgdown reference page is the single
      source of truth for what's in the package.
-2. Bump version in `DESCRIPTION` (e.g., `0.0.0.9000` → `0.1.0`) — as the **final** commit of the branch, after verification numbers/tests are final. Mid-branch bumps are premature and churn: additional code changes end up bundled inside a "release" that already claimed the version.
-3. Commit as "Release vX.Y.Z"
-4. Tag: `git tag vX.Y.Z && git push && git push --tags`
+2. **Leave the version to the merge:** add the bullet under the development heading, change no
+   version, and put `Bump: major|minor|patch` on its own line in the PR body; `/gh-pr-merge`
+   releases (the first: `first-release=0.1.0`).
+3. With no merge: commit "Release vX.Y.Z", then `git tag vX.Y.Z && git push && git push --tags`.
 
 ## Repository Setup
 
